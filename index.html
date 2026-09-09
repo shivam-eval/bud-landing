@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bud — Your personal AI assistant</title>
+<meta name="description" content="Bud is a personal AI assistant that keeps your day in order — inbox triaged, calendar defended, follow-ups chased, mornings briefed. Private preview.">
+<link rel="canonical" href="https://mybud.life/">
+<meta property="og:title" content="Bud — Your personal AI assistant">
+<meta property="og:description" content="A personal AI assistant that keeps your day in order. Private preview, by invitation.">
+<meta property="og:url" content="https://mybud.life/">
+<meta property="og:site_name" content="Bud">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_IN">
+<meta name="theme-color" content="#f7f1e7">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f1e7;
+    --ink: #171310;
+    --muted: rgba(23, 19, 16, 0.66);
+    --faint: rgba(23, 19, 16, 0.5);
+    --line: rgba(23, 19, 16, 0.14);
+    --accent: #1f6f5c;
+    --cream: #ece4d6;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Serif 4", Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; }
+
+  .wrap {
+    width: 100%;
+    max-width: 660px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 56px) clamp(24px, 5vw, 32px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding-bottom: clamp(44px, 10vw, 92px);
+  }
+  .mark { width: 30px; height: 30px; flex: 0 0 auto; }
+  .brand { font-size: 20px; font-weight: 600; letter-spacing: 0.01em; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+    color: var(--faint);
+    font: 600 12px/1.4 Inter, system-ui, sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(52px, 11vw, 88px);
+    line-height: 0.98;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+
+  .lead {
+    max-width: 34ch;
+    margin: 24px 0 0;
+    font-size: clamp(21px, 3.4vw, 27px);
+    line-height: 1.3;
+    font-style: italic;
+  }
+  .copy {
+    max-width: 52ch;
+    margin: 20px 0 0;
+    color: var(--muted);
+    font: 400 17px/1.7 Inter, system-ui, sans-serif;
+  }
+
+  .rows {
+    margin: clamp(38px, 7vw, 56px) 0 0;
+    border-top: 1px solid var(--line);
+  }
+  .row {
+    display: flex;
+    gap: 16px;
+    padding: 15px 2px;
+    border-bottom: 1px solid var(--line);
+    font: 400 15px/1.5 Inter, system-ui, sans-serif;
+  }
+  .row b { flex: 0 0 116px; font-weight: 600; }
+  .row span { color: var(--muted); }
+
+  form {
+    margin: clamp(38px, 7vw, 52px) 0 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  input[type="email"] {
+    flex: 1;
+    min-width: 220px;
+    min-height: 48px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+    font: 400 15px/1 Inter, system-ui, sans-serif;
+  }
+  input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button {
+    min-height: 48px;
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font: 600 15px/1 Inter, system-ui, sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 20px -12px rgba(31, 111, 92, 0.85);
+  }
+  .note {
+    margin: 14px 0 0;
+    color: var(--faint);
+    font: 400 13px/1.5 Inter, system-ui, sans-serif;
+  }
+  .ok {
+    margin: clamp(38px, 7vw, 52px) 0 0;
+    padding: 16px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font: 500 15px/1.5 Inter, system-ui, sans-serif;
+  }
+  [hidden] { display: none !important; }
+
+  .spacer { flex: 1; min-height: 40px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 22px clamp(24px, 5vw, 32px);
+    color: var(--faint);
+    font: 500 11px/1.7 Inter, system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  footer a { text-decoration: none; color: var(--accent); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bud">
+        <path d="M16 30V14.5" stroke="#171310" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M16 17c0-5.6-3.4-9.7-9.8-10.6C5.3 13 8.5 17 16 17Z" fill="#1f6f5c"/>
+        <path d="M16 14.6c.6-4.7 3.8-8 9.4-8C25.4 13 22.1 14.6 16 14.6Z" fill="#1f6f5c" fill-opacity="0.6"/>
+      </svg>
+      <span class="brand">Bud</span>
+    </div>
+
+    <div class="eyebrow"><span class="dot"></span> VoiceEval Labs · Private preview</div>
+    <h1>Meet <em>Bud</em>.</h1>
+    <p class="lead">Your personal AI assistant.</p>
+    <p class="copy">
+      Bud handles the busywork behind your day — triaging the inbox, guarding the
+      calendar, chasing the follow-ups you would rather not, and briefing you
+      before any of it matters.
+    </p>
+
+    <div class="rows">
+      <div class="row"><b>Inbox</b><span>Triaged on arrival. Drafts waiting, noise set aside.</span></div>
+      <div class="row"><b>Calendar</b><span>Defended. No double-books, travel time counted in.</span></div>
+      <div class="row"><b>Follow-ups</b><span>Chased. The reply you are owed, the ball you dropped.</span></div>
+      <div class="row"><b>Mornings</b><span>Briefed. What matters today, in three lines.</span></div>
+    </div>
+
+    <form id="access-form" novalidate>
+      <input type="email" id="access-email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
+      <button type="submit">Request early access</button>
+    </form>
+    <p class="note" id="access-note">Private preview, by invitation. We will only write to say it is your turn.</p>
+
+    <div class="ok" id="access-ok" hidden>You are on the list. We will be in touch when a seat opens.</div>
+
+    <div class="spacer"></div>
+  </div>
+
+  <footer>
+    <div>© 2026 Bud · a <a href="https://mybud.life">VoiceEval</a> project</div>
+    <div>Operated by VoiceEval Technologies Private Limited</div>
+  </footer>
+
+<script>
+  // Placeholder only: this preview validates the email locally and stores/sends nothing.
+  (function () {
+    var form = document.getElementById('access-form');
+    var email = document.getElementById('access-email');
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!email.checkValidity()) { email.reportValidity(); return; }
+      form.hidden = true;
+      document.getElementById('access-note').hidden = true;
+      document.getElementById('access-ok').hidden = false;
+    });
+  })();
+</script>
+</body>
+</html>

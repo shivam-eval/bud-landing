@@ -1,0 +1,5 @@
+# mybud.life
+User-agent: *
+Allow: /
+
+Sitemap: https://mybud.life/sitemap.xml
