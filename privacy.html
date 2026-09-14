@@ -42,7 +42,7 @@
 <main>
 
 <h1>Privacy Policy</h1>
-<p class="sub">Bud — a personal assistant on WhatsApp<br>Last updated: 9 September 2026</p>
+<p class="sub">Bud — a personal assistant on WhatsApp<br>Last updated: 14 September 2026</p>
 
 <p>Bud is a personal assistant you reach over WhatsApp. It connects to your Google
 account so it can read your calendar, manage your tasks, and send email on your
@@ -66,6 +66,10 @@ about your data, or to exercise any right described below, contact
   <li><strong>Your WhatsApp profile name</strong>, so Bud can address you properly.</li>
   <li><strong>The messages you send Bud</strong>, and Bud's replies.</li>
   <li><strong>Voice notes you send</strong>, which are transcribed to text.</li>
+  <li><strong>Photos you send</strong>, which are read to work out what the food
+      is. <strong>The photo itself is never stored.</strong> It is sent to the AI
+      provider, the food in it is estimated, and only that estimate is kept —
+      the image is discarded once it has been read.</li>
 </ul>
 
 <h3>From your Google account</h3>
@@ -95,6 +99,10 @@ Contacts.</p>
       starting fresh every message.</li>
   <li><strong>Your preferences</strong> — timezone, and when you want your morning
       brief and evening wrapup.</li>
+  <li><strong>Your food log</strong>, if you use it — what you told Bud you ate
+      or sent a photo of, the estimated calories, and the day it was on. You can
+      ask Bud to stop asking about it at any time, and deleting your data
+      removes it along with everything else.</li>
   <li><strong>Operational records</strong> — which features were used, errors,
       timings. These contain no message content.</li>
 </ul>
@@ -147,8 +155,10 @@ and only for the purposes described:</p>
         <td>Calendar and task requests; emails you ask Bud to send</td>
         <td>To perform the actions you request</td></tr>
     <tr><td><strong>Google</strong> — Gemini API</td>
-        <td>Your message, plus the calendar and task details relevant to it</td>
-        <td>To understand your request and write Bud's reply</td></tr>
+        <td>Your message and any photo you send, plus the calendar and task
+            details relevant to it</td>
+        <td>To understand your request, read a food photo, and write Bud's
+            reply</td></tr>
     <tr><td><strong>Anthropic</strong></td>
         <td>The same, if we switch AI provider</td>
         <td>Standby provider so Bud keeps working during an outage</td></tr>
@@ -176,6 +186,8 @@ preference — it is what section 4 above obliges us to guarantee.</p>
       no purpose.</li>
   <li><strong>Operational records: 180 days</strong>, then deleted automatically.
       These contain no message content.</li>
+  <li><strong>Your food log: 180 days</strong>, then deleted automatically. Bud
+      only ever looks back over recent days, so older entries serve no purpose.</li>
   <li><strong>Your profile and preferences</strong>: for as long as you use Bud.</li>
   <li><strong>Google access tokens</strong>: until you disconnect, or until Google
       expires them.</li>
