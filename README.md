@@ -1,6 +1,7 @@
 # mybud.life
 
-Landing page and legal documents for **Bud**, a personal assistant on WhatsApp.
+Landing page and legal documents for **Bud**, nutrition tracking and diet
+planning on WhatsApp.
 
 Static, no build step. Netlify publishes the repo root and autodeploys on every
 push to `main`.
