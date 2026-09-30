@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow">
 <title>Bud - Nutrition tracking &amp; diet planning on WhatsApp</title>
 <meta name="description" content="Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open. Private preview.">
+<meta name="keywords" content="nutrition tracking, diet planning, calorie counter, GLP-1, WhatsApp nutrition assistant, meal logging India, Ayurveda nutrition partner">
 <link rel="canonical" href="https://mybud.life/">
 <meta property="og:title" content="Bud - Nutrition tracking & diet planning on WhatsApp">
 <meta property="og:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too. Private preview, by invitation.">
@@ -12,12 +14,52 @@
 <meta property="og:site_name" content="Bud">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bud - Nutrition tracking & diet planning on WhatsApp">
+<meta name="twitter:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too.">
 <meta name="theme-color" content="#f7f1e7">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mybud.life/#organization",
+      "name": "Bud",
+      "url": "https://mybud.life/",
+      "logo": "https://mybud.life/favicon.svg",
+      "description": "Bud is a nutrition copilot on WhatsApp, operated by VoiceEval Technologies Private Limited."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mybud.life/#website",
+      "url": "https://mybud.life/",
+      "name": "Bud",
+      "description": "Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open.",
+      "publisher": { "@id": "https://mybud.life/#organization" },
+      "inLanguage": "en-IN"
+    },
+    {
+      "@type": "Service",
+      "name": "Bud nutrition tracking on WhatsApp",
+      "provider": { "@id": "https://mybud.life/#organization" },
+      "serviceType": "Nutrition tracking and diet planning",
+      "areaServed": "IN",
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://mybud.life/",
+        "name": "WhatsApp"
+      },
+      "description": "Photo or text meal logging with calorie and protein tracking, diet-aware food suggestions, and GLP-1 program support, delivered entirely over WhatsApp."
+    }
+  ]
+}
+</script>
 <style>
   :root {
     --paper: #f7f1e7;
@@ -147,11 +189,16 @@
     margin: clamp(34px, 6vw, 44px) 0 0;
     padding-top: 22px;
     border-top: 1px solid var(--line);
+  }
+  .coach p {
+    margin: 0;
     color: var(--muted);
     font: 400 14px/1.6 Inter, system-ui, sans-serif;
   }
   .coach a { color: var(--accent); font-weight: 600; text-decoration: none; }
   .coach a:hover { text-decoration: underline; }
+  .coach form { margin-top: 14px; }
+  .coach .ok, .coach .error { margin-top: 14px; }
 
   .spacer { flex: 1; min-height: 40px; }
 
@@ -201,7 +248,15 @@
     <div class="ok" id="access-ok" hidden>You are on the list. We will be in touch when a seat opens.</div>
     <p class="error" id="access-error" hidden>Something went wrong - try again in a moment.</p>
 
-    <p class="coach">Running a practice? Dietitians, coaches, and weight-loss or diabetes clinics use Bud to keep clients logging between visits. <a href="mailto:hi@mybud.life?subject=Bud%20for%20my%20practice">Tell us about your practice →</a></p>
+    <div class="coach">
+      <p>Are you a dietitian, nutritionist or Ayurveda practitioner? Partner with Bud - leave your email and we'll be in touch.</p>
+      <form id="partner-form" novalidate>
+        <input type="email" id="partner-email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
+        <button type="submit">Show interest</button>
+      </form>
+      <div class="ok" id="partner-ok" hidden>Thank you for showing interest - we'll be in touch.</div>
+      <p class="error" id="partner-error" hidden>Something went wrong - try again in a moment.</p>
+    </div>
 
     <div class="spacer"></div>
   </div>
@@ -213,11 +268,12 @@
   </footer>
 
 <script>
-  (function () {
-    var form = document.getElementById('access-form');
-    var email = document.getElementById('access-email');
+  function wireEmailForm(formId, okId, errorId, endpoint) {
+    var form = document.getElementById(formId);
+    var email = form.querySelector('input[type="email"]');
     var button = form.querySelector('button');
-    var error = document.getElementById('access-error');
+    var ok = document.getElementById(okId);
+    var error = document.getElementById(errorId);
     var sending = 'Sending…';
     var idle = button.textContent;
 
@@ -227,21 +283,24 @@
       error.hidden = true;
       button.disabled = true;
       button.textContent = sending;
-      fetch('https://api.mybud.life/waitlist', {
+      fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.value })
       }).then(function (res) {
         if (!res.ok) throw new Error('request failed');
         form.hidden = true;
-        document.getElementById('access-ok').hidden = false;
+        ok.hidden = false;
       }).catch(function () {
         button.disabled = false;
         button.textContent = idle;
         error.hidden = false;
       });
     });
-  })();
+  }
+
+  wireEmailForm('access-form', 'access-ok', 'access-error', 'https://api.mybud.life/waitlist');
+  wireEmailForm('partner-form', 'partner-ok', 'partner-error', 'https://api.mybud.life/partner-interest');
 </script>
 </body>
 </html>

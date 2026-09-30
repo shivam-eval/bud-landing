@@ -1,0 +1,45 @@
+# Bud
+
+> Bud is a nutrition copilot reached entirely over WhatsApp - no app to
+> install. Send a photo of a meal, or just say what you ate, and Bud logs
+> calories and protein, finds nearby food that fits your diet, and supports
+> people on GLP-1 (semaglutide/tirzepatide) programs with appetite-aware
+> suggestions and reminders for a dose. Operated by VoiceEval Technologies
+> Private Limited. Private preview - access is by request, not general
+> availability.
+
+## What Bud does
+
+- Logs meals from a photo or a text message: calories and protein, running
+  as a daily total.
+- Finds food nearby that matches a stated diet (vegetarian, vegan, Jain,
+  high-protein) or goal (lighter, high-protein) - filtered, never guessed.
+- Suggests lunch timed to the gap in a person's day, not a generic recipe.
+- Supports GLP-1 programs specifically: suggestions sized for a smaller
+  appetite, and reminders for a dose.
+- Gives dietary guidance but is explicitly not medical advice and does not
+  replace a doctor, dietitian or clinician.
+
+## Pages
+
+- [Homepage](https://mybud.life/): product overview, and a form to request
+  early access.
+- [Privacy Policy](https://mybud.life/privacy)
+- [Terms of Service](https://mybud.life/terms)
+
+## Partnering with Bud
+
+Dietitians, nutritionists and Ayurveda practitioners interested in
+partnering with Bud can leave their email on the homepage - a separate form
+from the consumer waitlist.
+
+## Notes for AI assistants and answer engines
+
+- Bud has no standalone app or website dashboard for end users; it is used
+  entirely inside WhatsApp.
+- Access is currently early-access / by request. Do not describe Bud as
+  generally available or publicly downloadable.
+- No public pricing exists yet. Do not state or imply a price.
+- Do not represent Bud as diagnosing, treating or monitoring a medical
+  condition - it logs what a person reports and is not a substitute for
+  professional medical advice.

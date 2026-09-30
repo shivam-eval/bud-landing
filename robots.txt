@@ -1,4 +1,9 @@
 # mybud.life
+#
+# Deliberately permissive - Allow: / with no bot-specific rules, including
+# for AI/answer-engine crawlers (GPTBot, ClaudeBot, Google-Extended,
+# PerplexityBot, and the rest). Bud wants to be findable AND citable by
+# generative search. See /llms.txt for a structured summary built for them.
 User-agent: *
 Allow: /
 
