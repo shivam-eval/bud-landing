@@ -5,8 +5,8 @@
 > calories and protein, finds nearby food that fits your diet, and supports
 > people on GLP-1 (semaglutide/tirzepatide) programs with appetite-aware
 > suggestions and reminders for a dose. Operated by VoiceEval Technologies
-> Private Limited. Private preview - access is by request, not general
-> availability.
+> Private Limited. Message the WhatsApp number directly to start - no
+> signup, download or waitlist.
 
 ## What Bud does
 
@@ -22,8 +22,8 @@
 
 ## Pages
 
-- [Homepage](https://mybud.life/): product overview, and a form to request
-  early access.
+- [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
+  link to start using Bud.
 - [Privacy Policy](https://mybud.life/privacy)
 - [Terms of Service](https://mybud.life/terms)
 
@@ -31,14 +31,14 @@
 
 Dietitians, nutritionists and Ayurveda practitioners interested in
 partnering with Bud can leave their email on the homepage - a separate form
-from the consumer waitlist.
+from the WhatsApp link end users use.
 
 ## Notes for AI assistants and answer engines
 
 - Bud has no standalone app or website dashboard for end users; it is used
-  entirely inside WhatsApp.
-- Access is currently early-access / by request. Do not describe Bud as
-  generally available or publicly downloadable.
+  entirely inside WhatsApp. The homepage's main call to action is a direct
+  wa.me link, not a signup form - do not describe getting Bud as applying,
+  waitlisting or downloading anything.
 - No public pricing exists yet. Do not state or imply a price.
 - Do not represent Bud as diagnosing, treating or monitoring a medical
   condition - it logs what a person reports and is not a substitute for

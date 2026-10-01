@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow">
 <title>Bud - Nutrition tracking &amp; diet planning on WhatsApp</title>
-<meta name="description" content="Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open. Private preview.">
+<meta name="description" content="Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open - just message Bud on WhatsApp.">
 <meta name="keywords" content="nutrition tracking, diet planning, calorie counter, GLP-1, WhatsApp nutrition assistant, meal logging India, Ayurveda nutrition partner">
 <link rel="canonical" href="https://mybud.life/">
 <meta property="og:title" content="Bud - Nutrition tracking & diet planning on WhatsApp">
-<meta property="og:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too. Private preview, by invitation.">
+<meta property="og:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too. Message Bud on WhatsApp to start.">
 <meta property="og:url" content="https://mybud.life/">
 <meta property="og:site_name" content="Bud">
 <meta property="og:type" content="website">
@@ -75,7 +75,7 @@
           "name": "Do I need to download an app?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Bud works entirely over WhatsApp - message the number once you have access and that's it."
+            "text": "No. Bud works entirely over WhatsApp - just message the number and that's it."
           }
         },
         {
@@ -99,7 +99,7 @@
           "name": "How do I get access?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Request early access with the form on this page. We'll message you on WhatsApp when a seat opens."
+            "text": "Just message Bud on WhatsApp - tap the button on this page, or go to wa.me/15672352765, and say hi. No signup needed."
           }
         },
         {
@@ -248,6 +248,25 @@
   }
   [hidden] { display: none !important; }
 
+  .cta {
+    display: inline-block;
+    margin: clamp(38px, 7vw, 52px) 0 0;
+    min-height: 48px;
+    padding: 13px 24px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font: 600 15px/1.2 Inter, system-ui, sans-serif;
+    text-decoration: none;
+    box-shadow: 0 8px 20px -12px rgba(31, 111, 92, 0.85);
+  }
+  .cta:hover { opacity: 0.92; }
+  .hint {
+    margin: 12px 0 0;
+    color: var(--faint);
+    font: 400 13px/1.5 Inter, system-ui, sans-serif;
+  }
+
   .coach {
     margin: clamp(34px, 6vw, 44px) 0 0;
     padding-top: 22px;
@@ -334,12 +353,8 @@
       <div class="row"><b>GLP-1</b><span>Reminders for your dose. Suggestions sized for a smaller appetite.</span></div>
     </div>
 
-    <form id="access-form" novalidate>
-      <input type="email" id="access-email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
-      <button type="submit">Request early access</button>
-    </form>
-    <div class="ok" id="access-ok" hidden>You are on the list. We will be in touch when a seat opens.</div>
-    <p class="error" id="access-error" hidden>Something went wrong - try again in a moment.</p>
+    <a class="cta" href="https://wa.me/+15672352765?text=hi">Chat with Bud on WhatsApp</a>
+    <p class="hint">Opens WhatsApp - no signup, no app to install.</p>
 
     <div class="coach">
       <p>Are you a dietitian, nutritionist or Ayurveda practitioner? Partner with Bud - leave your email and we'll be in touch.</p>
@@ -359,7 +374,7 @@
       </details>
       <details>
         <summary>Do I need to download an app?</summary>
-        <p>No. Bud works entirely over WhatsApp - message the number once you have access and that's it.</p>
+        <p>No. Bud works entirely over WhatsApp - just message the number and that's it.</p>
       </details>
       <details>
         <summary>Is Bud free?</summary>
@@ -371,7 +386,7 @@
       </details>
       <details>
         <summary>How do I get access?</summary>
-        <p>Request early access with the form on this page. We'll message you on WhatsApp when a seat opens.</p>
+        <p>Just message Bud on WhatsApp - tap the button on this page, or go to wa.me/15672352765, and say hi. No signup needed.</p>
       </details>
       <details>
         <summary>Is my data private?</summary>
@@ -424,7 +439,6 @@
     });
   }
 
-  wireEmailForm('access-form', 'access-ok', 'access-error', 'https://api.mybud.life/waitlist');
   wireEmailForm('partner-form', 'partner-ok', 'partner-error', 'https://api.mybud.life/partner-interest');
 </script>
 </body>
