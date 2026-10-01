@@ -33,7 +33,8 @@
       "name": "Bud",
       "url": "https://mybud.life/",
       "logo": "https://mybud.life/favicon.svg",
-      "description": "Bud is a nutrition copilot on WhatsApp, operated by VoiceEval Technologies Private Limited."
+      "description": "Bud is a nutrition copilot on WhatsApp, operated by VoiceEval Technologies Private Limited.",
+      "sameAs": ["https://www.instagram.com/mybud.life/"]
     },
     {
       "@type": "WebSite",
@@ -56,6 +57,68 @@
         "name": "WhatsApp"
       },
       "description": "Photo or text meal logging with calorie and protein tracking, diet-aware food suggestions, and GLP-1 program support, delivered entirely over WhatsApp."
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://mybud.life/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Bud?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bud is a nutrition copilot you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, finds food nearby that fits your diet, and supports GLP-1 programs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to download an app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Bud works entirely over WhatsApp - message the number once you have access and that's it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Bud free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Bud is free during this private preview. If that ever changes, you'll get clear notice before anything is charged."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Bud work for people on GLP-1 medications like Ozempic, Wegovy or Mounjaro?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Bud sizes food suggestions for a smaller appetite and can remind you when your next dose is due. It's not medical advice - talk to your doctor about your treatment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get access?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Request early access with the form on this page. We'll message you on WhatsApp when a seat opens."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data private?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes - see our Privacy Policy at https://mybud.life/privacy for exactly what Bud collects, how it's used, and how to delete it at any time."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "I'm a dietitian, nutritionist or Ayurveda practitioner - how do I partner with Bud?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Leave your email in the partner form above and we'll be in touch."
+          }
+        }
+      ]
     }
   ]
 }
@@ -200,6 +263,36 @@
   .coach form { margin-top: 14px; }
   .coach .ok, .coach .error { margin-top: 14px; }
 
+  .faq {
+    margin: clamp(38px, 7vw, 56px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .faq h2 {
+    margin: 0 0 6px;
+    font-size: clamp(22px, 4vw, 26px);
+    font-weight: 500;
+  }
+  .faq details {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 2px;
+  }
+  .faq summary {
+    cursor: pointer;
+    font: 600 15px/1.5 Inter, system-ui, sans-serif;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; float: right; color: var(--accent); font-weight: 600; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font: 400 15px/1.6 Inter, system-ui, sans-serif;
+  }
+  .faq a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .faq a:hover { text-decoration: underline; }
+
   .spacer { flex: 1; min-height: 40px; }
 
   footer {
@@ -258,11 +351,43 @@
       <p class="error" id="partner-error" hidden>Something went wrong - try again in a moment.</p>
     </div>
 
+    <div class="faq">
+      <h2>Frequently asked questions</h2>
+      <details>
+        <summary>What is Bud?</summary>
+        <p>Bud is a nutrition copilot you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, finds food nearby that fits your diet, and supports GLP-1 programs.</p>
+      </details>
+      <details>
+        <summary>Do I need to download an app?</summary>
+        <p>No. Bud works entirely over WhatsApp - message the number once you have access and that's it.</p>
+      </details>
+      <details>
+        <summary>Is Bud free?</summary>
+        <p>Yes, Bud is free during this private preview. If that ever changes, you'll get clear notice before anything is charged.</p>
+      </details>
+      <details>
+        <summary>Does Bud work for people on GLP-1 medications like Ozempic, Wegovy or Mounjaro?</summary>
+        <p>Yes. Bud sizes food suggestions for a smaller appetite and can remind you when your next dose is due. It's not medical advice - talk to your doctor about your treatment.</p>
+      </details>
+      <details>
+        <summary>How do I get access?</summary>
+        <p>Request early access with the form on this page. We'll message you on WhatsApp when a seat opens.</p>
+      </details>
+      <details>
+        <summary>Is my data private?</summary>
+        <p>Yes - see our <a href="/privacy">Privacy Policy</a> for exactly what Bud collects, how it's used, and how to delete it at any time.</p>
+      </details>
+      <details>
+        <summary>I'm a dietitian, nutritionist or Ayurveda practitioner - how do I partner with Bud?</summary>
+        <p>Leave your email in the partner form above and we'll be in touch.</p>
+      </details>
+    </div>
+
     <div class="spacer"></div>
   </div>
 
   <footer>
-    <div>© 2026 Bud · a <a href="https://mybud.life">VoiceEval</a> project</div>
+    <div>© 2026 Bud · a <a href="https://mybud.life">VoiceEval</a> project · <a href="https://www.instagram.com/mybud.life/">Instagram</a></div>
     <div>Operated by VoiceEval Technologies Private Limited</div>
     <div>Not medical advice - talk to your doctor about your treatment</div>
   </footer>
