@@ -248,9 +248,36 @@
   }
   [hidden] { display: none !important; }
 
+  .preview {
+    margin: clamp(32px, 6vw, 44px) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bubble {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font: 400 14px/1.5 Inter, system-ui, sans-serif;
+  }
+  .bubble-me {
+    align-self: flex-end;
+    background: var(--accent);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble-bud {
+    align-self: flex-start;
+    background: var(--cream);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+  }
+
   .cta {
-    display: inline-block;
-    margin: clamp(38px, 7vw, 52px) 0 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: clamp(28px, 5vw, 36px) 0 0;
     min-height: 48px;
     padding: 13px 24px;
     border-radius: 6px;
@@ -260,12 +287,31 @@
     text-decoration: none;
     box-shadow: 0 8px 20px -12px rgba(31, 111, 92, 0.85);
   }
+  .cta-icon { width: 18px; height: 18px; flex: 0 0 auto; }
   .cta:hover { opacity: 0.92; }
   .hint {
     margin: 12px 0 0;
     color: var(--faint);
     font: 400 13px/1.5 Inter, system-ui, sans-serif;
   }
+
+  .float-cta {
+    position: fixed;
+    right: clamp(16px, 4vw, 28px);
+    bottom: clamp(16px, 4vw, 28px);
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 24px -8px rgba(31, 111, 92, 0.6);
+    z-index: 10;
+  }
+  .float-cta svg { width: 24px; height: 24px; }
+  .float-cta:hover { opacity: 0.92; }
 
   .coach {
     margin: clamp(34px, 6vw, 44px) 0 0;
@@ -316,7 +362,7 @@
 
   footer {
     border-top: 1px solid var(--line);
-    padding: 22px clamp(24px, 5vw, 32px);
+    padding: 22px clamp(24px, 5vw, 32px) 84px;
     color: var(--faint);
     font: 500 11px/1.7 Inter, system-ui, sans-serif;
     letter-spacing: 0.06em;
@@ -353,7 +399,20 @@
       <div class="row"><b>GLP-1</b><span>Reminders for your dose. Suggestions sized for a smaller appetite.</span></div>
     </div>
 
-    <a class="cta" href="https://wa.me/+15672352765?text=hi">Chat with Bud on WhatsApp</a>
+    <div class="preview">
+      <div class="bubble bubble-me">📷 lunch</div>
+      <div class="bubble bubble-bud">Chicken biryani - around 650 kcal, 32g protein. You're at 1,240 of 1,900 today.</div>
+      <div class="bubble bubble-me">veg lunch spot near me</div>
+      <div class="bubble bubble-bud">Saffron Thali, Indiranagar - veg thali, 4.6★, fits your macros →</div>
+    </div>
+
+    <a class="cta" href="https://wa.me/+15672352765?text=hi">
+      <svg class="cta-icon" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="3" width="16" height="11" rx="5.5"/>
+        <path d="M6 14 L5 17.5 L9.5 14.5 Z"/>
+      </svg>
+      Chat with Bud on WhatsApp
+    </a>
     <p class="hint">Opens WhatsApp - no signup, no app to install.</p>
 
     <div class="coach">
@@ -400,6 +459,13 @@
 
     <div class="spacer"></div>
   </div>
+
+  <a class="float-cta" href="https://wa.me/+15672352765?text=hi" aria-label="Chat with Bud on WhatsApp">
+    <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="2" y="3" width="16" height="11" rx="5.5"/>
+      <path d="M6 14 L5 17.5 L9.5 14.5 Z"/>
+    </svg>
+  </a>
 
   <footer>
     <div>© 2026 Bud · a <a href="https://mybud.life">VoiceEval</a> project · <a href="https://www.instagram.com/mybud.life/">Instagram</a></div>
