@@ -1,6 +1,6 @@
 # mybud.life
 
-Landing page and legal documents for **Bud**, nutrition tracking and diet
+Landing page and legal documents for **Bud Health**, nutrition tracking and diet
 planning on WhatsApp.
 
 Static, no build step. Netlify publishes the repo root and autodeploys on every
@@ -29,7 +29,7 @@ Google.
 
 ## The claims in these documents are tested against the backend
 
-`privacy.html` makes factual promises — Bud cannot read email, no Drive access,
+`privacy.html` makes factual promises — Bud Health cannot read email, no Drive access,
 90-day conversation retention, deletion on request. The backend repo
 (`voice-eval/bud`) has `tests/test_policy_claims.py`, which asserts each of
 those against what the code actually does, and its CI fetches the live pages
