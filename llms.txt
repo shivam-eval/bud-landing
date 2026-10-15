@@ -24,7 +24,7 @@
 
 - [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
   link to start using Bud Health.
-- [Blog](https://mybud.life/blog): the science behind Bud Health's numbers.
+- [Blog](https://mybud.life/blog/): the science behind Bud Health's numbers.
 - [Daily calorie & macro calculator](https://mybud.life/blog/calorie-calculator):
   the full method for daily calories, protein, carbs, fat and fibre, every
   source, and a free calculator that gives the same numbers as the WhatsApp
