@@ -112,6 +112,14 @@
         },
         {
           "@type": "Question",
+          "name": "How does Bud Health work out my calorie and protein targets?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From your age, sex, height, weight, how active you are and your goal, using ICMR-NIN's 2020 method for Indians and WHO's limits for fat and fibre. The full method, every source and a calculator are at https://mybud.life/blog/calorie-calculator."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "I'm a dietitian, nutritionist or Ayurveda practitioner - how do I partner with Bud Health?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -182,6 +190,15 @@
     cursor: pointer;
   }
   .top-partner:hover { border-color: var(--accent); color: var(--accent); }
+  .top-link {
+    margin-left: auto;
+    color: var(--muted);
+    text-decoration: none;
+    font: 500 13px/1.3 Inter, system-ui, sans-serif;
+    white-space: nowrap;
+  }
+  .top-link:hover { color: var(--accent); }
+  .top-link + .top-partner { margin-left: 4px; }
 
   h1 {
     margin: 0;
@@ -424,6 +441,7 @@
         <path d="M16 14.6c.6-4.7 3.8-8 9.4-8C25.4 13 22.1 14.6 16 14.6Z" fill="#1f6f5c" fill-opacity="0.6"/>
       </svg>
       <span class="brand">Bud Health</span>
+      <a class="top-link" href="/blog">Blog</a>
       <button type="button" class="top-partner" id="partner-open">Partner with us (dietitians/nutritionists) →</button>
     </div>
 
@@ -486,6 +504,10 @@
         <p>Yes - see our <a href="/privacy">Privacy Policy</a> for exactly what Bud Health collects, how it's used, and how to delete it at any time.</p>
       </details>
       <details>
+        <summary>How does Bud Health work out my calorie and protein targets?</summary>
+        <p>From your age, sex, height, weight, how active you are and your goal, using ICMR-NIN's 2020 method for Indians and WHO's limits for fat and fibre. The <a href="/blog/calorie-calculator">full method, every source and a calculator</a> are on our blog.</p>
+      </details>
+      <details>
         <summary>I'm a dietitian, nutritionist or Ayurveda practitioner - how do I partner with Bud Health?</summary>
         <p>Tap "Partner with us" at the top of this page and leave your email - we'll be in touch.</p>
       </details>
@@ -514,7 +536,7 @@
   </a>
 
   <footer>
-    <div>© 2026 Bud Health · <a href="https://www.instagram.com/mybud.life/">Instagram</a></div>
+    <div>© 2026 Bud Health · <a href="/blog">Blog</a> · <a href="https://www.instagram.com/mybud.life/">Instagram</a></div>
     <div>Operated by VoiceEval Technologies Private Limited</div>
   </footer>
 

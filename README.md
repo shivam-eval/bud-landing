@@ -7,14 +7,29 @@ Static, no build step. Netlify publishes the repo root and autodeploys on every
 push to `main`.
 
 ```
-index.html     the page (single file, inline CSS/JS)
-privacy.html   privacy policy      -> /privacy
-terms.html     terms of service    -> /terms
-_redirects     clean URLs (200 rewrites, so the address bar keeps /privacy)
-favicon.svg    wordmark
-robots.txt     indexable
+index.html                    the page (single file, inline CSS/JS)
+privacy.html                  privacy policy      -> /privacy
+terms.html                    terms of service    -> /terms
+blog/index.html               the blog            -> /blog
+blog/calorie-calculator.html  targets method + calculator -> /blog/calorie-calculator
+blog/bmi-calculator.html      BMI method + calculator     -> /blog/bmi-calculator
+blog/blog.css, blog/calc.js   shared by the blog pages
+_redirects                    clean URLs (200 rewrites, so the address bar keeps /privacy)
+favicon.svg                   wordmark
+robots.txt                    indexable
+llms.txt                      summary for AI assistants and answer engines
 sitemap.xml
 ```
+
+## The calculators must give the bot's numbers
+
+The two blog calculators compute in the browser from a JSON block on each page
+(`<script type="application/json" id="bud-method">`), which is a copy of
+`body.METHOD` in the backend repo - the code that works out the numbers a user
+is shown on WhatsApp, and whose "View sources" buttons open these pages. The
+backend's `tests/test_method_on_website.py` fetches both live pages and fails
+if that block differs from `body.METHOD`. **Change a constant in the backend
+and in these pages together**, and deploy this repo first: the bot links here.
 
 ## Why the legal pages live here
 

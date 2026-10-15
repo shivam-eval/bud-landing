@@ -24,8 +24,36 @@
 
 - [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
   link to start using Bud Health.
+- [Blog](https://mybud.life/blog): the science behind Bud Health's numbers.
+- [Daily calorie & macro calculator](https://mybud.life/blog/calorie-calculator):
+  the full method for daily calories, protein, carbs, fat and fibre, every
+  source, and a free calculator that gives the same numbers as the WhatsApp
+  service.
+- [BMI calculator](https://mybud.life/blog/bmi-calculator): how BMI is
+  calculated, the WHO categories, the healthy weight range for a height, and
+  the lower cut-offs suggested for South Asians.
 - [Privacy Policy](https://mybud.life/privacy)
 - [Terms of Service](https://mybud.life/terms)
+
+## How Bud Health works out a person's daily targets
+
+- Calories: resting energy from the FAO/WHO/UNU (2004) equations for age and
+  sex, reduced by 10% for men and 9% for women as in ICMR-NIN's Nutrient
+  Requirements for Indians (2020), multiplied by an activity level - 1.4
+  mostly sitting, 1.6 lightly active, 1.8 moderately active, 2.3 very active
+  (ICMR-NIN's 1.4, 1.8 and 2.3, plus 1.6 for a desk job with daily exercise).
+- Goals: weight loss is 500 kcal a day below maintenance (AHA/ACC/TOS 2013);
+  diabetes care is the same when BMI is 25 or more, otherwise maintenance;
+  muscle building is 10% above maintenance; GLP-1 medication users get the
+  500 kcal deficit but never below 1,200 kcal (women) or 1,800 (men). Nobody
+  is targeted below 1,200 kcal (women) or 1,500 (men).
+- Protein: 1.0 g per kg (ICMR-NIN, cereal-based diets), 1.2 for weight loss,
+  1.4 on GLP-1 medication, 1.6 for muscle building - on body weight, or on
+  the top of the healthy weight range for the person's height if above it.
+- Fat 25% of calories (WHO 2023: 30% or less); fibre 25 g a day (WHO 2023
+  minimum); carbohydrate is the remainder.
+- BMI uses the WHO categories: under 18.5 underweight, 18.5-24.9 healthy,
+  25-29.9 overweight, 30 and over obese.
 
 ## Partnering with Bud Health
 
