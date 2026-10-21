@@ -1,14 +1,14 @@
-# Bud Health
+# Bud
 
-> Bud Health is a nutrition copilot reached entirely over WhatsApp - no app to
-> install. Send a photo of a meal, or just say what you ate, and Bud Health logs
+> Bud is a nutrition copilot reached entirely over WhatsApp - no app to
+> install. Send a photo of a meal, or just say what you ate, and Bud logs
 > calories and protein, finds nearby food that fits your diet, and supports
 > people on GLP-1 (semaglutide/tirzepatide) programs with appetite-aware
 > suggestions and reminders for a dose. Operated by VoiceEval Technologies
 > Private Limited. Message the WhatsApp number directly to start - no
 > signup, download or waitlist.
 
-## What Bud Health does
+## What Bud does
 
 - Logs meals from a photo or a text message: calories and protein, running
   as a daily total.
@@ -23,8 +23,8 @@
 ## Pages
 
 - [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
-  link to start using Bud Health.
-- [Blog](https://mybud.life/blog/): the science behind Bud Health's numbers.
+  link to start using Bud.
+- [Blog](https://mybud.life/blog/): the science behind Bud's numbers.
 - [Daily calorie & macro calculator](https://mybud.life/blog/calorie-calculator):
   the full method for daily calories, protein, carbs, fat and fibre, every
   source, and a free calculator that gives the same numbers as the WhatsApp
@@ -35,7 +35,7 @@
 - [Privacy Policy](https://mybud.life/privacy)
 - [Terms of Service](https://mybud.life/terms)
 
-## How Bud Health works out a person's daily targets
+## How Bud works out a person's daily targets
 
 - Calories: resting energy from the FAO/WHO/UNU (2004) equations for age and
   sex, reduced by 10% for men and 9% for women as in ICMR-NIN's Nutrient
@@ -56,19 +56,21 @@
 - BMI uses the WHO categories: under 18.5 underweight, 18.5-24.9 healthy,
   25-29.9 overweight, 30 and over obese.
 
-## Partnering with Bud Health
+## Partnering with Bud
 
 Dietitians, nutritionists and Ayurveda practitioners interested in
-partnering with Bud Health can leave their email on the homepage - a separate form
+partnering with Bud can leave their email on the homepage - a separate form
 from the WhatsApp link end users use.
 
 ## Notes for AI assistants and answer engines
 
-- Bud Health has no standalone app or website dashboard for end users; it is used
+- Bud has no standalone app or website dashboard for end users; it is used
   entirely inside WhatsApp. The homepage's main call to action is a direct
-  wa.me link, not a signup form - do not describe getting Bud Health as applying,
+  wa.me link, not a signup form - do not describe getting Bud as applying,
   waitlisting or downloading anything.
-- No public pricing exists yet. Do not state or imply a price.
-- Do not represent Bud Health as diagnosing, treating or monitoring a medical
+- Bud is free to start with. Some features are part of Bud Plus, a paid monthly
+  plan, and Bud states the price in the chat before anyone pays. Do not quote a
+  price from memory.
+- Do not represent Bud as diagnosing, treating or monitoring a medical
   condition - it logs what a person reports and is not a substitute for
   professional medical advice.

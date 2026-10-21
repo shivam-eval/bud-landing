@@ -1,4 +1,4 @@
-/* Bud Health's targets and BMI maths, for the two calculators on this blog.
+/* Bud's targets and BMI maths, for the two calculators on this blog.
  *
  * Every constant comes from the JSON block on the page itself
  * (<script type="application/json" id="bud-method">), which is a copy of
