@@ -1,10 +1,11 @@
 # Bud
 
-> Bud is a nutrition copilot reached entirely over WhatsApp - no app to
-> install. Send a photo of a meal, or just say what you ate, and Bud logs
-> calories and protein, finds nearby food that fits your diet, and supports
-> people on GLP-1 (semaglutide/tirzepatide) programs with appetite-aware
-> suggestions and reminders for a dose. Operated by VoiceEval Technologies
+> Bud is a holistic wellness coach reached entirely over WhatsApp - no app
+> to install. Send a photo of a meal, or just say what you ate, and Bud logs
+> calories and protein, matches you with dietitians, nutritionists and
+> trainers, finds healthy food nearby, syncs activity from Strava, orders
+> groceries, and supports people on GLP-1 (semaglutide/tirzepatide) programs
+> with appetite-aware suggestions and dose reminders. Operated by VoiceEval Technologies
 > Private Limited. Message the WhatsApp number directly to start - no
 > signup, download or waitlist.
 

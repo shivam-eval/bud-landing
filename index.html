@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow">
-<title>Bud - Nutrition tracking &amp; diet planning on WhatsApp</title>
-<meta name="description" content="Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open - just message Bud on WhatsApp.">
+<title>Bud - Your holistic wellness coach on WhatsApp</title>
+<meta name="description" content="Bud is a wellness coach on WhatsApp. Log meals and workouts by photo, voice or text, connect with dietitians and trainers, find healthy food and order groceries. No app to open.">
 <meta name="keywords" content="nutrition tracking, diet planning, calorie counter, GLP-1, WhatsApp nutrition assistant, meal logging India, Ayurveda nutrition partner">
 <link rel="canonical" href="https://mybud.life/">
-<meta property="og:title" content="Bud - Nutrition tracking & diet planning on WhatsApp">
-<meta property="og:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too. Message Bud on WhatsApp to start.">
+<meta property="og:title" content="Bud - Your holistic wellness coach on WhatsApp">
+<meta property="og:description" content="Track meals and workouts, connect with dietitians and trainers, find healthy food and order groceries - all on WhatsApp. Message Bud to start.">
 <meta property="og:url" content="https://mybud.life/">
 <meta property="og:site_name" content="Bud">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_IN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Bud - Nutrition tracking & diet planning on WhatsApp">
-<meta name="twitter:description" content="Track your food and plan meals on WhatsApp - calories, protein, and diet-aware suggestions, built for GLP-1 programs too.">
+<meta name="twitter:title" content="Bud - Your holistic wellness coach on WhatsApp">
+<meta name="twitter:description" content="Track meals and workouts, connect with dietitians and trainers, find healthy food and order groceries - all on WhatsApp.">
 <meta name="theme-color" content="#f7f1e7">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/favicon.svg">
@@ -33,7 +33,7 @@
       "name": "Bud",
       "url": "https://mybud.life/",
       "logo": "https://mybud.life/favicon.svg",
-      "description": "Bud is a nutrition copilot on WhatsApp, operated by VoiceEval Technologies Private Limited.",
+      "description": "Bud is a holistic wellness coach on WhatsApp, operated by VoiceEval Technologies Private Limited.",
       "sameAs": ["https://www.instagram.com/mybud.life/"]
     },
     {
@@ -41,7 +41,7 @@
       "@id": "https://mybud.life/#website",
       "url": "https://mybud.life/",
       "name": "Bud",
-      "description": "Bud logs your meals from a photo or a sentence, tracks calories and protein, and finds food that fits your diet - including GLP-1 programs. No app to open.",
+      "description": "Bud is a wellness coach on WhatsApp. It tracks meals and workouts, connects you with dietitians and trainers, finds healthy food and orders groceries. No app to open.",
       "publisher": { "@id": "https://mybud.life/#organization" },
       "inLanguage": "en-IN"
     },
@@ -67,7 +67,7 @@
           "name": "What is Bud?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Bud is a nutrition copilot you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, finds food nearby that fits your diet, and supports GLP-1 programs."
+            "text": "Bud is a holistic wellness coach you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, matches you with dietitians, nutritionists and fitness trainers, finds healthy food and fitness options near you, syncs your activity from Strava, and orders the groceries you need. It supports GLP-1 programs too."
           }
         },
         {
@@ -306,6 +306,31 @@
     border-bottom-left-radius: 4px;
   }
 
+  .showcase { margin: clamp(32px, 6vw, 44px) 0 0; }
+  .showcase img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 18px 40px -24px rgba(23, 19, 16, 0.4);
+  }
+  .try { margin: clamp(32px, 6vw, 44px) 0 0; }
+  .try h2 { margin: 0 0 12px; font-size: clamp(20px, 4vw, 24px); font-weight: 500; }
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    background: #fff;
+    color: var(--ink);
+    text-decoration: none;
+    font: 500 14px/1.3 Inter, system-ui, sans-serif;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .try .hint { margin-top: 12px; }
+
   .cta {
     display: inline-flex;
     align-items: center;
@@ -446,26 +471,36 @@
     </div>
 
     <h1>Meet <em>Bud</em>.</h1>
-    <p class="lead">Your nutrition copilot on WhatsApp.</p>
+    <p class="lead">Your holistic wellness coach, on WhatsApp.</p>
     <p class="copy">
-      Send a photo of your plate, or just say what you ate, and Bud logs the calories
-      and protein - no app to open, no manual entry. Tell it your diet or your goal
-      and it finds food nearby that actually fits. On a GLP-1 program? Bud sizes
-      suggestions for a smaller appetite and can remind you when your next dose is due.
+      Send a photo of your plate or just say what you ate, and Bud logs the calories,
+      protein, carbs and fat. No app to open. Bud also finds food that fits your diet,
+      connects you with real dietitians and trainers, orders your groceries and keeps
+      your workouts in the picture.
     </p>
 
     <div class="rows">
-      <div class="row"><b>Meals</b><span>Logged from a photo or a sentence. Calories and protein, running daily total.</span></div>
-      <div class="row"><b>Lunch</b><span>A suggestion timed to the gap in your day, not a recipe blog - ready before you're starving.</span></div>
-      <div class="row"><b>Diet</b><span>Vegetarian, vegan, Jain, high-protein, lighter - filtered, never guessed.</span></div>
-      <div class="row"><b>GLP-1</b><span>Reminders for your dose. Suggestions sized for a smaller appetite.</span></div>
+      <div class="row"><b>Track</b><span>Meals and workouts, logged by voice, chat or photo. Calories, protein, carbs, fat and fibre against targets worked out for your body and goal.</span></div>
+      <div class="row"><b>Connect</b><span>Matches you with the right dietitians, nutritionists and fitness trainers.</span></div>
+      <div class="row"><b>Discover</b><span>Makes the right restaurants, fitness studios, sports turfs and trainers easy to find and reach.</span></div>
+      <div class="row"><b>Sync</b><span>Pulls in activity from fitness tracking apps such as Strava.</span></div>
+      <div class="row"><b>Diet planning</b><span>Vegetarian, vegan, Jain, high-protein or lighter, and GLP-1 support with dose reminders.</span></div>
+      <div class="row"><b>Groceries</b><span>Orders the missing groceries you need to follow your diet.</span></div>
     </div>
 
-    <div class="preview">
-      <div class="bubble bubble-me">📷 lunch</div>
-      <div class="bubble bubble-bud">Chicken biryani - around 650 kcal, 32g protein. You're at 1,240 of 1,900 today.</div>
-      <div class="bubble bubble-me">veg lunch spot near me</div>
-      <div class="bubble bubble-bud">Saffron Thali, Indiranagar - veg thali, 4.6★, fits your macros →</div>
+    <div class="showcase">
+      <img src="/img/bud-meal-tracker.jpg" width="1200" height="867" alt="Bud on WhatsApp logging a grilled chicken salad from a photo, with a card showing today's calories, protein, carbs, fat and fibre" loading="lazy">
+    </div>
+
+    <div class="try">
+      <h2>Things you can say to Bud</h2>
+      <div class="pills">
+        <a class="pill" href="https://wa.me/+15672352765?text=hi">Log my lunch</a>
+        <a class="pill" href="https://wa.me/+15672352765?text=hi">What should I eat tonight?</a>
+        <a class="pill" href="https://wa.me/+15672352765?text=hi">Find me a dietitian</a>
+        <a class="pill" href="https://wa.me/+15672352765?text=hi">Order my groceries</a>
+      </div>
+      <p class="hint">Tap one - it opens WhatsApp with Bud, nothing to install.</p>
     </div>
 
     <a class="cta" href="https://wa.me/+15672352765?text=hi">
@@ -481,7 +516,7 @@
       <h2>Frequently asked questions</h2>
       <details>
         <summary>What is Bud?</summary>
-        <p>Bud is a nutrition copilot you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, finds food nearby that fits your diet, and supports GLP-1 programs.</p>
+        <p>Bud is a holistic wellness coach you use entirely inside WhatsApp - no app to download. Send a photo of a meal or just say what you ate, and Bud logs the calories and protein, matches you with dietitians, nutritionists and fitness trainers, finds healthy food and fitness options near you, syncs your activity from Strava, and orders the groceries you need. It supports GLP-1 programs too.</p>
       </details>
       <details>
         <summary>Do I need to download an app?</summary>
