@@ -18,6 +18,10 @@
 - Suggests lunch timed to the gap in a person's day, not a generic recipe.
 - Supports GLP-1 programs specifically: suggestions sized for a smaller
   appetite, and reminders for a dose.
+- Runs a 21-day challenge (log one meal a day on any 21 of 30 days) that
+  people do with their buddies: one invite link, shared with friends or a
+  WhatsApp group, puts everyone who joins on one leaderboard of days logged,
+  with each person's daily calories and protein against their own target.
 - Gives dietary guidance but is explicitly not medical advice and does not
   replace a doctor, dietitian or clinician.
 
