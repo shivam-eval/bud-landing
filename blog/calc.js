@@ -116,6 +116,11 @@
 
     var g = 0;
     picked.forEach(function (p) { g = Math.max(g, perKg(p, bmiValue)); });
+    // Anyone who works out regularly gets at least the training figure,
+    // whatever their goal (body.TRAINING_LEVELS in the bot).
+    var training = M.training_protein || {};
+    var trained = (training.levels || []).indexOf(level) !== -1 && training.g_per_kg > g;
+    if (trained) g = training.g_per_kg;
     var m = input.height / 100;
     var cap = M.protein_reference_bmi * m * m;
     var proteinWeight = Math.min(input.weight, cap);
@@ -129,7 +134,7 @@
       kcal: kcal, protein: protein, carbs: carbs, fat: fat, fibre: M.fibre_g,
       goal: goal, goals: picked, sex: sex, level: level, bmi: bmiValue,
       resting: resting, maintenance: maintenance, direction: dir, floor: floor, floored: floored,
-      perKg: g, proteinWeight: proteinWeight, capped: input.weight > cap
+      perKg: g, trained: trained, proteinWeight: proteinWeight, capped: input.weight > cap
     };
   }
 
@@ -233,7 +238,8 @@
       }
       if (t.floored) goalStep += ', raised to the ' + fmt(t.floor) + ' kcal floor';
       steps.push(goalStep + ' = <span>' + fmt(t.kcal) + ' kcal</span>');
-      steps.push('Protein: ' + t.perKg + ' g per kg × ' + round1(t.proteinWeight) + ' kg' +
+      steps.push('Protein: ' + t.perKg + ' g per kg' + (t.trained ? ' (you work out regularly)' : '') +
+        ' × ' + round1(t.proteinWeight) + ' kg' +
         (t.capped ? ' (the top of the healthy range for your height)' : '') + ' = <span>' + t.protein + ' g</span>');
       steps.push('Fat: 25% of calories ÷ 9 = <span>' + t.fat + ' g</span>. Carbs: what is left ÷ 4 = <span>' +
         t.carbs + ' g</span>. Fibre: <span>' + t.fibre + ' g</span>');

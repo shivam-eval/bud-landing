@@ -45,17 +45,18 @@
 - Calories: resting energy from the FAO/WHO/UNU (2004) equations for age and
   sex, reduced by 10% for men and 9% for women as in ICMR-NIN's Nutrient
   Requirements for Indians (2020), multiplied by an activity level - 1.4
-  mostly sitting, 1.5 lightly active, 1.6 moderately active, 1.8 very active
-  (ICMR-NIN's sedentary 1.4 and moderate-work 1.8, with two steps between
-  them inside FAO/WHO/UNU's sedentary-to-light band of 1.40-1.69).
+  mostly sitting, 1.45 lightly active, 1.5 moderately active, 1.6 very active
+  (ICMR-NIN's sedentary 1.4, plus up to the 0.2 FAO/WHO/UNU give for an hour
+  of exercise a day).
 - Goals: weight loss is 500 kcal a day below maintenance (AHA/ACC/TOS 2013);
   diabetes care is the same when BMI is 25 or more, otherwise maintenance;
   muscle building is 10% above maintenance; GLP-1 medication users get the
   500 kcal deficit but never below 1,200 kcal (women) or 1,800 (men). Nobody
   is targeted below 1,200 kcal (women) or 1,500 (men).
 - Protein: 1.0 g per kg (ICMR-NIN, cereal-based diets), 1.2 for weight loss,
-  1.4 on GLP-1 medication, 1.6 for muscle building - on body weight, or on
-  the top of the healthy weight range for the person's height if above it.
+  1.4 on GLP-1 medication, 1.6 for muscle building or for anyone who works
+  out regularly - on body weight, or on the top of the healthy weight range
+  for the person's height if above it.
 - Fat 25% of calories (WHO 2023: 30% or less); fibre 25 g a day (WHO 2023
   minimum); carbohydrate is the remainder.
 - BMI uses the WHO categories: under 18.5 underweight, 18.5-24.9 healthy,

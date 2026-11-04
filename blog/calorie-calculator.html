@@ -93,7 +93,7 @@
         {
           "@type": "Question",
           "name": "How much protein do I need a day?",
-          "acceptedAnswer": { "@type": "Answer", "text": "ICMR-NIN's recommended allowance is 0.83 g per kg of body weight, and 1 g per kg for people eating a cereal-based diet with lower-quality protein - the usual Indian plate. During weight loss 1.2-1.6 g per kg helps keep muscle, and 1.4-2.0 g per kg is the range for building muscle. Bud works it out on your weight, or on the top of the healthy range for your height if you are above it." }
+          "acceptedAnswer": { "@type": "Answer", "text": "ICMR-NIN's recommended allowance is 0.83 g per kg of body weight, and 1 g per kg for people eating a cereal-based diet with lower-quality protein - the usual Indian plate. During weight loss 1.2-1.6 g per kg helps keep muscle, and 1.4-2.0 g per kg is the range for building muscle - Bud uses 1.6 for that, and for anyone who works out regularly. Bud works it out on your weight, or on the top of the healthy range for your height if you are above it." }
         },
         {
           "@type": "Question",
@@ -241,8 +241,8 @@
             <thead><tr><th>Number</th><th>How it's worked out</th><th>Source</th></tr></thead>
             <tbody>
               <tr><td><b>Resting energy</b></td><td>FAO/WHO/UNU equation for your age and sex, cut 10% (men) or 9% (women) for Indian adults</td><td class="src">ICMR-NIN 2020<sup><a href="#ref-1">1</a></sup>, FAO/WHO/UNU 2004<sup><a href="#ref-3">3</a></sup></td></tr>
-              <tr><td><b>Calories</b></td><td>Resting energy × 1.4 to 1.8 for your activity, then your goal: 500 kcal less to lose weight, 10% more to build muscle</td><td class="src">ICMR-NIN<sup><a href="#ref-1">1</a></sup>, AHA/ACC/TOS<sup><a href="#ref-6">6</a></sup></td></tr>
-              <tr><td><b>Protein</b></td><td>1.0 to 1.6 g per kg, by goal</td><td class="src">ICMR-NIN<sup><a href="#ref-1">1</a></sup>, GLP-1 advisory<sup><a href="#ref-7">7</a></sup>, ISSN<sup><a href="#ref-8">8</a></sup></td></tr>
+              <tr><td><b>Calories</b></td><td>Resting energy × 1.4 to 1.6 for your activity, then your goal: 500 kcal less to lose weight, 10% more to build muscle</td><td class="src">ICMR-NIN<sup><a href="#ref-1">1</a></sup>, AHA/ACC/TOS<sup><a href="#ref-6">6</a></sup></td></tr>
+              <tr><td><b>Protein</b></td><td>1.0 to 1.6 g per kg, by goal - 1.6 if you work out regularly</td><td class="src">ICMR-NIN<sup><a href="#ref-1">1</a></sup>, GLP-1 advisory<sup><a href="#ref-7">7</a></sup>, ISSN<sup><a href="#ref-8">8</a></sup></td></tr>
               <tr><td><b>Fat</b></td><td>25% of calories</td><td class="src">WHO 2023<sup><a href="#ref-5">5</a></sup>, ICMR-NIN 2024<sup><a href="#ref-2">2</a></sup></td></tr>
               <tr><td><b>Carbs</b></td><td>The calories left after protein and fat</td><td class="src">WHO 2023<sup><a href="#ref-4">4</a></sup></td></tr>
               <tr><td><b>Fibre</b></td><td>25 g</td><td class="src">WHO 2023<sup><a href="#ref-4">4</a></sup></td></tr>
@@ -277,14 +277,14 @@
             <thead><tr><th>How active you are</th><th class="num">Factor</th><th>Source</th></tr></thead>
             <tbody>
               <tr><td><b>Mostly sitting</b><br>Sedentary, no time to work out</td><td class="num">1.4</td><td class="src">ICMR-NIN, sedentary<sup><a href="#ref-1">1</a></sup></td></tr>
-              <tr><td><b>Lightly active</b><br>Mostly sitting, work out once in a while</td><td class="num">1.5</td><td class="src">Inside FAO/WHO/UNU's sedentary-to-light band, 1.40–1.69<sup><a href="#ref-3">3</a></sup></td></tr>
-              <tr><td><b>Moderately active</b><br>Movement all day or work out 2-3 times a week</td><td class="num">1.6</td><td class="src">1.4 plus 0.2 for regular exercise, inside the same band<sup><a href="#ref-1">1</a>,<a href="#ref-3">3</a></sup></td></tr>
-              <tr><td><b>Very active</b><br>Work out regularly</td><td class="num">1.8</td><td class="src">ICMR-NIN, moderate work<sup><a href="#ref-1">1</a></sup>; FAO/WHO/UNU's active band<sup><a href="#ref-3">3</a></sup></td></tr>
+              <tr><td><b>Lightly active</b><br>Mostly sitting, work out once in a while</td><td class="num">1.45</td><td class="src">1.4 plus a little of the 0.2 for daily exercise<sup><a href="#ref-1">1</a>,<a href="#ref-3">3</a></sup></td></tr>
+              <tr><td><b>Moderately active</b><br>Movement all day or work out 2-3 times a week</td><td class="num">1.5</td><td class="src">1.4 plus half the 0.2 for daily exercise<sup><a href="#ref-1">1</a>,<a href="#ref-3">3</a></sup></td></tr>
+              <tr><td><b>Very active</b><br>Work out regularly</td><td class="num">1.6</td><td class="src">1.4 plus the 0.2 for an hour of exercise a day<sup><a href="#ref-1">1</a>,<a href="#ref-3">3</a></sup></td></tr>
             </tbody>
           </table>
         </div>
-        <p>Two of the four levels are ICMR's own figures and two are worked out between them. Most people who use Bud sit at a desk, and how often they work out is what separates them. The FAO/WHO/UNU report puts a sitting day with a little activity anywhere from 1.40 to 1.69, and notes that an hour of moderate to vigorous exercise a day raises a person's PAL by about 0.2, "from 1.55 to 1.75"<sup><a href="#ref-3">3</a></sup>. So "lightly active" is 1.5 and "moderately active" is ICMR's 1.4 plus that 0.2, both inside that band; and "very active" - working out regularly - is 1.8, ICMR's moderate work and inside FAO/WHO/UNU's active band of 1.70–1.99. ICMR's heavy-work figure, 2.3, is a labourer's day, and Bud doesn't use it: on a desk job with regular workouts it would put your calories about 30% too high.</p>
-        <div class="note"><b>A check against ICMR's own table.</b> For a 65 kg man this method gives 2,110 kcal a day sedentary and 2,710 for moderate work ("very active" here), and for a 55 kg woman 1,660 and 2,130 - ICMR-NIN's published reference requirements exactly<sup><a href="#ref-1">1</a></sup>. (At ICMR's heavy-work factor it gives 3,460 against ICMR's 3,470 for men, and 2,720 exactly for women.)</div>
+        <p>One of the four levels is ICMR's own figure, and the other three build on it. Most people who use Bud sit at a desk, and how often they work out is what separates them. The FAO/WHO/UNU report notes that an hour of moderate to vigorous exercise every day raises a person's PAL by about 0.2 - "from 1.55 to 1.75" in its example, which starts from a Western sitting day<sup><a href="#ref-3">3</a></sup>. Bud adds that 0.2 to ICMR's Indian sitting day of 1.4, so working out regularly is 1.6, and less exercise adds less: 1.5 for two or three sessions a week, 1.45 for once in a while. ICMR's higher figures - 1.8 for moderate work and 2.3 for heavy work - describe physically demanding jobs, not an hour at the gym on top of a desk job, so Bud doesn't use them: for somebody with a desk job who works out regularly, 1.8 would put their calories about 12% too high.</p>
+        <div class="note"><b>A check against ICMR's own table.</b> For a 65 kg man this method's resting energy gives 2,110 kcal a day at ICMR's sedentary factor, 2,710 at its moderate-work factor and 3,460 at heavy work, against ICMR's published 2,110, 2,710 and 3,470; for a 55 kg woman it gives 1,660, 2,130 and 2,720 - ICMR-NIN's reference requirements exactly<sup><a href="#ref-1">1</a></sup>. "Mostly sitting" is ICMR's sedentary figure.</div>
 
         <h2><span class="step">Step 3</span>Your goal</h2>
         <p>The figure from step 2 is what keeps your weight where it is. Your goal then moves it:</p>
@@ -315,10 +315,11 @@
               <tr><td><b>Weight loss</b>, and diabetes care with a BMI of 25 or more</td><td class="num">1.2</td><td class="src">1.2–1.6 during weight loss<sup><a href="#ref-7">7</a></sup></td></tr>
               <tr><td><b>GLP-1 medication</b></td><td class="num">1.4</td><td class="src">Joint GLP-1 advisory<sup><a href="#ref-7">7</a></sup></td></tr>
               <tr><td><b>Muscle building</b></td><td class="num">1.6</td><td class="src">ISSN<sup><a href="#ref-8">8</a></sup>, Morton et al.<sup><a href="#ref-9">9</a></sup></td></tr>
+              <tr><td><b>Working out regularly</b> ("very active"), whatever your goal</td><td class="num">1.6</td><td class="src">ISSN<sup><a href="#ref-8">8</a></sup>, Morton et al.<sup><a href="#ref-9">9</a></sup></td></tr>
             </tbody>
           </table>
         </div>
-        <p>ICMR-NIN's recommended allowance for Indian adults is 0.83 g of protein per kg of body weight. For people whose diet is mostly cereal, with lower-quality protein, it is 1 g per kg<sup><a href="#ref-1">1</a></sup> - which describes most Indian plates, so that is Bud's figure for general nutrition. While you're losing weight, more protein helps you lose fat rather than muscle, and 1.2–1.6 g per kg is the range the 2025 GLP-1 advisory cites for that<sup><a href="#ref-7">7</a></sup>. For building muscle, the International Society of Sports Nutrition recommends 1.4–2.0 g per kg<sup><a href="#ref-8">8</a></sup>, and a meta-analysis of 49 trials found no extra gain beyond about 1.6<sup><a href="#ref-9">9</a></sup>.</p>
+        <p>ICMR-NIN's recommended allowance for Indian adults is 0.83 g of protein per kg of body weight. For people whose diet is mostly cereal, with lower-quality protein, it is 1 g per kg<sup><a href="#ref-1">1</a></sup> - which describes most Indian plates, so that is Bud's figure for general nutrition. While you're losing weight, more protein helps you lose fat rather than muscle, and 1.2–1.6 g per kg is the range the 2025 GLP-1 advisory cites for that<sup><a href="#ref-7">7</a></sup>. For building muscle, the International Society of Sports Nutrition recommends 1.4–2.0 g per kg<sup><a href="#ref-8">8</a></sup>, and a meta-analysis of 49 trials found no extra gain beyond about 1.6<sup><a href="#ref-9">9</a></sup>. The same 1.6 applies to anyone who works out regularly, whatever their goal: that range is for people who train, and somebody who lifts while losing weight is the person most at risk of losing muscle with the fat.</p>
         <p><strong>Protein is worked out on a healthy weight.</strong> Muscle, not body fat, is what sets how much protein you need, so working it out on your total weight overstates it for anyone carrying extra fat - a point the GLP-1 advisory makes directly<sup><a href="#ref-7">7</a></sup>. Bud uses your weight or the top of the healthy range for your height (a BMI of 24.9), whichever is lower.</p>
         <div class="formula">
           <span class="eq">Protein (g) = g per kg × the lower of: your weight, or 24.9 × height(m)²</span>
@@ -364,7 +365,7 @@
           </details>
           <details>
             <summary>How much protein do I need a day?</summary>
-            <p>ICMR-NIN's recommended allowance is 0.83 g per kg of body weight, and 1 g per kg on a cereal-based diet<sup><a href="#ref-1">1</a></sup>. During weight loss 1.2–1.6 g per kg helps keep muscle<sup><a href="#ref-7">7</a></sup>, and for building muscle the range is 1.4–2.0<sup><a href="#ref-8">8</a></sup>. Bud works it out on your weight, or on the top of the healthy range for your height if you're above it.</p>
+            <p>ICMR-NIN's recommended allowance is 0.83 g per kg of body weight, and 1 g per kg on a cereal-based diet<sup><a href="#ref-1">1</a></sup>. During weight loss 1.2–1.6 g per kg helps keep muscle<sup><a href="#ref-7">7</a></sup>, and for building muscle the range is 1.4–2.0<sup><a href="#ref-8">8</a></sup> - Bud uses 1.6 for that, and for anyone who works out regularly. Bud works it out on your weight, or on the top of the healthy range for your height if you're above it.</p>
           </details>
           <details>
             <summary>How big a calorie deficit should I use to lose weight?</summary>
@@ -405,7 +406,7 @@
   <div>Operated by VoiceEval Technologies Private Limited</div>
 </footer>
 
-<script type="application/json" id="bud-method">{"id":"icmr-nin-2020","bmr_equations":{"male":[[18,17.686,658.2],[30,15.057,692.2],[60,11.472,873.1],[200,11.711,587.7]],"female":[[18,13.384,692.6],[30,14.818,486.6],[60,8.126,845.6],[200,9.082,658.5]]},"indian_bmr_factor":{"male":0.9,"female":0.91},"adult_age":18,"pal":{"sedentary":1.4,"light":1.5,"moderate":1.6,"heavy":1.8},"deficit_kcal":500,"surplus_share":0.1,"diabetes_loss_bmi":25.0,"no_deficit_below_bmi":18.5,"protein_g_per_kg":{"general":1.0,"weight-loss":1.2,"diabetes":1.0,"muscle":1.6,"glp1":1.4},"protein_reference_bmi":24.9,"fat_share":0.25,"fibre_g":25,"min_kcal":{"female":1200,"male":1500},"glp1_min_kcal":{"female":1200,"male":1800},"kcal_per_g":{"protein":4,"carbs":4,"fat":9},"lead_order":["glp1","weight-loss","diabetes","muscle","general"],"bmi_bands":[[18.5,"underweight"],[25.0,"healthy"],[30.0,"overweight"],[null,"obese"]]}</script>
+<script type="application/json" id="bud-method">{"id":"icmr-nin-2020","bmr_equations":{"male":[[18,17.686,658.2],[30,15.057,692.2],[60,11.472,873.1],[200,11.711,587.7]],"female":[[18,13.384,692.6],[30,14.818,486.6],[60,8.126,845.6],[200,9.082,658.5]]},"indian_bmr_factor":{"male":0.9,"female":0.91},"adult_age":18,"pal":{"sedentary":1.4,"light":1.45,"moderate":1.5,"heavy":1.6},"deficit_kcal":500,"surplus_share":0.1,"diabetes_loss_bmi":25.0,"no_deficit_below_bmi":18.5,"protein_g_per_kg":{"general":1.0,"weight-loss":1.2,"diabetes":1.0,"muscle":1.6,"glp1":1.4},"training_protein":{"levels":["heavy"],"g_per_kg":1.6},"protein_reference_bmi":24.9,"fat_share":0.25,"fibre_g":25,"min_kcal":{"female":1200,"male":1500},"glp1_min_kcal":{"female":1200,"male":1800},"kcal_per_g":{"protein":4,"carbs":4,"fat":9},"lead_order":["glp1","weight-loss","diabetes","muscle","general"],"bmi_bands":[[18.5,"underweight"],[25.0,"healthy"],[30.0,"overweight"],[null,"obese"]]}</script>
 <script src="/blog/calc.js" defer></script>
 </body>
 </html>
