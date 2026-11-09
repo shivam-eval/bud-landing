@@ -13,6 +13,7 @@ terms.html                    terms of service    -> /terms
 blog/index.html               the blog            -> /blog
 blog/calorie-calculator.html  targets method + calculator -> /blog/calorie-calculator
 blog/bmi-calculator.html      BMI method + calculator     -> /blog/bmi-calculator
+blog/high-protein-vegetarian-foods-india.html  vegetarian protein guide -> /blog/high-protein-vegetarian-foods-india
 blog/blog.css, blog/calc.js   shared by the blog pages
 _redirects                    clean URLs (200 rewrites, so the address bar keeps /privacy)
 favicon.svg                   wordmark

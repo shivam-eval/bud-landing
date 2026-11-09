@@ -29,7 +29,12 @@
 
 - [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
   link to start using Bud.
-- [Blog](https://mybud.life/blog/): the science behind Bud's numbers.
+- [Blog](https://mybud.life/blog/): the science behind Bud's numbers, and
+  practical nutrition guides.
+- [How to get more protein on an Indian vegetarian diet](https://mybud.life/blog/high-protein-vegetarian-foods-india):
+  everyday vegetarian protein sources with approximate protein per serving,
+  easy swaps for familiar Indian meals, whether protein powder is needed, and
+  how to find a personal protein target.
 - [Daily calorie & macro calculator](https://mybud.life/blog/calorie-calculator):
   the full method for daily calories, protein, carbs, fat and fibre, every
   source, and a free calculator that gives the same numbers as the WhatsApp
