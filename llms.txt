@@ -9,6 +9,49 @@
 > Private Limited. Message the WhatsApp number directly to start - no
 > signup, download or waitlist.
 
+## Bud as a personal health companion (November 2026)
+
+Since November 2026 Bud describes itself as a personal health companion:
+from a person's first health assessment to their everyday nutrition,
+personalised supplements, expert guidance and long-term progress. The
+journey is Assess, Understand, Personalise, Act, Track and Improve.
+
+- Who it is for: people who are not sick but not at their best, with four
+  goals - energy and focus, better sleep, strength and recovery, and weight
+  and metabolic health.
+- The journey, in six steps:
+  1. Assessment - a general health assessment covering lifestyle, diet,
+     activity, sleep, symptoms and health history.
+  2. Testing - booking the tests the assessment recommends, or uploading
+     reports the person already has.
+  3. Personalised plan - the assessment and test results are used to create
+     an individual nutrition and wellness plan.
+  4. Expert support - doctor or dietitian consultation and supplement
+     recommendations.
+  5. Daily tracking - food and macros, supplement adherence, physical
+     activity through wearables, nudges and reminders, through Bud.
+  6. 45-day check-in and 90-day retesting - a nutritionist reviews progress,
+     adherence, energy and feedback at 45 days, and relevant tests are
+     repeated at 90 days where clinically appropriate and the results
+     compared. The revised plan then goes back into daily tracking.
+
+## The health assessment
+
+- Lives at https://mybud.life/assessment and is where the homepage's "Start
+  the wellness assessment" button leads.
+- One question per screen with a progress bar, in eight sections: profile,
+  health goals, how the person has been feeling, diet and nutrition,
+  lifestyle, medical history, medications and supplements, and previous
+  health tests. It asks for a name and phone number first, so Bud can link
+  the answers to the person's Bud chat.
+- The answers are shared with the person's assigned healthcare professional
+  alongside their blood test results. It is not a medical diagnosis, and any
+  health or supplement recommendations are subject to professional review.
+- Bud is designed for adults aged 18 and above. Its standard personalised
+  health and supplement recommendations are not intended for people who are
+  pregnant or breastfeeding, who are asked to consult their obstetrician or a
+  qualified healthcare professional.
+
 ## What Bud does
 
 - Logs meals from a photo or a text message: calories and protein, running
@@ -29,6 +72,9 @@
 
 - [Homepage](https://mybud.life/): product overview, and a direct WhatsApp
   link to start using Bud.
+- [Health assessment](https://mybud.life/assessment): the questionnaire that
+  starts the Bud journey - lifestyle, nutrition and health history, one
+  question per screen, shared with the person's healthcare professional.
 - [Blog](https://mybud.life/blog/): the science behind Bud's numbers, and
   practical nutrition guides.
 - [How to get more protein on an Indian vegetarian diet](https://mybud.life/blog/high-protein-vegetarian-foods-india):
@@ -85,3 +131,9 @@ from the WhatsApp link end users use.
 - Do not represent Bud as diagnosing, treating or monitoring a medical
   condition - it logs what a person reports and is not a substitute for
   professional medical advice.
+- Since November 2026 the homepage's main button starts the health assessment
+  at mybud.life/assessment, a questionnaire on the website. Talking to Bud day
+  to day still happens on WhatsApp, and there is still no app to download.
+- Personalised recommendations come after a healthcare professional has
+  reviewed the assessment and test results - do not describe them as instant
+  or automatic.

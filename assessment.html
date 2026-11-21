@@ -301,6 +301,15 @@
   .btn-text:hover { color: var(--brand); }
   .btn-plain { padding: 0 24px; }
   .kbd-hint { color: var(--muted); font: 500 12.5px/1 var(--sans); }
+  .nav-err {
+    max-width: 632px;
+    margin: 0 auto -6px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #fbeae5;
+    color: #9a3a24;
+    font: 600 13.5px/1.4 var(--sans);
+  }
   .kbd-hint b { font-weight: 700; color: var(--ink); }
 
   /* ---------- Intro / notice / done ---------- */
@@ -429,6 +438,7 @@
   <main id="stage" aria-live="polite"></main>
 
   <nav class="a-nav" id="a-nav" hidden>
+    <p class="nav-err" id="nav-err" role="alert" hidden></p>
     <div class="a-nav-in">
       <button type="button" class="btn btn-ghost" id="btn-back">Back</button>
       <span class="kbd-hint">Press <b>Enter ↵</b></span>
@@ -663,6 +673,7 @@
   function answered(s) {
     if (s.type === 'multi') return (a[s.id] || []).length > 0;
     if (s.type === 'pair') return s.parts.some(function (p) { return filled(a[p.key]); });
+    if (s.type === 'single') return filled(a[s.id]);
     return true;
   }
 
@@ -1004,7 +1015,13 @@
     refreshNav();
   }
 
-  function go(id, dir) { state.at = id; state.resumeAt = id; save(); render(dir); }
+  function go(id, dir) {
+    state.at = id; state.resumeAt = id; save(); render(dir);
+    // Saved on every step once name and phone are in, so somebody who stops
+    // halfway is still somebody Bud can reach. A failed partial save is not
+    // shown: the next step (or Submit) sends everything again.
+    if (!dir) sync(false);
+  }
 
   function next() {
     clearTimeout(autoTimer);
@@ -1025,33 +1042,92 @@
     go(vis[i - 1].id, 'back');
   }
 
+  var sending = false;
   function finish() {
-    state.done = true;
-    state.submission = buildPayload();
-    save();
-    // TODO: send state.submission to Bud's server once the endpoint exists.
-    render();
+    if (sending) return;
+    sending = true;
+    showError('');
+    nextBtn.disabled = true;
+    nextLabel.textContent = 'Sending…';
+    sync(true).then(function (ok) {
+      sending = false;
+      if (!ok) {
+        refreshNav();
+        showError('We couldn\'t send your answers. Check your connection and press Submit again.');
+        return;
+      }
+      state.done = true;
+      save();
+      render();
+    });
   }
 
-  function buildPayload() {
-    var vis = visible();
-    var keep = {};
-    vis.forEach(function (s) {
-      if (s.type === 'contact') { keep.name = (a.name || '').trim(); keep.phone = ((a.phone_code || '+91') === 'other' ? '' : (a.phone_code || '+91')) + ' ' + (a.phone || '').trim(); }
-      else if (s.type === 'hw') { keep.height = a.height; keep.weight = a.weight; }
-      else if (s.type === 'dob') { keep.dob = a.dob; keep.age = ageOf(a); }
-      else if (s.type === 'pair') s.parts.forEach(function (p) { if (filled(a[p.key])) keep[p.key] = a[p.key]; });
-      else if (s.sec !== undefined && a[s.id] !== undefined) keep[s.id] = a[s.id];
-      if (s.other && has(a, s.id, 'other')) keep[s.other] = a[s.other];
-      (s.follow || []).forEach(function (f) { if (f.when(a) && a[f.key] !== undefined) keep[f.key] = a[f.key]; });
-    });
-    keep.flags = {
-      pregnant_or_breastfeeding: femaleOrUnsaid(a) && anyOf(a, 'pregnancy', ['pregnant', 'breastfeeding']),
-      clinician_review_before_supplements: femaleOrUnsaid(a) && anyOf(a, 'pregnancy', ['trying', 'prefer_not'])
-    };
-    keep.completed_at = new Date().toISOString();
-    return keep;
+  // ---------- Saving to Bud ----------
+  // On mybud.life the answers go to Bud's server. Anywhere else (a local
+  // preview, a deploy preview) the server would refuse the origin, so nothing
+  // is sent and the flow carries on as if it had been.
+  var LIVE = /(^|\.)mybud\.life$/.test(location.hostname);
+  var API = 'https://api.mybud.life/assessment';
+
+  function newId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    var b = new Uint8Array(16);
+    (window.crypto || window.msCrypto).getRandomValues(b);
+    b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+    var h = Array.prototype.map.call(b, function (x) { return (x + 256).toString(16).slice(1); }).join('');
+    return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
   }
+
+  function contactGiven() { return valid(stepById('contact')); }
+
+  function sync(completed) {
+    if (!contactGiven()) return Promise.resolve(false);
+    if (!state.aid) { state.aid = newId(); save(); }
+    var qs = questions();
+    var s = current();
+    var n = completed ? qs.length : Math.max(qs.indexOf(s) + 1, 1);
+    var body = JSON.stringify({
+      id: state.aid,
+      name: (a.name || '').trim(),
+      phone_code: a.phone_code || '+91',
+      phone: (a.phone || '').trim(),
+      answers: buildAnswers(),
+      step: completed ? 'submitted' : (s && s.id) || '',
+      progress: { n: n, total: qs.length },
+      completed: !!completed
+    });
+    if (!LIVE) return Promise.resolve(true);
+    return fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body,
+      keepalive: body.length < 60000
+    }).then(function (res) { return res.ok; }).catch(function () { return false; });
+  }
+
+  // What they have answered so far, from the questions that apply to them -
+  // an answer to a question that no longer applies (they changed their sex,
+  // or their diet) is left out rather than sent.
+  function buildAnswers() {
+    var out = {};
+    visible().forEach(function (s) {
+      if (s.type === 'contact' || s.sec === undefined) return;
+      if (s.type === 'hw') { out.height = a.height; out.weight = a.weight; }
+      else if (s.type === 'pair') s.parts.forEach(function (p) { if (filled(a[p.key])) out[p.key] = a[p.key]; });
+      else if (a[s.id] !== undefined) out[s.id] = a[s.id];
+      if (s.other && has(a, s.id, 'other')) out[s.other] = a[s.other];
+      (s.follow || []).forEach(function (f) { if (f.when(a) && a[f.key] !== undefined) out[f.key] = a[f.key]; });
+    });
+    return out;
+  }
+
+  var navErr = document.getElementById('nav-err');
+  function showError(text) { navErr.textContent = text; navErr.hidden = !text; }
+
+  // Leaving mid-way (closing the tab, switching app) saves where they are.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && !state.done && current() && current().sec !== undefined) sync(false);
+  });
 
   nextBtn.addEventListener('click', next);
   backBtn.addEventListener('click', back);
