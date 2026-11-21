@@ -8,6 +8,7 @@ push to `main`.
 
 ```
 index.html                    the page (single file, inline CSS/JS)
+assessment.html               the health assessment, one question per screen -> /assessment
 privacy.html                  privacy policy      -> /privacy
 terms.html                    terms of service    -> /terms
 blog/index.html               the blog            -> /blog
