@@ -254,6 +254,7 @@
   }
   .logo svg { width: 30px; height: 30px; }
   .nav-links {
+    position: relative;
     display: flex;
     gap: 6px;
     margin: 0 auto;
@@ -270,9 +271,34 @@
     color: var(--ink);
     text-decoration: none;
     font: 500 14px/1 var(--sans);
-    transition: background-color .2s ease;
+    position: relative;
+    z-index: 1;
+    transition: background-color .2s ease, color .25s ease;
   }
-  .nav-links a:hover { background: rgba(255, 255, 255, 0.85); }
+  .nav-links a:hover,
+  .nav-links a:focus-visible { background: var(--brand-100); color: var(--brand-700); outline: none; }
+  .nav-links.has-glide a:hover,
+  .nav-links.has-glide a:focus-visible { background: transparent; }
+  .nav-glide {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 0;
+    width: 0;
+    border-radius: 100px;
+    background: var(--brand-100);
+    box-shadow: inset 0 0 0 1px rgba(37, 112, 92, 0.14);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .4s cubic-bezier(.2, .7, .2, 1), width .4s cubic-bezier(.2, .7, .2, 1), opacity .2s ease;
+  }
+  .nav-links.is-gliding .nav-glide { opacity: 1; }
+  @media (min-width: 981px) {
+    .nav { display: grid; grid-template-columns: 1fr auto 1fr; }
+    .logo { justify-self: start; }
+    .nav-links { margin: 0; }
+    .nav-right { justify-self: end; }
+  }
   .nav-right { display: flex; align-items: center; gap: 18px; }
   .nav-partner {
     padding: 0;
@@ -410,9 +436,9 @@
   .glass .bar { height: 6px; margin-top: 12px; background: rgba(15, 31, 26, 0.1); }
   .glass p { margin: 10px 0 0; font: 500 12.5px/1.4 var(--sans); color: var(--muted); }
   .glass p b { color: var(--ink); font-weight: 700; }
-  .glass-food { width: 220px; left: calc(50% - 505px); top: 478px; --delay: .3s; --bob: 7.5s; }
-  .glass-plan { width: 230px; left: calc(50% - 255px); top: 420px; --delay: .4s; --bob: 6.5s; }
-  .glass-supp { width: 214px; left: calc(50% + 5px); top: 502px; --delay: .5s; --bob: 8s; }
+  .glass-supp { width: 214px; left: calc(50% - 505px); top: 502px; --delay: .3s; --bob: 8s; }
+  .glass-plan { width: 230px; left: calc(50% - 261px); top: 420px; --delay: .4s; --bob: 6.5s; }
+  .glass-food { width: 220px; left: calc(50% - 1px); top: 478px; --delay: .5s; --bob: 7.5s; }
   .glass-act { width: 236px; left: calc(50% + 249px); top: 436px; --delay: .6s; --bob: 7s; }
   .glass-supp ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 9px; }
   .glass-supp li { display: flex; align-items: center; gap: 9px; font: 600 13px/1.2 var(--sans); }
@@ -491,6 +517,7 @@
     color: rgba(255, 255, 255, 0.86);
   }
   .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .hero-cta-small { display: none; }
 
   /* ---------- Sections ---------- */
   .goals { max-width: 1240px; margin: 0 auto; padding: clamp(80px, 10vw, 128px) 24px 0; }
@@ -1060,12 +1087,13 @@
   }
 
   /* ---------- Responsive ---------- */
-  @media (max-width: 1180px) {
+  @media (max-width: 1279px) {
     .nav-partner { display: none; }
   }
   @media (max-width: 980px) {
     .nav-links, .nav .btn { display: none; }
     .menu { display: block; margin-left: auto; }
+    .hero-ctas .hero-cta-small { display: inline-flex; }
   }
   @media (max-width: 1100px) {
     .hero-frame {
@@ -1226,11 +1254,12 @@
       <p class="wordmark" aria-hidden="true">Bud</p>
 
       <div class="hero-cards">
-      <div class="glass glass-food" aria-hidden="true">
-        <div class="k">Food intake</div>
-        <div class="big">1,240 <small>of 1,900 cal</small></div>
-        <div class="bar"><i style="width: 65%"></i></div>
-        <p>Protein <b>62 / 96 g</b></p>
+      <div class="glass glass-supp" aria-hidden="true">
+        <div class="k">Today's supplements</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.3 2.3 4.7-4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vitamin D3</li>
+          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.3 2.3 4.7-4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Omega-3</li>
+        </ul>
       </div>
 
       <div class="glass glass-plan" aria-hidden="true">
@@ -1240,12 +1269,11 @@
         <p>Next: <b>45-day check-in</b> with your nutritionist</p>
       </div>
 
-      <div class="glass glass-supp" aria-hidden="true">
-        <div class="k">Today's supplements</div>
-        <ul>
-          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.3 2.3 4.7-4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vitamin D3</li>
-          <li><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.3 2.3 4.7-4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Omega-3</li>
-        </ul>
+      <div class="glass glass-food" aria-hidden="true">
+        <div class="k">Food intake</div>
+        <div class="big">1,240 <small>of 1,900 cal</small></div>
+        <div class="bar"><i style="width: 65%"></i></div>
+        <p>Protein <b>62 / 96 g</b></p>
       </div>
 
       <div class="glass glass-act" aria-hidden="true">
@@ -1265,7 +1293,7 @@
         <div class="hero-copy">
           <p>From your first health assessment to your everyday nutrition, personalised supplements, expert guidance and long-term progress.</p>
           <div class="hero-ctas">
-            <a class="btn btn-primary" href="/assessment">
+            <a class="btn btn-primary hero-cta-small" href="/assessment">
               Start the wellness assessment
               <span class="btn-arrow"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             </a>
@@ -1544,7 +1572,6 @@
       <div class="foot-brand">
         <a class="logo" href="/" aria-label="Bud home">
           <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 29V14.5" stroke="#0f1f1a" stroke-width="2.6" stroke-linecap="round"/><path d="M16 17c0-5.6-3.4-9.7-9.8-10.6C5.3 13 8.5 17 16 17Z" fill="#25705c"/><path d="M16 14.6c.6-4.7 3.8-8 9.4-8C25.4 13 22.1 14.6 16 14.6Z" fill="#25705c" fill-opacity="0.6"/></svg>
-          Bud
         </a>
         <p>Your personal health companion.</p>
         <p class="foot-contact"><a href="mailto:hi@mybud.life">hi@mybud.life</a><br><a href="tel:+919041926882">+91 90419 26882</a></p>
@@ -1594,6 +1621,32 @@
   menuEl.querySelectorAll('.menu-panel a').forEach(function (a) { a.addEventListener('click', closeMenu); });
   document.addEventListener('click', function (ev) { if (!menuEl.contains(ev.target)) closeMenu(); });
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeMenu(); });
+
+  (function () {
+    var links = document.querySelector('.nav-links');
+    if (!links) return;
+    var glide = document.createElement('span');
+    glide.className = 'nav-glide';
+    glide.setAttribute('aria-hidden', 'true');
+    links.insertBefore(glide, links.firstChild);
+    links.classList.add('has-glide');
+    function moveTo(a) {
+      var jump = !links.classList.contains('is-gliding');
+      if (jump) glide.style.transition = 'opacity .2s ease';
+      glide.style.width = a.offsetWidth + 'px';
+      glide.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+      if (jump) { void glide.offsetWidth; glide.style.transition = ''; }
+      links.classList.add('is-gliding');
+    }
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('mouseenter', function () { moveTo(a); });
+      a.addEventListener('focus', function () { if (a.matches(':focus-visible')) moveTo(a); });
+      a.addEventListener('blur', function () { if (!links.matches(':hover')) links.classList.remove('is-gliding'); });
+    });
+    links.addEventListener('mouseleave', function () {
+      if (!links.querySelector('a:focus-visible')) links.classList.remove('is-gliding');
+    });
+  })();
 
   (function () {
     var items = document.querySelectorAll('.reveal');
