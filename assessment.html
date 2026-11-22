@@ -615,6 +615,19 @@
   // ---------- State ----------
   var state = load() || { answers: {}, at: 'intro', started: false, done: false };
   var a = state.answers;
+
+  // A goal card on the home page opens /assessment?goal=sleep: tick that goal
+  // in the goals question, unless this session has already answered it. The
+  // parameter is then dropped, so a refresh never re-ticks a goal they cleared.
+  (function () {
+    var m = /[?&]goal=([a-z]+)/.exec(location.search);
+    if (!m) return;
+    if (['energy', 'sleep', 'strength', 'weight'].indexOf(m[1]) > -1 && !(a.goals && a.goals.length)) {
+      a.goals = [m[1]];
+      save();
+    }
+    if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.hash);
+  })();
   var stage = document.getElementById('stage');
   var nav = document.getElementById('a-nav');
   var nextBtn = document.getElementById('btn-next');

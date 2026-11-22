@@ -300,16 +300,6 @@
     .nav-right { justify-self: end; }
   }
   .nav-right { display: flex; align-items: center; gap: 18px; }
-  .nav-partner {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--ink);
-    font: 500 14px/1.2 var(--sans);
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .nav-partner:hover { color: var(--brand); }
   .nav .btn { min-height: 44px; font-size: 14px; padding-left: 18px; }
   .nav .btn-arrow { width: 32px; height: 32px; }
 
@@ -396,20 +386,179 @@
   }
   .menu-panel .menu-cta:hover { background: var(--brand-700); }
 
-  .wordmark {
+  /* ---------- Flow: day 1 -> through Bud -> day 90 ----------
+     Every class starts fl-. The script at the end of the page runs it on a
+     slow loop; with no script, or with reduced motion, the finished state
+     (.is-static) shows. */
+  .flow {
+    --leg: 1100ms;
     position: absolute;
     left: 0;
     right: 0;
-    top: 74px;
-    margin: 0;
-    text-align: center;
-    font: 700 clamp(150px, 25vw, 360px)/0.85 var(--sans);
-    letter-spacing: -0.065em;
-    color: var(--brand);
-    user-select: none;
-    pointer-events: none;
-    z-index: 1;
+    top: 106px;
+    z-index: 2;
+    width: min(1120px, calc(100% - 64px));
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(150px, 24%, 260px) minmax(0, 1fr);
+    align-items: center;
+    color: var(--ink);
+    animation: rise 1s cubic-bezier(.2, .7, .2, 1) both .15s;
   }
+  .fl-card {
+    position: relative;
+    z-index: 1;
+    padding: 26px 26px 28px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 0 30px 60px -34px rgba(10, 35, 28, 0.45);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1), box-shadow .8s ease, border-color .8s ease;
+  }
+  .fl-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .fl-tag { display: inline-flex; align-items: center; gap: 8px; font: 700 12px/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; }
+  .fl-tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .fl-before .fl-tag { color: #b4492a; }
+  .fl-after .fl-tag { color: var(--brand); }
+  .fl-day { padding: 6px 12px; border-radius: 100px; background: rgba(15, 31, 26, 0.06); font: 700 12.5px/1 var(--sans); color: var(--muted); transition: background .8s ease, color .8s ease; }
+  .fl-rows { display: grid; gap: 18px; }
+  .fl-row {
+    display: grid;
+    grid-template-columns: 19px 1fr auto;
+    grid-template-areas: "ico name word" "meter meter meter";
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 10px;
+  }
+  .fl-row svg { grid-area: ico; width: 19px; height: 19px; color: rgba(15, 31, 26, 0.45); }
+  .fl-name { grid-area: name; font: 600 15.5px/1.2 var(--sans); color: var(--muted); }
+  .fl-word { grid-area: word; font: 700 15.5px/1.2 var(--sans); white-space: nowrap; color: var(--w, var(--ink)); }
+  .fl-meter { grid-area: meter; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .fl-meter i { position: relative; height: 8px; border-radius: 4px; background: rgba(15, 31, 26, 0.09); overflow: hidden; }
+  .fl-meter i::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background: var(--c, var(--brand));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .45s cubic-bezier(.3, .7, .2, 1);
+  }
+  .fl-meter i:nth-child(2) { --s: 1; }
+  .fl-meter i:nth-child(3) { --s: 2; }
+  .fl-meter i:nth-child(4) { --s: 3; }
+  .fl-before .fl-meter i.f::before { transform: scaleX(1); }
+
+  /* the day-90 card waits, faded, until the path reaches it */
+  .fl-after { opacity: 0.6; transform: scale(0.985); }
+  .fl-after .fl-word { color: rgba(15, 31, 26, 0.34); transition: color .6s ease; }
+  .flow.is-after .fl-after, .flow.is-static .fl-after {
+    opacity: 1;
+    transform: none;
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 34px 70px -30px rgba(37, 112, 92, 0.62), 0 0 0 1px rgba(37, 112, 92, 0.14);
+  }
+  .flow.is-after .fl-after .fl-day, .flow.is-static .fl-after .fl-day { background: var(--brand-100); color: var(--brand-700); }
+  .flow.is-after .fl-after .fl-word, .flow.is-static .fl-after .fl-word { color: var(--brand-700); transition-delay: calc(var(--r) * 120ms); }
+  .flow.is-after .fl-after .fl-meter i.f::before, .flow.is-static .fl-after .fl-meter i.f::before {
+    transform: scaleX(1);
+    transition-delay: calc(var(--r) * 120ms + var(--s, 0) * 90ms + 150ms);
+  }
+  .flow.is-run .fl-before { opacity: 0.86; }
+
+  /* the path between the two days, through a glowing Bud */
+  .fl-mid { position: relative; z-index: 2; height: 88px; }
+  .fl-line, .fl-fill, .fl-run { position: absolute; left: 0; right: 0; top: 43px; height: 2px; }
+  .fl-line { background: rgba(15, 31, 26, 0.16); }
+  .fl-line::after {
+    /* arrowhead into the day-90 card */
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 5px solid transparent;
+    border-right: 0;
+    border-left: 7px solid rgba(15, 31, 26, 0.28);
+    transition: border-left-color .5s ease;
+  }
+  .flow.is-after .fl-line::after, .flow.is-static .fl-line::after { border-left-color: var(--brand); }
+  .fl-fill {
+    background: linear-gradient(90deg, #c08a1e 0%, var(--brand) 50%, var(--brand) 100%);
+    clip-path: inset(0 100% 0 0);
+  }
+  .flow.is-run .fl-fill { clip-path: inset(0 50% 0 0); transition: clip-path var(--leg) cubic-bezier(.5, 0, .4, 1); }
+  .flow.is-run2 .fl-fill, .flow.is-static .fl-fill { clip-path: inset(0 0 0 0); }
+  .fl-run { opacity: 0; transform: translateX(0); }
+  .fl-run i {
+    position: absolute;
+    left: -6px;
+    top: -5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(37, 112, 92, 0.26), 0 0 22px 6px rgba(37, 112, 92, 0.5);
+  }
+  .fl-run i::before {
+    content: "";
+    position: absolute;
+    right: 6px;
+    top: 5px;
+    width: 48px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
+  }
+  .flow.is-run .fl-run { opacity: 1; transform: translateX(50%); transition: transform var(--leg) cubic-bezier(.5, 0, .4, 1), opacity .3s ease; }
+  .flow.is-run2 .fl-run { transform: translateX(100%); }
+  .flow.is-out .fl-run { opacity: 0; transition: opacity .35s ease; }
+
+  .fl-orb { position: absolute; left: 50%; top: 0; z-index: 1; width: 88px; height: 88px; margin-left: -44px; }
+  .fl-orb::before {
+    /* the glow, breathing slowly */
+    content: "";
+    position: absolute;
+    inset: -40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37, 112, 92, 0.52) 0%, rgba(37, 112, 92, 0.2) 45%, rgba(37, 112, 92, 0) 70%);
+    animation: flBreathe 3.4s ease-in-out infinite alternate;
+  }
+  .fl-orb::after {
+    /* a ripple when the path reaches Bud */
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(37, 112, 92, 0.6);
+    opacity: 0;
+  }
+  .fl-core {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #fff 0%, #f4f8f6 55%, #dcebe5 100%);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 18px 38px -14px rgba(10, 35, 28, 0.5), 0 0 0 7px rgba(255, 255, 255, 0.42);
+    transition: transform .6s cubic-bezier(.3, 1.5, .4, 1), box-shadow .6s ease;
+  }
+  .fl-core svg { width: 44px; height: 44px; }
+  .fl-orb.on .fl-core { transform: scale(1.1); box-shadow: 0 18px 40px -12px rgba(37, 112, 92, 0.65), 0 0 0 8px rgba(37, 112, 92, 0.14); }
+  .fl-orb.on::after { animation: flRipple 1.2s ease-out both; }
+  .fl-orb.on::before { animation: flFlare 1.4s ease-out both; }
+  @keyframes flBreathe { from { transform: scale(0.86); opacity: 0.7; } to { transform: scale(1.08); opacity: 1; } }
+  @keyframes flRipple { from { transform: scale(1); opacity: 0.75; } to { transform: scale(2.2); opacity: 0; } }
+  @keyframes flFlare { 0% { transform: scale(1); } 35% { transform: scale(1.5); } 100% { transform: scale(1.05); } }
+
+  /* the loop's reset: fade the lit path out, then snap back with no motion */
+  .flow.is-fade .fl-fill, .flow.is-fade .fl-run { opacity: 0; transition: opacity .7s ease; }
+  .flow.fl-snap, .flow.fl-snap *, .flow.fl-snap *::before, .flow.fl-snap *::after { transition: none !important; }
 
   .hero-cards { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
   .hero-cards .glass { pointer-events: auto; }
@@ -436,10 +585,10 @@
   .glass .bar { height: 6px; margin-top: 12px; background: rgba(15, 31, 26, 0.1); }
   .glass p { margin: 10px 0 0; font: 500 12.5px/1.4 var(--sans); color: var(--muted); }
   .glass p b { color: var(--ink); font-weight: 700; }
-  .glass-supp { width: 214px; left: calc(50% - 505px); top: 502px; --delay: .3s; --bob: 8s; }
-  .glass-plan { width: 230px; left: calc(50% - 261px); top: 420px; --delay: .4s; --bob: 6.5s; }
-  .glass-food { width: 220px; left: calc(50% - 1px); top: 478px; --delay: .5s; --bob: 7.5s; }
-  .glass-act { width: 236px; left: calc(50% + 249px); top: 436px; --delay: .6s; --bob: 7s; }
+  .glass-supp { width: 214px; left: calc(50% - 505px); top: 574px; --delay: .3s; --bob: 8s; }
+  .glass-plan { width: 230px; left: calc(50% - 261px); top: 492px; --delay: .4s; --bob: 6.5s; }
+  .glass-food { width: 220px; left: calc(50% - 1px); top: 550px; --delay: .5s; --bob: 7.5s; }
+  .glass-act { width: 236px; left: calc(50% + 249px); top: 508px; --delay: .6s; --bob: 7s; }
   .glass-supp ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 9px; }
   .glass-supp li { display: flex; align-items: center; gap: 9px; font: 600 13px/1.2 var(--sans); }
   .act-row { display: flex; align-items: center; gap: 11px; margin-top: 12px; }
@@ -542,17 +691,48 @@
     color: var(--muted);
     font: 500 16px/1.6 var(--sans);
   }
+  /* who it's for: the line sits under the heading, right above the cards */
+  .section-head.goals-head { flex-direction: column; align-items: flex-start; gap: 22px; }
+  .goals-head h2 { max-width: none; }
+  .goals-lead > p:first-child { max-width: 620px; margin: 0; font: 600 22px/1.4 var(--sans); letter-spacing: -0.015em; color: var(--ink); }
+  .goals-lead > p:first-child span { display: block; color: var(--brand); }
 
   .goal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .goal {
     position: relative;
+    display: block;
     aspect-ratio: 4 / 5.4;
     border-radius: 26px;
     overflow: hidden;
     background: var(--brand-900);
     color: #fff;
+    text-decoration: none;
     isolation: isolate;
+    transition: translate .45s cubic-bezier(.2, .7, .2, 1), box-shadow .45s ease;
   }
+  /* the scroll reveal owns transform, so the hover lift uses translate */
+  .js .goal.reveal {
+    transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1), translate .45s cubic-bezier(.2, .7, .2, 1), box-shadow .45s ease;
+    transition-delay: calc(var(--d, 0) * 90ms), calc(var(--d, 0) * 90ms), 0s, 0s;
+  }
+  .goal:hover, .goal:focus-visible { translate: 0 -6px; box-shadow: 0 34px 60px -32px rgba(9, 34, 27, 0.6); }
+  .goal:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+  .goal-go {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--brand);
+    box-shadow: 0 8px 20px -10px rgba(9, 34, 27, 0.6);
+    transition: background .3s ease, color .3s ease, transform .4s cubic-bezier(.3, 1.4, .4, 1);
+  }
+  .goal-go svg { width: 16px; height: 16px; }
+  .goal:hover .goal-go, .goal:focus-visible .goal-go { background: var(--brand); color: #fff; transform: scale(1.08); }
   .goal img {
     position: absolute;
     inset: 0;
@@ -589,33 +769,6 @@
   .goal h3 { margin: 0; font: 600 22px/1.15 var(--sans); letter-spacing: -0.02em; }
   .goal p { margin: 10px 0 0; font: 500 14px/1.5 var(--sans); color: rgba(255, 255, 255, 0.82); }
 
-  .goals-foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    margin-top: 22px;
-    padding: 22px 26px;
-    border-radius: 22px;
-    background: var(--brand-50);
-  }
-  .goals-foot p { margin: 0; max-width: 780px; font: 500 16px/1.55 var(--sans); color: var(--brand-900); }
-  .goals-foot p b { font-weight: 700; }
-  .link-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 18px;
-    border-radius: 100px;
-    background: #fff;
-    color: var(--brand);
-    font: 600 14px/1 var(--sans);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: transform .2s ease;
-  }
-  .link-pill:hover { transform: translateY(2px); }
-  .link-pill svg { width: 16px; height: 16px; }
 
   /* scroll reveal (only once JS has marked the page) */
   .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--d, 0) * 90ms); }
@@ -876,14 +1029,6 @@
     letter-spacing: -0.04em;
   }
   .faq-side h2 em { font: italic 400 1.1em/1 var(--serif); color: var(--brand); letter-spacing: -0.01em; }
-  .faq-help {
-    margin-top: 36px;
-    padding: 26px;
-    border-radius: 24px;
-    background: var(--brand-50);
-  }
-  .faq-help h3 { margin: 0; font: 700 18px/1.25 var(--sans); letter-spacing: -0.01em; }
-  .faq-help p { margin: 8px 0 18px; color: var(--muted); font: 500 14.5px/1.55 var(--sans); }
   .faq-list { border-top: 1px solid var(--line); }
   .faq-list details { border-bottom: 1px solid var(--line); }
   .faq-list summary {
@@ -1087,9 +1232,6 @@
   }
 
   /* ---------- Responsive ---------- */
-  @media (max-width: 1279px) {
-    .nav-partner { display: none; }
-  }
   @media (max-width: 980px) {
     .nav-links, .nav .btn { display: none; }
     .menu { display: block; margin-left: auto; }
@@ -1109,7 +1251,7 @@
         linear-gradient(180deg, rgba(246, 245, 241, 0.5) 0%, rgba(246, 245, 241, 0) 30%),
         linear-gradient(0deg, rgba(8, 30, 23, 0.9) 0%, rgba(8, 30, 23, 0.55) 34%, rgba(8, 30, 23, 0) 58%);
     }
-    .wordmark { position: relative; top: auto; margin-top: 6px; font-size: clamp(120px, 34vw, 280px); }
+    .flow { position: relative; top: auto; margin-top: 18px; }
     .hero-cards {
       position: relative;
       inset: auto;
@@ -1124,11 +1266,45 @@
     .glass:nth-child(even) { margin-top: 40px; }
     .hero-bottom { position: relative; padding: 70px 36px 0; align-items: flex-end; }
   }
+  @media (max-width: 980px) {
+    .flow { width: min(760px, calc(100% - 40px)); }
+    .fl-card { padding: 20px 20px 22px; border-radius: 24px; }
+    .fl-head { margin-bottom: 18px; }
+    .fl-rows { gap: 15px; }
+    .fl-row { grid-template-columns: 17px 1fr auto; column-gap: 8px; row-gap: 8px; }
+    .fl-row svg { width: 17px; height: 17px; }
+    .fl-name, .fl-word { font-size: 14px; }
+    .fl-meter i { height: 7px; }
+    .fl-mid { height: 72px; }
+    .fl-line, .fl-fill, .fl-run { top: 35px; }
+    .fl-orb { width: 72px; height: 72px; margin-left: -36px; }
+    .fl-orb::before { inset: -32px; }
+    .fl-core svg { width: 36px; height: 36px; }
+  }
   @media (max-width: 760px) {
     .hero { padding: 8px; }
     .hero-frame { border-radius: 26px; padding-bottom: 30px; background-size: auto 100%; }
     .nav { padding: 16px 18px; }
-    .wordmark { font-size: clamp(120px, 38vw, 260px); }
+    /* side by side on a phone, with Bud small between the two days */
+    .flow { --fl-compact: 1; width: calc(100% - 24px); grid-template-columns: minmax(0, 1fr) 38px minmax(0, 1fr); }
+    .fl-card { padding: 14px 12px 16px; border-radius: 18px; }
+    .fl-head { margin-bottom: 14px; gap: 6px; }
+    .fl-tag { gap: 5px; font-size: 10px; letter-spacing: 0.06em; }
+    .fl-tag::before { width: 6px; height: 6px; }
+    .fl-day { padding: 4px 7px; font-size: 10px; }
+    .fl-rows { gap: 11px; }
+    .fl-row { grid-template-columns: 13px 1fr; grid-template-areas: "ico name" "word word" "meter meter"; column-gap: 5px; row-gap: 4px; }
+    .fl-row svg { width: 13px; height: 13px; }
+    .fl-name { font-size: 11px; }
+    .fl-word { font-size: 12.5px; }
+    .fl-meter { gap: 3px; margin-top: 2px; }
+    .fl-meter i { height: 5px; }
+    .fl-mid { height: 38px; }
+    .fl-line, .fl-fill, .fl-run { display: none; }
+    .fl-orb { width: 38px; height: 38px; margin-left: -19px; }
+    .fl-orb::before { inset: -18px; }
+    .fl-core { box-shadow: 0 10px 22px -10px rgba(10, 35, 28, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.42); }
+    .fl-core svg { width: 21px; height: 21px; }
     .hero-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 30px 16px 0; }
     .glass { width: auto; padding: 14px; border-radius: 18px; }
     .glass:nth-child(even) { margin-top: 30px; }
@@ -1156,7 +1332,7 @@
   }
   @media (max-width: 760px) {
     .section-head { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 28px; }
-    .goals-foot { flex-direction: column; align-items: flex-start; }
+    .goals-lead > p:first-child { font-size: 18px; }
   }
   @media (max-width: 600px) {
     .goal-grid {
@@ -1178,7 +1354,6 @@
   @media (max-width: 900px) {
     .faq { grid-template-columns: 1fr; }
     .faq-side { position: static; }
-    .faq-help { display: none; }
   }
   @media (max-width: 640px) {
     .bento { grid-template-columns: 1fr; }
@@ -1232,7 +1407,6 @@
           <a href="/blog">Blog</a>
         </div>
         <div class="nav-right">
-          <button type="button" class="nav-partner" data-partner-open>Partner with us</button>
           <a class="btn btn-primary" href="/assessment">
             Start the wellness assessment
             <span class="btn-arrow"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -1251,7 +1425,66 @@
         </div>
       </nav>
 
-      <p class="wordmark" aria-hidden="true">Bud</p>
+      <section class="flow is-static" role="img" aria-label="How Bud works. Day 1: low energy, irregular sleep, low vitamin D and slow recovery. Then Bud. Day 90: steady energy, deep and regular sleep, vitamin D in range and faster recovery.">
+        <div class="fl-card fl-before" aria-hidden="true">
+          <div class="fl-head"><span class="fl-tag">Before</span><span class="fl-day">Day 1</span></div>
+          <div class="fl-rows">
+            <div class="fl-row" style="--r:0; --c:#c95a36; --w:#b4492a">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 4.5 13.5H11l-1 8 8.5-11H12l1-8z"/></svg>
+              <span class="fl-name">Energy</span><span class="fl-word">Low</span>
+              <span class="fl-meter"><i class="f"></i><i></i><i></i><i></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:1; --c:#c95a36; --w:#b4492a">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.6A7.8 7.8 0 1 1 9.4 4.5a6.3 6.3 0 0 0 10.1 10.1z"/></svg>
+              <span class="fl-name">Sleep</span><span class="fl-word">Irregular</span>
+              <span class="fl-meter"><i class="f"></i><i></i><i></i><i></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:2; --c:#c08a1e; --w:#93630a">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s5.8 6.2 5.8 10.6a5.8 5.8 0 0 1-11.6 0C6.2 9.4 12 3.2 12 3.2z"/></svg>
+              <span class="fl-name">Vitals</span><span class="fl-word">Vitamin D low</span>
+              <span class="fl-meter"><i class="f"></i><i class="f"></i><i></i><i></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:3; --c:#c95a36; --w:#b4492a">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.8 12A7.8 7.8 0 1 1 17.5 6.5"/><path d="M19.5 3.8v3.9h-3.9"/></svg>
+              <span class="fl-name">Recovery</span><span class="fl-word">Slow</span>
+              <span class="fl-meter"><i class="f"></i><i></i><i></i><i></i><i></i></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fl-mid" aria-hidden="true">
+          <span class="fl-line"></span>
+          <span class="fl-fill"></span>
+          <span class="fl-run"><i></i></span>
+          <span class="fl-orb"><span class="fl-core"><svg viewBox="0 0 32 32" fill="none"><path d="M16 29V14.5" stroke="#0f1f1a" stroke-width="2.6" stroke-linecap="round"/><path d="M16 17c0-5.6-3.4-9.7-9.8-10.6C5.3 13 8.5 17 16 17Z" fill="#25705c"/><path d="M16 14.6c.6-4.7 3.8-8 9.4-8C25.4 13 22.1 14.6 16 14.6Z" fill="#25705c" fill-opacity="0.6"/></svg></span></span>
+        </div>
+
+        <div class="fl-card fl-after" aria-hidden="true">
+          <div class="fl-head"><span class="fl-tag">After</span><span class="fl-day">Day 90</span></div>
+          <div class="fl-rows">
+            <div class="fl-row" style="--r:0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 4.5 13.5H11l-1 8 8.5-11H12l1-8z"/></svg>
+              <span class="fl-name">Energy</span><span class="fl-word">Steady</span>
+              <span class="fl-meter"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14.6A7.8 7.8 0 1 1 9.4 4.5a6.3 6.3 0 0 0 10.1 10.1z"/></svg>
+              <span class="fl-name">Sleep</span><span class="fl-word">Deep and regular</span>
+              <span class="fl-meter"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s5.8 6.2 5.8 10.6a5.8 5.8 0 0 1-11.6 0C6.2 9.4 12 3.2 12 3.2z"/></svg>
+              <span class="fl-name">Vitals</span><span class="fl-word">In range</span>
+              <span class="fl-meter"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>
+            </div>
+            <div class="fl-row" style="--r:3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.8 12A7.8 7.8 0 1 1 17.5 6.5"/><path d="M19.5 3.8v3.9h-3.9"/></svg>
+              <span class="fl-name">Recovery</span><span class="fl-word">Faster</span>
+              <span class="fl-meter"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div class="hero-cards">
       <div class="glass glass-supp" aria-hidden="true">
@@ -1310,51 +1543,51 @@
 
   <main>
     <section class="goals" id="goals" aria-labelledby="goals-title">
-      <div class="section-head reveal">
+      <div class="section-head goals-head reveal">
         <div>
           <span class="eyebrow">Who it's for</span>
           <h2 id="goals-title">Not sick, but <em>not at your best?</em></h2>
         </div>
-        <p>Start with the goal you want to feel. Bud builds everything else around it.</p>
+        <div class="goals-lead">
+          <p>Start with the goal you want to feel. <span>Bud builds everything else around it.</span></p>
+        </div>
       </div>
       <div class="goal-grid">
-        <article class="goal reveal" style="--d:0">
+        <a class="goal reveal" style="--d:0" href="/assessment?goal=energy" aria-label="Energy and focus: start the assessment with this goal">
           <img src="/img/goal-energy.jpg" alt="A woman with a cup of tea at her laptop on a bright morning" width="900" height="1125" loading="lazy">
           <span class="goal-num">01</span>
+          <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Energy and focus</h3>
             <p>Steady energy all day and a clear head, with no afternoon crash.</p>
           </div>
-        </article>
-        <article class="goal reveal" style="--d:1">
+        </a>
+        <a class="goal reveal" style="--d:1" href="/assessment?goal=sleep" aria-label="Better sleep: start the assessment with this goal">
           <img src="/img/goal-sleep.jpg" alt="A woman sleeping peacefully on white pillows" width="900" height="1125" loading="lazy">
           <span class="goal-num">02</span>
+          <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Better sleep</h3>
             <p>Deep, restorative rest every night, and mornings that feel it.</p>
           </div>
-        </article>
-        <article class="goal reveal" style="--d:2">
+        </a>
+        <a class="goal reveal" style="--d:2" href="/assessment?goal=strength" aria-label="Strength and recovery: start the assessment with this goal">
           <img src="/img/goal-strength.jpg" alt="A man training with dumbbells in a gym" width="900" height="1125" loading="lazy">
           <span class="goal-num">03</span>
+          <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Strength and recovery</h3>
             <p>Keep muscle, train consistently and recover well between sessions.</p>
           </div>
-        </article>
-        <article class="goal reveal" style="--d:3">
+        </a>
+        <a class="goal reveal" style="--d:3" href="/assessment?goal=weight" aria-label="Weight and metabolic health: start the assessment with this goal">
           <img src="/img/goal-weight.jpg" alt="A woman out for a walk on a sunlit tree-lined path" width="900" height="1125" loading="lazy">
           <span class="goal-num">04</span>
+          <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Weight and metabolic health</h3>
             <p>Lose fat without losing muscle and keep blood sugar steady, including on GLP-1 drugs.</p>
           </div>
-        </article>
-      </div>
-      <div class="goals-foot reveal">
-        <p><b>Different goals, the same roots.</b> Sleep, protein, nutrient gaps and blood sugar drive all four, so one assessment, one blood panel and one daily routine can move every one of them.</p>
-        <a class="link-pill" href="#journey">See how it works
-          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3.5v9M4 8.5l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </section>
@@ -1516,11 +1749,6 @@
       <div class="faq-side reveal">
         <span class="eyebrow">FAQ</span>
         <h2 id="faq-title">Questions, <em>answered.</em></h2>
-        <div class="faq-help">
-          <h3>Still have a question?</h3>
-          <p>Write to us and a real person will get back to you.</p>
-          <a class="btn btn-primary" href="mailto:hi@mybud.life">Talk to us <span class="btn-arrow"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        </div>
       </div>
       <div class="faq-list reveal" style="--d:1">
           <details>
@@ -1722,6 +1950,55 @@
     });
     dialog.querySelector('.dialog-close').addEventListener('click', function () { dialog.close(); });
     dialog.addEventListener('click', function (ev) { if (ev.target === dialog) dialog.close(); });
+  })();
+
+  /* Hero flow: day 1 -> Bud -> day 90, on a slow loop. The page starts on
+     the finished state (.is-static), which is what shows with no script or
+     with reduced motion. */
+  (function () {
+    var fl = document.querySelector('.flow');
+    if (!fl) return;
+    var orb = fl.querySelector('.fl-orb');
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var states = ['is-static', 'is-run', 'is-run2', 'is-out', 'is-after', 'is-fade'];
+    var timers = [];
+    function later(ms, fn) { timers.push(setTimeout(fn, ms)); }
+    function stop() { timers.forEach(clearTimeout); timers = []; }
+    function snap(state) {
+      fl.classList.add('fl-snap');
+      states.forEach(function (c) { fl.classList.remove(c); });
+      orb.classList.remove('on');
+      if (state) fl.classList.add(state);
+      void fl.offsetWidth;
+      fl.classList.remove('fl-snap');
+    }
+    function cycle() {
+      stop();
+      snap();
+      // on a phone there is no path, just Bud lighting up between the days
+      var compact = getComputedStyle(fl).getPropertyValue('--fl-compact').trim() === '1';
+      var hold = 1700, leg = compact ? 0 : 1100, pause = compact ? 700 : 650;
+      fl.style.setProperty('--leg', leg + 'ms');
+      var reach = hold + leg, after = reach + pause + leg;
+      if (!compact) later(hold, function () { fl.classList.add('is-run'); });
+      later(reach, function () { orb.classList.add('on'); });
+      if (!compact) later(reach + pause, function () { fl.classList.add('is-run2'); });
+      later(after, function () { fl.classList.add('is-out', 'is-after'); });
+      later(after + 5200, function () {
+        fl.classList.add('is-fade');
+        fl.classList.remove('is-after');
+        orb.classList.remove('on');
+      });
+      later(after + 6000, cycle);
+    }
+    function decide() {
+      if (still.matches) { stop(); snap('is-static'); }
+      else if (document.hidden) stop();
+      else cycle();
+    }
+    document.addEventListener('visibilitychange', decide);
+    if (still.addEventListener) still.addEventListener('change', decide);
+    decide();
   })();
 </script>
 </body>
