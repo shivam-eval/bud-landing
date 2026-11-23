@@ -418,7 +418,13 @@
     .kbd-hint { display: none; }
     .a-nav-in { padding: 18px 16px 20px; }
     main { padding-left: 18px; padding-right: 18px; }
-    .intro-banner { height: 150px; }
+    /* no image on phones, so the start button is on the first screen */
+    .intro-banner { display: none; }
+    .intro h1 { margin-top: 4px; font-size: 32px; }
+    .intro .lead { margin-top: 12px; font-size: 18px; }
+    .intro p { font-size: 15px; line-height: 1.55; }
+    .intro .disclaim { margin-top: 18px; padding: 14px 16px; font-size: 13.5px; }
+    .intro-actions { margin-top: 22px; }
   }
 </style>
 </head>

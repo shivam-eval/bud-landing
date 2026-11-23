@@ -754,19 +754,6 @@
     transition: opacity .5s ease;
   }
   .goal:hover img { transform: scale(1.06); }
-  .goal-num {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    padding: 7px 12px;
-    border-radius: 100px;
-    background: rgba(9, 34, 27, 0.38);
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    font: 700 12px/1 var(--sans);
-    letter-spacing: 0.04em;
-  }
   .goal-text { position: absolute; left: 22px; right: 22px; bottom: 22px; }
   .goal h3 { margin: 0; font: 600 22px/1.15 var(--sans); letter-spacing: -0.02em; }
   .goal p { margin: 10px 0 0; font: 500 14px/1.5 var(--sans); color: rgba(255, 255, 255, 0.82); }
@@ -1573,7 +1560,6 @@
       <div class="goal-grid">
         <a class="goal reveal" style="--d:0" href="/assessment?goal=energy" aria-label="Energy and focus: start the assessment with this goal">
           <img src="/img/goal-energy.jpg" alt="A woman with a cup of tea at her laptop on a bright morning" width="900" height="1125" loading="lazy">
-          <span class="goal-num">01</span>
           <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Energy and focus</h3>
@@ -1582,7 +1568,6 @@
         </a>
         <a class="goal reveal" style="--d:1" href="/assessment?goal=sleep" aria-label="Better sleep: start the assessment with this goal">
           <img src="/img/goal-sleep.jpg" alt="A woman sleeping peacefully on white pillows" width="900" height="1125" loading="lazy">
-          <span class="goal-num">02</span>
           <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Better sleep</h3>
@@ -1591,7 +1576,6 @@
         </a>
         <a class="goal reveal" style="--d:2" href="/assessment?goal=strength" aria-label="Strength and recovery: start the assessment with this goal">
           <img src="/img/goal-strength.jpg" alt="A man training with dumbbells in a gym" width="900" height="1125" loading="lazy">
-          <span class="goal-num">03</span>
           <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Strength and recovery</h3>
@@ -1600,7 +1584,6 @@
         </a>
         <a class="goal reveal" style="--d:3" href="/assessment?goal=weight" aria-label="Weight and metabolic health: start the assessment with this goal">
           <img src="/img/goal-weight.jpg" alt="A woman out for a walk on a sunlit tree-lined path" width="900" height="1125" loading="lazy">
-          <span class="goal-num">04</span>
           <span class="goal-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 11.5l7-7M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="goal-text">
             <h3>Weight and metabolic health</h3>
