@@ -146,6 +146,7 @@
   .opt.on .tick { border-color: var(--green); }
   .opt.on .tick::after { transform: scale(1); }
   .opt input:focus-visible + .tick { outline: 2px solid var(--green); outline-offset: 2px; }
+  .opt.solo { padding-left: 18px; cursor: default; }
   .opt-title { display: block; font: 600 15.5px/1.35 var(--sans); }
   .opt-title span { white-space: nowrap; }
   .opt-sub { display: block; margin-top: 3px; color: var(--muted); font-size: 13.5px; line-height: 1.45; text-wrap: pretty; }
@@ -274,6 +275,7 @@
     .price { padding: 22px; }
     .opt { padding: 16px 14px 16px 46px; }
     .opt .tick { left: 14px; top: 19px; }
+    .opt.solo { padding-left: 14px; }
     .veil { padding: 0; place-items: end center; }
     .sheet { max-height: 94svh; border-radius: 24px 24px 0 0; }
     .sheet form { padding: 26px 20px 22px; }
@@ -316,18 +318,27 @@
   var OFFER_ENDS = new Date('2026-12-31T23:59:59+05:30');
   var OFFER_ENDS_TEXT = '31 Dec';
   var MONTHS = 3;
+  // India sees the two rupee plans; anybody who chose another country in the
+  // assessment sees the one dollar plan, with no blood test (owner,
+  // 2026-11-24). The server holds the same figures and charges these.
   var PLANS = {
     test: {
       title: '3-month plan + home blood test',
       sub: 'We collect your sample at home.',
       order: '90-day plan, home blood test',
-      price: 4500, regular: 5500
+      price: 4500, regular: 5500, cur: 'INR'
     },
     report: {
       title: '3-month plan + your own blood test',
       sub: 'Send us a report from the last 3 months.',
       order: '90-day plan, your own blood report',
-      price: 4000, regular: 5000
+      price: 4000, regular: 5000, cur: 'INR'
+    },
+    abroad: {
+      title: '3-month plan',
+      sub: 'No blood test needed. It starts with your doctor.',
+      order: '90-day plan',
+      price: 79, regular: 99, cur: 'USD'
     }
   };
   // The owner's figure (2026-11-24), from sales on their other platform.
@@ -371,7 +382,13 @@
       symptoms: ['tired', 'bloating'], symptom_duration: '2w3m', symptom_impact: 'mild',
       diet: 'veg_no_eggs', fruit_veg: 'daily_multi', activity: '60to149', sleep_hours: '7to9', rested: 'sometimes', tobacco: 'never', alcohol: 'never',
       conditions: ['thyroid'], family: ['none_known'], gi_surgery: 'no', menstruation: 'other_reason',
-      medicines: 'yes', medicines_details: 'Thyronorm 50 mcg', supplements: ['multivitamin'], allergies: 'no', prior_tests: '3to12m', deficiencies: ['none_known'] }
+      medicines: 'yes', medicines_details: 'Thyronorm 50 mcg', supplements: ['multivitamin'], allergies: 'no', prior_tests: '3to12m', deficiencies: ['none_known'] },
+    '4': { name: 'Maya Iyer', phone_code: '+1', phone: '415 555 0100', country: 'us', dob: { d: '21', m: '6', y: '1990' }, sex: 'female', pregnancy: 'none',
+      height: { unit: 'ft', ft: '5', in: '5' }, weight: { unit: 'lb', v: '138' }, goals: ['energy', 'strength'],
+      symptoms: ['tired', 'hair', 'cramps'], symptom_duration: 'gt3m', symptom_impact: 'mild',
+      diet: 'vegan', fruit_veg: 'daily_one', activity: '60to149', sleep_hours: '7to9', rested: 'sometimes', tobacco: 'never', alcohol: 'lt1',
+      conditions: ['none'], family: ['none_known'], gi_surgery: 'no', menstruation: 'regular', heavy_periods: 'no',
+      medicines: 'no', supplements: ['none'], allergies: 'no', prior_tests: 'gt12m', deficiencies: ['not_sure'] }
   };
 
   function load(key) { try { return JSON.parse(sessionStorage.getItem(key)); } catch (e) { return null; } }
@@ -679,7 +696,12 @@
   function perMonth(key) { return offerOn() ? PLANS[key].price : PLANS[key].regular; }
   function total(key) { return perMonth(key) * MONTHS; }
   function saving(key) { return (PLANS[key].regular - PLANS[key].price) * MONTHS; }
-  function chosen() { return r.plan && PLANS[r.plan] ? r.plan : (R.recentTest ? 'report' : 'test'); }
+  function chosen() {
+    if (R.abroad) return 'abroad';
+    return r.plan === 'test' || r.plan === 'report' ? r.plan : (R.recentTest ? 'report' : 'test');
+  }
+  // In the plan's own currency: ₹13,500, or $237 outside India.
+  function money(n, key) { return PLANS[key].cur === 'USD' ? '$' + Number(n).toLocaleString('en-US') : inr(n); }
 
   // ======================================================================
   // The report
@@ -692,14 +714,17 @@
 
   function previewPill() {
     if (LIVE || !sample) return '';
-    return '<div class="preview" role="note">Preview · <a href="?sample=1">1</a> <a href="?sample=2">2</a> <a href="?sample=3">3</a></div>';
+    return '<div class="preview" role="note">Preview · <a href="?sample=1">1</a> <a href="?sample=2">2</a> <a href="?sample=3">3</a> <a href="?sample=4">4</a></div>';
   }
 
   function hero() {
     var who = R.first ? esc(R.first) + ', here’s' : 'Here’s';
+    // Outside India the plan has no blood test, so nothing here promises one.
     var lede = R.signals.length
-      ? 'A few likely gaps stand out. A blood test confirms them, and a doctor prescribes what you need.'
-      : 'Nothing stands out strongly. A blood test shows what answers can’t.';
+      ? (R.abroad ? 'A few likely gaps stand out. Your doctor goes through them with you and prescribes what you need.'
+                  : 'A few likely gaps stand out. A blood test confirms them, and a doctor prescribes what you need.')
+      : (R.abroad ? 'Nothing stands out strongly. Your doctor goes through your answers with you.'
+                  : 'Nothing stands out strongly. A blood test shows what answers can’t.');
     var C = 2 * Math.PI * 52;
     var st = R.scoreStatus;
     var areas = R.areas.map(function (x) {
@@ -727,7 +752,8 @@
   function signals() {
     var body;
     if (!R.signals.length) {
-      body = '<p class="nothing">Many gaps, like low Vitamin D or B12, show no signs at first — which is why your plan starts with a blood test.</p>';
+      body = '<p class="nothing">Many gaps, like low Vitamin D or B12, show no signs at first — ' +
+        (R.abroad ? 'your doctor looks at these with you.' : 'which is why your plan starts with a blood test.') + '</p>';
     } else {
       body = '<div class="sigs">' + R.signals.map(function (s) {
         return '<article class="sig"><div class="sig-top">' + ico(s.icon) + '<h3>' + esc(s.name) + '</h3>' +
@@ -739,47 +765,49 @@
       ? '<div class="note">' + ico('info') + '<span>Because you’re ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ', none of this is a suggestion to take anything — your doctor should guide any supplement.</span></div>'
       : '';
     return '<section class="wrap sec" id="signals"><div class="label">Your signals</div><h2>What stands out</h2>' +
-      '<p class="lede">Each one is linked to answers you gave. Your blood test confirms it, and your doctor sets any dose.</p>' +
+      '<p class="lede">Each one is linked to answers you gave. ' +
+        (R.abroad ? 'Your doctor reviews it with you and sets any dose.' : 'Your blood test confirms it, and your doctor sets any dose.') + '</p>' +
       body + note + '</section>';
   }
 
-  function option(key) {
+  function option(key, solo) {
     var p = PLANS[key], on = chosen() === key;
     var price = offerOn()
-      ? '<s>' + inr(p.regular) + '</s><strong>' + inr(p.price) + '</strong><small> /month</small>'
-      : '<strong>' + inr(p.regular) + '</strong><small> /month</small>';
+      ? '<s>' + money(p.regular, key) + '</s><strong>' + money(p.price, key) + '</strong><small> /month</small>'
+      : '<strong>' + money(p.regular, key) + '</strong><small> /month</small>';
     var sub = key === 'report' && R.recentTest ? 'You said your last test was within 3 months.' : p.sub;
     // "3-month plan + home blood test": on a phone it breaks after the "+",
     // never inside the blood test's name.
     var parts = p.title.split(' + ');
     var title = esc(parts[0]) + (parts[1] ? ' + <span>' + esc(parts[1]) + '</span>' : '');
+    var inner = '<b class="opt-title">' + title + '</b>' +
+      '<span class="opt-sub">' + esc(sub) + '</span>' +
+      '<span class="opt-price">' + price + '</span>';
+    // The only plan on offer (outside India): shown as chosen, with nothing to pick.
+    if (solo) return '<div class="opt on solo">' + inner + '</div>';
     return '<label class="opt' + (on ? ' on' : '') + '">' +
       '<input type="radio" name="plan" value="' + key + '"' + (on ? ' checked' : '') + '>' +
-      '<span class="tick" aria-hidden="true"></span>' +
-      '<b class="opt-title">' + title + '</b>' +
-      '<span class="opt-sub">' + esc(sub) + '</span>' +
-      '<span class="opt-price">' + price + '</span>' +
+      '<span class="tick" aria-hidden="true"></span>' + inner +
     '</label>';
   }
 
   function priceCard() {
-    if (R.abroad) {
-      return '<div class="price talk"><h3>The plan is in India for now.</h3>' +
-        '<p>Home blood tests and supplements are India-only today. Message us and we’ll tell you what we can do where you are.</p>' +
-        '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment from outside India. What can you do for me here?') + '">Message the Bud team</a></div>';
-    }
     if (R.pregnant) {
       return '<div class="price talk"><h3>Let’s talk first.</h3>' +
         '<p>Our standard plan isn’t designed for pregnancy or breastfeeding. Message us and we’ll help you find the right care.</p>' +
         '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment. I’m ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ' and have a question about the 90-day plan.') + '">Message the Bud team</a></div>';
     }
     var key = chosen();
-    return '<div class="price" id="price">' +
-      '<h3>Choose your plan</h3>' +
-      '<p class="incl">Both include doctor, supplements, nutritionist and Bud.</p>' +
-      '<div class="opts" role="radiogroup" aria-label="Plan">' + option('test') + option('report') + '</div>' +
-      (offerOn() ? '<div class="offer"><span>Launch price · ends ' + OFFER_ENDS_TEXT + '</span><b id="save">You save ' + inr(saving(key)) + '</b></div>' : '') +
-      '<div class="total"><span>3 months, paid once</span><strong id="total">' + inr(total(key)) + '</strong></div>' +
+    var head = R.abroad
+      ? '<h3>Your plan</h3>' +
+        '<p class="incl">Includes doctor, supplements, nutritionist and Bud.</p>' +
+        '<div class="opts">' + option('abroad', true) + '</div>'
+      : '<h3>Choose your plan</h3>' +
+        '<p class="incl">Both include doctor, supplements, nutritionist and Bud.</p>' +
+        '<div class="opts" role="radiogroup" aria-label="Plan">' + option('test') + option('report') + '</div>';
+    return '<div class="price" id="price">' + head +
+      (offerOn() ? '<div class="offer"><span>Launch price · ends ' + OFFER_ENDS_TEXT + '</span><b id="save">You save ' + money(saving(key), key) + '</b></div>' : '') +
+      '<div class="total"><span>3 months, paid once</span><strong id="total">' + money(total(key), key) + '</strong></div>' +
       '<button type="button" class="btn btn-block" data-act="checkout">Start my plan' + ico('arrow') + '</button>' +
       '<div class="proof">' + ico('users') + esc(PURCHASED) + ' people have purchased this plan</div>' +
     '</div>';
@@ -788,28 +816,39 @@
   function plan() {
     var doc = '<div class="doc"><img src="' + DOCTOR.photo + '" alt="' + esc(DOCTOR.name) + '" width="64" height="64" loading="lazy" decoding="async">' +
       '<div><b>' + esc(DOCTOR.name) + '</b><small>' + esc(DOCTOR.creds) + '</small>' +
-      '<span>Reads your blood report and prescribes your supplements.</span></div></div>';
+      '<span>' + (R.abroad ? 'Goes through your answers with you and prescribes your supplements.'
+                           : 'Reads your blood report and prescribes your supplements.') + '</span></div></div>';
+    // Outside India there is no blood test: the plan starts with the doctor.
+    var steps = (R.abroad ? [] : [['Blood test at home', 'Or use a report from the last 3 months.']]).concat([
+      ['Doctor consultation', R.abroad ? 'Your supplements and their doses, set with you.' : 'Your supplements and their doses, set from your report.'],
+      ['3 months of supplements', R.abroad ? 'Prescribed for you, delivered to you.' : 'Prescribed for you.'],
+      ['Nutritionist at day 0 and day 45', 'Your food plan, then a check-in on how it’s going.'],
+      ['Bud on WhatsApp, every day', 'Food, supplements and workouts tracked, with reminders.']
+    ]);
     return '<section class="band" id="plan"><div class="wrap plan">' +
       '<div>' +
         '<div class="label">Your next step</div>' +
-        '<h2>A 90‑day plan built on your blood work.</h2>' +
-        '<ol class="steps">' +
-          '<li><div><b>Blood test at home</b><span>Or use a report from the last 3 months.</span></div></li>' +
-          '<li><div><b>Doctor consultation</b><span>Your supplements and their doses, set from your report.</span></div></li>' +
-          '<li><div><b>3 months of supplements</b><span>Prescribed for you.</span></div></li>' +
-          '<li><div><b>Nutritionist at day 0 and day 45</b><span>Your food plan, then a check-in on how it’s going.</span></div></li>' +
-          '<li><div><b>Bud on WhatsApp, every day</b><span>Food, supplements and workouts tracked, with reminders.</span></div></li>' +
+        '<h2>' + (R.abroad ? 'A 90‑day plan built around you.' : 'A 90‑day plan built on your blood work.') + '</h2>' +
+        '<ol class="steps">' + steps.map(function (s) {
+          return '<li><div><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div></li>';
+        }).join('') +
         '</ol>' + doc +
       '</div>' + priceCard() +
     '</div></section>';
   }
 
   function questions() {
-    var qs = [
+    var safe = ['Is it safe with my medicines?', 'Your doctor reads the medicines and supplements you listed before prescribing anything, and checks every supplement against them.'];
+    var qs = R.abroad ? [
+      ['What happens after I pay?', 'We message you on WhatsApp to set up your consultation with the doctor. Then you see your nutritionist, and your supplements start.'],
+      ['Do I need a blood test?', 'No. Your doctor works from your answers and your consultation.'],
+      ['Do you deliver outside India?', 'Yes. Your supplements are delivered to the address you give us.'],
+      safe
+    ] : [
       ['What happens after I pay?', 'We confirm your home blood test on WhatsApp. Once your report is in you see your doctor, then your nutritionist, and your supplements start.'],
       ['Why do I need a blood test?', 'Your answers show signals; only your blood shows levels. A doctor can’t set a safe dose of Vitamin D or iron without knowing where you start.'],
       ['Can I use a report I already have?', 'Yes, if it’s from the last 3 months. Choose it above and send it to us after you pay — we check it has the markers your doctor needs.'],
-      ['Is it safe with my medicines?', 'Your doctor reads the medicines and supplements you listed before prescribing anything, and checks every supplement against them.']
+      safe
     ];
     return '<section class="wrap sec" id="faq"><div class="label">Questions</div><h2>Before you decide</h2>' +
       '<div class="faq">' + qs.map(function (q) {
@@ -823,9 +862,9 @@
   }
 
   function sticky() {
-    if (R.abroad || R.pregnant) { stickyEl.innerHTML = ''; return; }
+    if (R.pregnant) { stickyEl.innerHTML = ''; return; }
     var key = chosen();
-    var price = offerOn() ? '<s>' + inr(PLANS[key].regular) + '</s><strong>' + inr(PLANS[key].price) + '</strong>' : '<strong>' + inr(PLANS[key].regular) + '</strong>';
+    var price = offerOn() ? '<s>' + money(PLANS[key].regular, key) + '</s><strong>' + money(PLANS[key].price, key) + '</strong>' : '<strong>' + money(PLANS[key].regular, key) + '</strong>';
     stickyEl.innerHTML = '<div class="wrap"><div>' + price + '<small> /month · 90-day plan</small></div>' +
       '<button type="button" class="btn" data-act="checkout">Start my plan</button></div>';
   }
@@ -895,14 +934,23 @@
     bad_address: ['address', 'Add your flat or house number, building and street.'],
     bad_pincode: ['pincode', 'A 6-digit pincode.'],
     bad_city: ['city', 'Add your city.'],
-    bad_state: ['state', 'Choose your state.']
+    bad_state: ['state', 'Choose your state.'],
+    bad_country: ['country', 'Add your country.']
   };
+  // Outside India the address has a postal code, and the number needs its
+  // country code - a bare one would be read as an Indian number.
+  var FIELD_ERRORS_ABROAD = {
+    bad_phone: ['phone', 'Add your WhatsApp number with its country code, like +1.'],
+    bad_address: ['address', 'Add your house or apartment number and street.'],
+    bad_pincode: ['pincode', 'Add your postal code.']
+  };
+  function fieldError(code) { return (R.abroad && FIELD_ERRORS_ABROAD[code]) || FIELD_ERRORS[code]; }
   var GENERAL_ERRORS = {
     payments_off: 'Payments are paused for a moment. Message us on WhatsApp and we’ll sort it out.',
     razorpay: 'We couldn’t open the payment page. Try again in a minute.',
     no_assessment: 'We couldn’t find your assessment. Please take it again.',
     assessment_unfinished: 'Your assessment isn’t finished yet. Please complete it first.',
-    not_in_india: 'The plan is only available in India for now.',
+    wrong_plan: 'This page is out of date. Reload it and try again.',
     talk_first: 'Please message us before starting the plan.'
   };
 
@@ -922,7 +970,26 @@
 
   function openCheckout() {
     var key = chosen(), c = r.contact || {};
-    var phone = c.phone || ((a.phone_code || '+91') + ' ' + (a.phone || '')).trim();
+    var code = a.phone_code && a.phone_code !== 'other' ? a.phone_code + ' ' : '';
+    var phone = c.phone || (code + (a.phone || '')).trim();
+    var city = field('city', 'City', '<input class="input" id="f-city" name="city" autocomplete="address-level2" maxlength="60" value="' + esc(c.city || '') + '">');
+    // Outside India: any postal code, a state only if there is one, and the
+    // country the supplements ship to ("Other" in the assessment names none).
+    var where = R.abroad
+      ? '<div class="row2">' +
+          field('pincode', 'Postal code', '<input class="input" id="f-pincode" name="pincode" autocomplete="postal-code" maxlength="10" value="' + esc(c.pincode || '') + '">') +
+          city +
+        '</div>' +
+        '<div class="row2">' +
+          field('state', 'State or region', '<input class="input" id="f-state" name="state" autocomplete="address-level1" maxlength="60" placeholder="If you have one" value="' + esc(c.state || '') + '">') +
+          field('country', 'Country', '<input class="input" id="f-country" name="country" autocomplete="country-name" maxlength="60" value="' + esc(c.country || (a.country === 'us' ? 'United States' : '')) + '">') +
+        '</div>'
+      : '<div class="row2">' +
+          field('pincode', 'Pincode', '<input class="input" id="f-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="6" value="' + esc(c.pincode || '') + '">') +
+          city +
+        '</div>' +
+        field('state', 'State', '<select class="input" id="f-state" name="state" autocomplete="address-level1"><option value="">Choose your state</option>' +
+          STATES.map(function (s) { return '<option' + (c.state === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select>');
     lastFocus = document.activeElement;
     sheetRoot.innerHTML =
       '<div class="veil" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h">' +
@@ -930,18 +997,14 @@
         '<form id="checkout" novalidate>' +
           '<h2 id="sheet-h">Almost there</h2>' +
           '<p class="lede">' + (key === 'test' ? 'Where should we collect your blood sample and send your supplements?' : 'Where should we send your supplements?') + '</p>' +
-          '<div class="chosen"><span>' + esc(PLANS[key].order) + '</span><strong>' + inr(total(key)) + '</strong></div>' +
+          '<div class="chosen"><span>' + esc(PLANS[key].order) + '</span><strong>' + money(total(key), key) + '</strong></div>' +
           field('name', 'Full name', '<input class="input" id="f-name" name="name" autocomplete="name" maxlength="80" value="' + esc(c.name || a.name || '') + '">') +
           field('phone', 'WhatsApp number', '<input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="' + esc(phone) + '">') +
-          field('address', 'Address', '<textarea class="input" id="f-address" name="address" autocomplete="street-address" maxlength="300" placeholder="Flat or house number, building, street, area">' + esc(c.address || '') + '</textarea>') +
-          '<div class="row2">' +
-            field('pincode', 'Pincode', '<input class="input" id="f-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="6" value="' + esc(c.pincode || '') + '">') +
-            field('city', 'City', '<input class="input" id="f-city" name="city" autocomplete="address-level2" maxlength="60" value="' + esc(c.city || '') + '">') +
-          '</div>' +
-          field('state', 'State', '<select class="input" id="f-state" name="state" autocomplete="address-level1"><option value="">Choose your state</option>' +
-            STATES.map(function (s) { return '<option' + (c.state === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select>') +
+          field('address', 'Address', '<textarea class="input" id="f-address" name="address" autocomplete="street-address" maxlength="300" placeholder="' +
+            (R.abroad ? 'House or apartment number, street' : 'Flat or house number, building, street, area') + '">' + esc(c.address || '') + '</textarea>') +
+          where +
           '<div id="form-err"></div>' +
-          '<button type="submit" class="btn btn-block" id="pay">Pay ' + inr(total(key)) + '</button>' +
+          '<button type="submit" class="btn btn-block" id="pay">Pay ' + money(total(key), key) + '</button>' +
           '<div class="secure">' + ico('lock') + 'Secure payment by Razorpay</div>' +
           '<p class="terms">By paying you agree to our <a class="link" href="/terms" target="_blank" rel="noopener">Terms</a>.</p>' +
         '</form>' +
@@ -975,15 +1038,19 @@
   }
 
   function readForm(f) {
-    var v = {};
-    ['name', 'phone', 'address', 'pincode', 'city', 'state'].forEach(function (k) { v[k] = (f.elements[k].value || '').trim(); });
+    var v = {}, abroad = R.abroad;
+    ['name', 'phone', 'address', 'pincode', 'city', 'state'].concat(abroad ? ['country'] : []).forEach(function (k) {
+      v[k] = (f.elements[k].value || '').trim();
+    });
+    var digits = v.phone.replace(/\D/g, '').length;
     var errs = {};
     if (v.name.length < 2) errs.name = FIELD_ERRORS.bad_name[1];
-    if (v.phone.replace(/\D/g, '').length < 10) errs.phone = FIELD_ERRORS.bad_phone[1];
-    if (v.address.length < 10) errs.address = FIELD_ERRORS.bad_address[1];
-    if (!/^[1-9][0-9]{5}$/.test(v.pincode)) errs.pincode = FIELD_ERRORS.bad_pincode[1];
+    if (abroad ? (v.phone.charAt(0) !== '+' || digits < 8) : digits < 10) errs.phone = fieldError('bad_phone')[1];
+    if (v.address.length < 10) errs.address = fieldError('bad_address')[1];
+    if (!(abroad ? /^[A-Za-z0-9][A-Za-z0-9 -]{1,9}$/ : /^[1-9][0-9]{5}$/).test(v.pincode)) errs.pincode = fieldError('bad_pincode')[1];
     if (v.city.length < 2) errs.city = FIELD_ERRORS.bad_city[1];
-    if (!v.state) errs.state = FIELD_ERRORS.bad_state[1];
+    if (abroad) { if (v.country.length < 2) errs.country = FIELD_ERRORS.bad_country[1]; }
+    else if (!v.state) errs.state = FIELD_ERRORS.bad_state[1];
     showErrors(f, errs, '');
     return Object.keys(errs).length ? null : v;
   }
@@ -1009,22 +1076,22 @@
     btn.textContent = 'Opening Razorpay…';
     post('/plan/checkout', { id: aid, plan: key, contact: v }).then(function (res) {
       if (res.ok && res.data.url) {
-        r.pending = { link: res.data.link, plan: key, amount: res.data.amount_inr };
+        r.pending = { link: res.data.link, plan: key, amount: res.data.amount };
         keep();
         location.href = res.data.url;
         return;
       }
       if (res.ok && res.data.status === 'paid') {
-        r.purchase = { plan: res.data.plan || key, amount: res.data.amount_inr, link: res.data.link, slot: res.data.slot || null };
+        r.purchase = { plan: res.data.plan || key, amount: res.data.amount, link: res.data.link, slot: res.data.slot || null };
         keep();
         closeCheckout();
         renderPaid();
         return;
       }
       btn.disabled = false;
-      btn.textContent = 'Pay ' + inr(total(key));
-      var code = res.data && res.data.detail;
-      if (FIELD_ERRORS[code]) { var e = {}; e[FIELD_ERRORS[code][0]] = FIELD_ERRORS[code][1]; showErrors(f, e, ''); return; }
+      btn.textContent = 'Pay ' + money(total(key), key);
+      var code = res.data && res.data.detail, fe = fieldError(code);
+      if (fe) { var e = {}; e[fe[0]] = fe[1]; showErrors(f, e, ''); return; }
       showErrors(f, {}, GENERAL_ERRORS[code] || (res.status === 429 ? 'Too many tries. Wait a few minutes and try again.' : 'Something went wrong. Check your connection and try again.'));
     });
   }
@@ -1042,7 +1109,7 @@
     if (!aid || !r.pending || !r.pending.link) { renderReport(); return; }
     post('/plan/confirm', { id: aid, link: r.pending.link }).then(function (res) {
       if (res.ok && res.data.status === 'paid') {
-        r.purchase = { plan: res.data.plan, amount: res.data.amount_inr, link: res.data.link, slot: res.data.slot || null };
+        r.purchase = { plan: res.data.plan, amount: res.data.amount, link: res.data.link, slot: res.data.slot || null };
         delete r.pending;
         keep();
         renderPaid();
@@ -1096,18 +1163,24 @@
           esc(draft.address || [((r.contact || {}).address), (r.contact || {}).city, (r.contact || {}).pincode].filter(Boolean).join(', ')) + '</textarea></div>' +
         '<div id="slot-err"></div>' +
         '<button type="button" class="btn btn-block" data-act="slot" style="margin-top:18px">Request this slot</button></div>';
+    } else if (key === 'abroad') {
+      // No blood test outside India: the doctor comes first.
+      book = '<div class="book"><h2>Next: your doctor</h2><p>We’ll message you on WhatsApp to set up your consultation.</p>' +
+        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, I’ve paid for my Bud 90-day plan. When can I see the doctor?') + '">Message us on WhatsApp</a></div>';
     } else {
       book = '<div class="book"><h2>Send us your blood report</h2><p>It must be from the last 3 months. Send the PDF or clear photos on WhatsApp and we’ll check it has the markers your doctor needs.</p>' +
         '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, here’s my blood report for my Bud 90-day plan.') + '">Send my report on WhatsApp</a></div>';
     }
-    var steps = (key === 'test'
+    var steps = key === 'test'
       ? ['We confirm your blood test slot on WhatsApp.', 'Your doctor reads your report and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']
-      : ['We check your report has what your doctor needs.', 'Your doctor reads it and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']);
+      : key === 'abroad'
+        ? ['We set up your consultation with the doctor on WhatsApp.', 'Your doctor prescribes your supplements, and we deliver them.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']
+        : ['We check your report has what your doctor needs.', 'Your doctor reads it and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.'];
     main.innerHTML = '<section class="wrap done">' +
       '<span class="done-ico">' + ico('check') + '</span>' +
       '<h1>You’re in' + (name ? ', ' + esc(name) : '') + '.</h1>' +
       '<p>Payment received for your 90‑day plan.' + (p.preview ? ' (Preview: no payment was taken.)' : '') + '</p>' +
-      '<div class="receipt"><span>' + esc(PLANS[key].order) + '</span><b>' + inr(p.amount || total(key)) + '</b></div>' +
+      '<div class="receipt"><span>' + esc(PLANS[key].order) + '</span><b>' + money(p.amount || total(key), key) + '</b></div>' +
       book +
       '<ol class="next">' + steps.map(function (t, i) { return '<li><b>' + (i + 1) + '</b><span>' + esc(t) + '</span></li>'; }).join('') + '</ol>' +
       '<p style="margin-top:22px"><a class="link" href="#" data-act="back-to-report">Back to your report</a></p>' +
@@ -1170,11 +1243,14 @@
     if (ev.target.name !== 'plan') return;
     r.plan = ev.target.value;
     keep();
-    document.querySelectorAll('.opt').forEach(function (o) { o.classList.toggle('on', o.querySelector('input').checked); });
+    document.querySelectorAll('.opt').forEach(function (o) {
+      var input = o.querySelector('input');
+      if (input) o.classList.toggle('on', input.checked);
+    });
     var key = chosen();
     var tot = document.getElementById('total'), sv = document.getElementById('save');
-    if (tot) tot.textContent = inr(total(key));
-    if (sv) sv.textContent = 'You save ' + inr(saving(key));
+    if (tot) tot.textContent = money(total(key), key);
+    if (sv) sv.textContent = 'You save ' + money(saving(key), key);
     sticky();
   });
 
