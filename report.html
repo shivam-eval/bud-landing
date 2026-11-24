@@ -127,14 +127,15 @@
   .steps li::before { content: counter(s); width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(238, 244, 241, 0.3); font: 600 12.5px/1 var(--sans); color: var(--band-ink); }
   .steps b { display: block; font: 600 16.5px/1.35 var(--sans); }
   .steps span { display: block; margin-top: 3px; color: var(--band-muted); font-size: 14.5px; }
-  .doc { display: flex; align-items: center; gap: 14px; margin-top: 30px; color: var(--band-muted); font-size: 14.5px; }
-  .doc i { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: rgba(238, 244, 241, 0.1); color: var(--band-ink); flex: 0 0 auto; }
-  .doc b { color: var(--band-ink); font-weight: 600; }
-  .ph { background: rgba(255, 214, 102, 0.22); border-radius: 4px; padding: 0 4px; box-shadow: inset 0 -1px 0 rgba(255, 214, 102, 0.6); }
-  .price .ph { background: #fff3c4; box-shadow: inset 0 -1px 0 #e0c062; }
+  .doc { display: flex; align-items: center; gap: 16px; margin-top: 32px; }
+  .doc img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; background: rgba(238, 244, 241, 0.1); box-shadow: 0 0 0 1px var(--band-hair); }
+  .doc b { display: block; color: var(--band-ink); font: 600 16.5px/1.3 var(--sans); }
+  .doc small { display: block; margin-top: 2px; color: var(--band-muted); font-size: 13.5px; }
+  .doc span { display: block; margin-top: 6px; color: var(--band-muted); font-size: 14.5px; line-height: 1.45; }
 
   .price { padding: 30px; border-radius: 24px; background: var(--surface); color: var(--ink); box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.6); }
   .price h3 { margin: 0; font: 600 17px/1.3 var(--sans); }
+  .incl { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; text-wrap: balance; }
   .opts { display: grid; gap: 10px; margin-top: 18px; }
   .opt { position: relative; display: block; padding: 18px 18px 18px 52px; border: 1px solid var(--hair); border-radius: 16px; cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
   .opt:hover { border-color: rgba(31, 95, 79, 0.45); }
@@ -145,13 +146,13 @@
   .opt.on .tick { border-color: var(--green); }
   .opt.on .tick::after { transform: scale(1); }
   .opt input:focus-visible + .tick { outline: 2px solid var(--green); outline-offset: 2px; }
-  .opt-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .opt-row b { font: 600 15.5px/1.3 var(--sans); }
-  .opt-row em { font-style: normal; white-space: nowrap; }
-  .opt-row s { margin-right: 5px; color: var(--muted); font-size: 13px; }
-  .opt-row strong { font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
-  .opt-row small { color: var(--muted); font-size: 12.5px; }
-  .opt-sub { display: block; margin-top: 4px; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+  .opt-title { display: block; font: 600 15.5px/1.35 var(--sans); }
+  .opt-title span { white-space: nowrap; }
+  .opt-sub { display: block; margin-top: 3px; color: var(--muted); font-size: 13.5px; line-height: 1.45; text-wrap: pretty; }
+  .opt-price { display: block; margin-top: 10px; white-space: nowrap; }
+  .opt-price s { margin-right: 6px; color: var(--muted); font-size: 13px; }
+  .opt-price strong { font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
+  .opt-price small { color: var(--muted); font-size: 12.5px; }
   .offer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--hair-2); font-size: 13.5px; color: var(--muted); }
   .offer b { color: var(--warn); font-weight: 600; }
   .total { display: flex; align-items: baseline; justify-content: space-between; margin-top: 10px; }
@@ -160,7 +161,6 @@
   .price .btn { margin-top: 18px; }
   .proof { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font: 600 13.5px/1.3 var(--sans); }
   .proof svg { width: 17px; height: 17px; color: var(--green); }
-  .fine { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: 12.5px; }
   .talk h3 { margin: 0; font: 400 30px/1.1 var(--serif); }
   .talk p { margin: 12px 0 0; color: var(--ink-2); font-size: 15px; }
   .talk .btn { margin-top: 22px; }
@@ -274,7 +274,6 @@
     .price { padding: 22px; }
     .opt { padding: 16px 14px 16px 46px; }
     .opt .tick { left: 14px; top: 19px; }
-    .opt-row { flex-direction: column; gap: 6px; }
     .veil { padding: 0; place-items: end center; }
     .sheet { max-height: 94svh; border-radius: 24px 24px 0 0; }
     .sheet form { padding: 26px 20px 22px; }
@@ -319,14 +318,14 @@
   var MONTHS = 3;
   var PLANS = {
     test: {
-      title: 'Home blood test',
+      title: '3-month plan + home blood test',
       sub: 'We collect your sample at home.',
       order: '90-day plan, home blood test',
       price: 4500, regular: 5500
     },
     report: {
-      title: 'Upload my report',
-      sub: 'A blood report from the last 3 months.',
+      title: '3-month plan + your own blood test',
+      sub: 'Send us a report from the last 3 months.',
       order: '90-day plan, your own blood report',
       price: 4000, regular: 5000
     }
@@ -335,8 +334,9 @@
   // Keep it true: update it as it grows.
   var PURCHASED = '130+';
 
-  // Placeholders are highlighted in a local preview and left off mybud.life.
-  var DOCTOR = { name: 'Dr. [Doctor’s name]', creds: '[MD]', placeholder: true };
+  // The doctor who reads every blood report and prescribes the supplements
+  // (owner, 2026-11-24).
+  var DOCTOR = { name: 'Dr. Arjun Mehta', creds: 'MBBS, MD (General Medicine)', photo: '/img/doctor-arjun-mehta.jpg' };
 
   // Bud's server on mybud.life. Anywhere else it is empty, and the checkout
   // shows what comes after paying without taking any money - unless a local
@@ -417,7 +417,6 @@
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
   function list(xs) { return xs.length < 2 ? (xs[0] || '') : xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1]; }
   function clamp(n) { return Math.max(5, Math.min(100, Math.round(n))); }
-  function ph(text, isPh) { return isPh ? (LIVE ? '' : '<span class="ph">' + esc(text) + '</span>') : esc(text); }
   function waTeam(text) { return WA_TEAM + '?text=' + encodeURIComponent(text); }
 
   var ICONS = {
@@ -433,7 +432,6 @@
     lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>',
     info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8v.01"/>',
     users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 19.5c.6-3.3 3-5.2 6-5.2s5.4 1.9 6 5.2"/><path d="M16 5.3a3 3 0 0 1 0 5.6M18 14.6c1.6.7 2.6 2.4 3 4.9"/>',
-    doctor: '<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>'
@@ -751,11 +749,16 @@
       ? '<s>' + inr(p.regular) + '</s><strong>' + inr(p.price) + '</strong><small> /month</small>'
       : '<strong>' + inr(p.regular) + '</strong><small> /month</small>';
     var sub = key === 'report' && R.recentTest ? 'You said your last test was within 3 months.' : p.sub;
+    // "3-month plan + home blood test": on a phone it breaks after the "+",
+    // never inside the blood test's name.
+    var parts = p.title.split(' + ');
+    var title = esc(parts[0]) + (parts[1] ? ' + <span>' + esc(parts[1]) + '</span>' : '');
     return '<label class="opt' + (on ? ' on' : '') + '">' +
       '<input type="radio" name="plan" value="' + key + '"' + (on ? ' checked' : '') + '>' +
       '<span class="tick" aria-hidden="true"></span>' +
-      '<span class="opt-row"><b>' + esc(p.title) + '</b><em>' + price + '</em></span>' +
+      '<b class="opt-title">' + title + '</b>' +
       '<span class="opt-sub">' + esc(sub) + '</span>' +
+      '<span class="opt-price">' + price + '</span>' +
     '</label>';
   }
 
@@ -772,20 +775,20 @@
     }
     var key = chosen();
     return '<div class="price" id="price">' +
-      '<h3>Choose your blood test</h3>' +
-      '<div class="opts" role="radiogroup" aria-label="Blood test">' + option('test') + option('report') + '</div>' +
+      '<h3>Choose your plan</h3>' +
+      '<p class="incl">Both include doctor, supplements, nutritionist and Bud.</p>' +
+      '<div class="opts" role="radiogroup" aria-label="Plan">' + option('test') + option('report') + '</div>' +
       (offerOn() ? '<div class="offer"><span>Launch price · ends ' + OFFER_ENDS_TEXT + '</span><b id="save">You save ' + inr(saving(key)) + '</b></div>' : '') +
       '<div class="total"><span>3 months, paid once</span><strong id="total">' + inr(total(key)) + '</strong></div>' +
       '<button type="button" class="btn btn-block" data-act="checkout">Start my plan' + ico('arrow') + '</button>' +
       '<div class="proof">' + ico('users') + esc(PURCHASED) + ' people have purchased this plan</div>' +
-      '<p class="fine">No autopay. Nothing renews on its own.</p>' +
     '</div>';
   }
 
   function plan() {
-    var doc = DOCTOR.placeholder && LIVE
-      ? '<div class="doc"><i>' + ico('doctor') + '</i><span>A doctor reviews every plan. Nothing is prescribed before your blood report is read.</span></div>'
-      : '<div class="doc"><i>' + ico('doctor') + '</i><span>Reviewed by <b>' + ph(DOCTOR.name, DOCTOR.placeholder) + '</b> ' + ph(DOCTOR.creds, DOCTOR.placeholder) + '. Nothing is prescribed before your blood report is read.</span></div>';
+    var doc = '<div class="doc"><img src="' + DOCTOR.photo + '" alt="' + esc(DOCTOR.name) + '" width="64" height="64" loading="lazy" decoding="async">' +
+      '<div><b>' + esc(DOCTOR.name) + '</b><small>' + esc(DOCTOR.creds) + '</small>' +
+      '<span>Reads your blood report and prescribes your supplements.</span></div></div>';
     return '<section class="band" id="plan"><div class="wrap plan">' +
       '<div>' +
         '<div class="label">Your next step</div>' +
