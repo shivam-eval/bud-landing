@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Your Health Report - Bud</title>
+<meta name="description" content="Your health report from the Bud assessment, and the 90-day plan built on your blood work.">
+<meta name="theme-color" content="#f7f5f0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --ink: #12201b;
+    --ink-2: #34433d;
+    --muted: #6b7671;
+    --hair: rgba(18, 32, 27, 0.11);
+    --hair-2: rgba(18, 32, 27, 0.06);
+    --green: #1f5f4f;
+    --green-2: #174a3e;
+    --band: #0f3a30;
+    --band-ink: #eef4f1;
+    --band-muted: rgba(238, 244, 241, 0.62);
+    --band-hair: rgba(238, 244, 241, 0.14);
+    /* Status: a fill and a lighter step of the same hue for its track, always
+       paired with a word - never colour alone. */
+    --good: #2e7d64;
+    --good-t: #dbeae3;
+    --fair: #b58222;
+    --fair-t: #f2e6cc;
+    --warn: #b5523a;
+    --warn-t: #f3ded6;
+    --sans: Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Instrument Serif", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { min-height: 100svh; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+  body.locked { overflow: hidden; }
+  a { color: inherit; }
+  [hidden] { display: none !important; }
+  button { font: inherit; color: inherit; }
+  svg.i { width: 20px; height: 20px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+  .label { font: 600 11.5px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .serif { font-family: var(--serif); font-weight: 400; }
+
+  /* ---------- top ---------- */
+  .top { position: sticky; top: 0; z-index: 20; background: rgba(247, 245, 240, 0.9); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
+  .logo svg { width: 26px; height: 26px; }
+  .exit { font: 600 14px/1 var(--sans); color: var(--muted); text-decoration: none; }
+  .exit:hover { color: var(--ink); }
+
+  /* ---------- buttons ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 26px; border: 0; border-radius: 100px; background: var(--green); color: #fff; font: 600 15.5px/1.2 var(--sans); text-decoration: none; cursor: pointer; transition: background-color .2s ease, transform .2s ease; }
+  .btn:hover { background: var(--green-2); }
+  .btn:active { transform: scale(0.99); }
+  .btn:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+  .btn:disabled { opacity: 0.55; cursor: progress; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-block { width: 100%; }
+  .btn-quiet { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--hair); }
+  .btn-quiet:hover { background: #fff; }
+  .link { color: var(--green); font-weight: 600; text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: 56px; }
+  .hero h1 { margin: 0; max-width: 15ch; font: 400 clamp(42px, 6.2vw, 72px)/1.0 var(--serif); letter-spacing: -0.015em; }
+  .hero p { margin: 20px 0 0; max-width: 46ch; color: var(--ink-2); font-size: 18px; line-height: 1.55; }
+
+  .panel { display: grid; grid-template-columns: 280px 1fr; margin-top: 44px; border: 1px solid var(--hair); border-radius: 24px; background: var(--surface); }
+  .score { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 36px 28px; border-right: 1px solid var(--hair-2); text-align: center; }
+  .ring { position: relative; width: 168px; height: 168px; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 5; }
+  .ring .arc { stroke-linecap: round; transition: stroke-dashoffset 1.4s cubic-bezier(.2, .7, .2, 1); }
+  .ring-n { position: absolute; inset: 0; display: grid; place-content: center; }
+  .ring-n b { font: 600 56px/1 var(--sans); letter-spacing: -0.04em; }
+  .ring-n span { margin-top: 6px; font-size: 13px; color: var(--muted); }
+  .score .label { margin-top: 18px; }
+  .state { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; font: 600 15px/1.2 var(--sans); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+  .dot.good { background: var(--good); } .dot.fair { background: var(--fair); } .dot.warn { background: var(--warn); }
+
+  .areas { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 44px; align-content: center; margin: 0; padding: 36px 40px; list-style: none; }
+  .area-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .area-top b { font: 600 15.5px/1.2 var(--sans); }
+  .area-top span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .bar { position: relative; height: 4px; margin-top: 12px; border-radius: 4px; overflow: hidden; }
+  .bar i { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 4px; transition: width 1.2s cubic-bezier(.2, .7, .2, 1); }
+  .bar.good { background: var(--good-t); } .bar.good i { background: var(--good); }
+  .bar.fair { background: var(--fair-t); } .bar.fair i { background: var(--fair); }
+  .bar.warn { background: var(--warn-t); } .bar.warn i { background: var(--warn); }
+
+  /* ---------- sections ---------- */
+  .sec { padding-top: 96px; }
+  .sec h2 { margin: 14px 0 0; font: 400 clamp(34px, 4.4vw, 48px)/1.04 var(--serif); letter-spacing: -0.01em; }
+  .sec .lede { margin: 14px 0 0; max-width: 54ch; color: var(--ink-2); font-size: 17px; }
+
+  .sigs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 36px; }
+  .sig { padding: 24px 24px 26px; border: 1px solid var(--hair); border-radius: 20px; background: var(--surface); }
+  .sig-top { display: flex; align-items: center; gap: 12px; }
+  .sig-top svg { width: 22px; height: 22px; color: var(--green); }
+  .sig-top h3 { flex: 1; margin: 0; font: 600 17px/1.25 var(--sans); letter-spacing: -0.01em; }
+  .hi { display: inline-flex; align-items: center; gap: 6px; font: 600 11px/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--warn); white-space: nowrap; }
+  .sig p { margin: 14px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.55; }
+  .sig .care { margin-top: 10px; color: #8a3b28; font-size: 14px; }
+  .nothing { margin-top: 32px; max-width: 60ch; color: var(--ink-2); font-size: 17px; }
+  .note { display: flex; gap: 12px; margin-top: 18px; max-width: 72ch; color: var(--ink-2); font-size: 15px; }
+  .note svg { color: var(--green); margin-top: 2px; }
+
+  /* ---------- the plan ---------- */
+  .band { margin-top: 104px; padding: 88px 0; background: var(--band); color: var(--band-ink); }
+  .band .label { color: var(--band-muted); }
+  .band h2 { margin: 14px 0 0; max-width: 17ch; font: 400 clamp(36px, 4.6vw, 52px)/1.03 var(--serif); letter-spacing: -0.01em; }
+  .plan { display: grid; grid-template-columns: minmax(0, 1fr) 430px; gap: 64px; align-items: start; }
+  .steps { margin: 40px 0 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps li { position: relative; display: grid; grid-template-columns: 34px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--band-hair); counter-increment: s; }
+  .steps li:last-child { border-bottom: 1px solid var(--band-hair); }
+  .steps li::before { content: counter(s); width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(238, 244, 241, 0.3); font: 600 12.5px/1 var(--sans); color: var(--band-ink); }
+  .steps b { display: block; font: 600 16.5px/1.35 var(--sans); }
+  .steps span { display: block; margin-top: 3px; color: var(--band-muted); font-size: 14.5px; }
+  .doc { display: flex; align-items: center; gap: 14px; margin-top: 30px; color: var(--band-muted); font-size: 14.5px; }
+  .doc i { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: rgba(238, 244, 241, 0.1); color: var(--band-ink); flex: 0 0 auto; }
+  .doc b { color: var(--band-ink); font-weight: 600; }
+  .ph { background: rgba(255, 214, 102, 0.22); border-radius: 4px; padding: 0 4px; box-shadow: inset 0 -1px 0 rgba(255, 214, 102, 0.6); }
+  .price .ph { background: #fff3c4; box-shadow: inset 0 -1px 0 #e0c062; }
+
+  .price { padding: 30px; border-radius: 24px; background: var(--surface); color: var(--ink); box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.6); }
+  .price h3 { margin: 0; font: 600 17px/1.3 var(--sans); }
+  .opts { display: grid; gap: 10px; margin-top: 18px; }
+  .opt { position: relative; display: block; padding: 18px 18px 18px 52px; border: 1px solid var(--hair); border-radius: 16px; cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
+  .opt:hover { border-color: rgba(31, 95, 79, 0.45); }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt .tick { position: absolute; left: 18px; top: 21px; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(18, 32, 27, 0.28); }
+  .opt .tick::after { content: ""; position: absolute; inset: 3.5px; border-radius: 50%; background: var(--green); transform: scale(0); transition: transform .2s cubic-bezier(.2, .8, .2, 1.4); }
+  .opt.on { border-color: var(--green); background: #f3f8f5; box-shadow: inset 0 0 0 1px var(--green); }
+  .opt.on .tick { border-color: var(--green); }
+  .opt.on .tick::after { transform: scale(1); }
+  .opt input:focus-visible + .tick { outline: 2px solid var(--green); outline-offset: 2px; }
+  .opt-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .opt-row b { font: 600 15.5px/1.3 var(--sans); }
+  .opt-row em { font-style: normal; white-space: nowrap; }
+  .opt-row s { margin-right: 5px; color: var(--muted); font-size: 13px; }
+  .opt-row strong { font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
+  .opt-row small { color: var(--muted); font-size: 12.5px; }
+  .opt-sub { display: block; margin-top: 4px; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+  .offer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--hair-2); font-size: 13.5px; color: var(--muted); }
+  .offer b { color: var(--warn); font-weight: 600; }
+  .total { display: flex; align-items: baseline; justify-content: space-between; margin-top: 10px; }
+  .total span { color: var(--muted); font-size: 14px; }
+  .total strong { font: 700 24px/1 var(--sans); letter-spacing: -0.02em; }
+  .price .btn { margin-top: 18px; }
+  .proof { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font: 600 13.5px/1.3 var(--sans); }
+  .proof svg { width: 17px; height: 17px; color: var(--green); }
+  .fine { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+  .talk h3 { margin: 0; font: 400 30px/1.1 var(--serif); }
+  .talk p { margin: 12px 0 0; color: var(--ink-2); font-size: 15px; }
+  .talk .btn { margin-top: 22px; }
+
+  /* ---------- questions ---------- */
+  .faq { max-width: 760px; margin-top: 28px; border-top: 1px solid var(--hair); }
+  .faq details { border-bottom: 1px solid var(--hair); }
+  .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; cursor: pointer; list-style: none; font: 600 17px/1.4 var(--sans); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary svg { color: var(--muted); transition: transform .25s ease; }
+  .faq details[open] summary svg { transform: rotate(45deg); }
+  .faq details p { margin: -6px 0 22px; max-width: 64ch; color: var(--ink-2); font-size: 15.5px; }
+
+  .foot { margin-top: 104px; padding: 28px 0 112px; border-top: 1px solid var(--hair); color: var(--muted); font-size: 13px; }
+  .foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+  .foot nav { display: flex; gap: 18px; }
+  .foot a { text-decoration: none; }
+  .foot a:hover { color: var(--ink); }
+
+  /* ---------- sticky bar ---------- */
+  .sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--hair); transform: translateY(110%); transition: transform .35s cubic-bezier(.2, .7, .2, 1); }
+  .sticky.show { transform: none; }
+  .sticky .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .sticky s { margin-right: 6px; color: var(--muted); font-size: 13px; }
+  .sticky strong { font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
+  .sticky small { color: var(--muted); font-size: 13px; }
+  .sticky .btn { min-height: 46px; padding: 0 22px; font-size: 15px; }
+
+  /* ---------- checkout ---------- */
+  .veil { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px; background: rgba(10, 24, 20, 0.42); animation: fade .2s ease both; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .sheet { position: relative; width: 100%; max-width: 520px; max-height: calc(100svh - 40px); overflow-y: auto; border-radius: 24px; background: var(--bg); box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.55); animation: rise .35s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes rise { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .sheet form { padding: 30px 30px 26px; }
+  .close { position: absolute; right: 18px; top: 18px; width: 38px; height: 38px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; cursor: pointer; }
+  .sheet h2 { margin: 0; padding-right: 44px; font: 400 34px/1.05 var(--serif); }
+  .sheet .lede { margin: 8px 0 0; color: var(--ink-2); font-size: 15px; }
+  .chosen { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 14px; background: #fff; font-size: 14.5px; }
+  .chosen strong { font-size: 17px; }
+  .field { margin-top: 14px; }
+  .field label { display: block; margin-bottom: 6px; font: 600 13px/1.3 var(--sans); color: var(--ink-2); }
+  .input { width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid var(--hair); border-radius: 12px; background: #fff; color: var(--ink); font: 500 16px/1.4 var(--sans); transition: border-color .2s ease, box-shadow .2s ease; }
+  textarea.input { min-height: 78px; resize: vertical; }
+  .input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(31, 95, 79, 0.12); }
+  .input.bad { border-color: var(--warn); }
+  .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .err { margin: 6px 0 0; color: #9a3a24; font: 600 12.5px/1.3 var(--sans); }
+  .sheet .btn { margin-top: 22px; }
+  .form-err { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: #fbeae5; color: #8a3221; font: 600 13.5px/1.45 var(--sans); }
+  .secure { display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 12px; color: var(--muted); font-size: 12.5px; }
+  .secure svg { width: 14px; height: 14px; }
+  .terms { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: 12px; }
+
+  /* ---------- after payment ---------- */
+  .done { max-width: 640px; padding-top: 64px; }
+  .done-ico { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: var(--green); color: #fff; }
+  .done-ico svg { width: 24px; height: 24px; stroke-width: 2.2; }
+  .done h1 { margin: 26px 0 0; font: 400 clamp(40px, 6vw, 60px)/1.02 var(--serif); letter-spacing: -0.015em; }
+  .done > p { margin: 14px 0 0; color: var(--ink-2); font-size: 17px; }
+  .receipt { display: flex; justify-content: space-between; gap: 16px; margin-top: 26px; padding: 16px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); font-size: 15px; }
+  .receipt span { color: var(--muted); }
+  .book { margin-top: 30px; padding: 28px; border: 1px solid var(--hair); border-radius: 22px; background: #fff; }
+  .book h2 { margin: 0; font: 600 20px/1.3 var(--sans); }
+  .book > p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+  .pick { margin-top: 18px; }
+  .pick > span { display: block; margin-bottom: 8px; font: 600 13px/1.3 var(--sans); color: var(--ink-2); }
+  .days { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .days::-webkit-scrollbar { display: none; }
+  .chipb { flex: 0 0 auto; min-width: 68px; padding: 10px 12px; border: 1px solid var(--hair); border-radius: 12px; background: #fff; font: 600 14px/1.25 var(--sans); text-align: center; cursor: pointer; }
+  .chipb small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; }
+  .chipb[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fff; }
+  .chipb[aria-pressed="true"] small { color: rgba(255, 255, 255, 0.75); }
+  .wins { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .wins .chipb { min-height: 50px; }
+  .next { margin: 26px 0 0; padding: 0; list-style: none; }
+  .next li { display: flex; gap: 12px; padding: 10px 0; color: var(--ink-2); font-size: 15px; }
+  .next li b { width: 22px; flex: 0 0 auto; color: var(--muted); font-weight: 600; }
+  .wait { display: flex; align-items: center; gap: 12px; margin-top: 24px; color: var(--ink-2); }
+  .spin { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--hair); border-top-color: var(--green); animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty { max-width: 560px; padding-top: 96px; }
+  .empty h1 { margin: 0; font: 400 clamp(38px, 5vw, 52px)/1.05 var(--serif); }
+  .empty p { margin: 14px 0 0; color: var(--ink-2); font-size: 17px; }
+  .empty .btn { margin-top: 26px; }
+
+  .preview { position: fixed; right: 16px; top: 76px; z-index: 30; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 100px; background: #fff8dc; border: 1px solid #e6cf86; font: 600 12px/1 var(--sans); color: #6b5512; box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.35); }
+  .preview a { color: inherit; }
+  .sticky.show ~ .preview, body.locked .preview { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  @media (max-width: 920px) {
+    .plan { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .price { order: -1; }
+    .sigs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    .panel { grid-template-columns: minmax(0, 1fr); }
+    .score { border-right: 0; border-bottom: 1px solid var(--hair-2); }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 20px; }
+    .hero { padding-top: 36px; }
+    .hero p { font-size: 16.5px; }
+    .areas { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 28px 24px; }
+    .sec { padding-top: 72px; }
+    .sigs { grid-template-columns: minmax(0, 1fr); }
+    .band { margin-top: 80px; padding: 64px 0; }
+    .price { padding: 22px; }
+    .opt { padding: 16px 14px 16px 46px; }
+    .opt .tick { left: 14px; top: 19px; }
+    .opt-row { flex-direction: column; gap: 6px; }
+    .veil { padding: 0; place-items: end center; }
+    .sheet { max-height: 94svh; border-radius: 24px 24px 0 0; }
+    .sheet form { padding: 26px 20px 22px; }
+    .row2 { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .book { padding: 22px 18px; }
+    .sticky small { display: none; }
+    .preview { top: auto; bottom: 84px; right: 12px; }
+  }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="logo" href="/" aria-label="Bud home">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 29V14.5" stroke="#12201b" stroke-width="2.6" stroke-linecap="round"/><path d="M16 17c0-5.6-3.4-9.7-9.8-10.6C5.3 13 8.5 17 16 17Z" fill="#25705c"/><path d="M16 14.6c.6-4.7 3.8-8 9.4-8C25.4 13 22.1 14.6 16 14.6Z" fill="#25705c" fill-opacity="0.6"/></svg>
+        Bud
+      </a>
+      <a class="exit" href="/">Exit</a>
+    </div>
+  </header>
+
+  <main id="report" aria-live="polite"></main>
+  <div class="sticky" id="sticky" aria-hidden="true"></div>
+  <div id="sheet-root"></div>
+
+  <noscript><p style="max-width:620px;margin:60px auto;padding:0 24px">Your report needs JavaScript. Turn it on and reload this page.</p></noscript>
+
+<script>
+(function () {
+  'use strict';
+
+  // ======================================================================
+  // What this page sells. Bud's server holds the same figures and charges
+  // them (app/services/health_plan.py) - a test reads both and fails on any
+  // difference, so change the two together.
+  // ======================================================================
+
+  // Before this moment the launch price shows against the regular one; after
+  // it, the regular price alone (owner, 2026-11-24).
+  var OFFER_ENDS = new Date('2026-12-31T23:59:59+05:30');
+  var OFFER_ENDS_TEXT = '31 Dec';
+  var MONTHS = 3;
+  var PLANS = {
+    test: {
+      title: 'Home blood test',
+      sub: 'We collect your sample at home.',
+      order: '90-day plan, home blood test',
+      price: 4500, regular: 5500
+    },
+    report: {
+      title: 'Upload my report',
+      sub: 'A blood report from the last 3 months.',
+      order: '90-day plan, your own blood report',
+      price: 4000, regular: 5000
+    }
+  };
+  // The owner's figure (2026-11-24), from sales on their other platform.
+  // Keep it true: update it as it grows.
+  var PURCHASED = '130+';
+
+  // Placeholders are highlighted in a local preview and left off mybud.life.
+  var DOCTOR = { name: 'Dr. [Doctor’s name]', creds: '[MD]', placeholder: true };
+
+  // Bud's server on mybud.life. Anywhere else it is empty, and the checkout
+  // shows what comes after paying without taking any money - unless a local
+  // test names its own server with ?api= (ignored on mybud.life).
+  var API = LIVE ? 'https://api.mybud.life' : '';
+  var WA_TEAM = 'https://wa.me/919041926882';
+  var STORE = 'bud-assessment-v1';
+  var RSTORE = 'bud-report-v2';
+  var LIVE = /(^|\.)mybud\.life$/.test(location.hostname);
+
+  // ======================================================================
+  // Answers. In a local preview with no finished assessment a sample person
+  // stands in; ?sample=1|2|3 picks one.
+  // ======================================================================
+
+  var SAMPLES = {
+    '1': { name: 'Nikita Sharma', phone_code: '+91', phone: '98765 43210', country: 'india', dob: { d: '14', m: '3', y: '1997' }, sex: 'female', pregnancy: 'none',
+      height: { unit: 'cm', cm: '162' }, weight: { unit: 'kg', v: '58' }, goals: ['energy', 'sleep'],
+      symptoms: ['tired', 'hair', 'sleep', 'focus'], symptom_duration: 'gt3m', symptom_impact: 'moderate',
+      diet: 'veg_dairy_eggs', fruit_veg: 'few_week', activity: 'lt60', sleep_hours: '5to6', rested: 'sometimes', tobacco: 'never', alcohol: 'lt1',
+      conditions: ['none'], family: ['t2d'], gi_surgery: 'no', menstruation: 'regular', heavy_periods: 'yes',
+      medicines: 'no', supplements: ['none'], allergies: 'no', prior_tests: 'no', deficiencies: ['not_sure'] },
+    '2': { name: 'Rohan Mehta', phone_code: '+91', phone: '99876 54321', country: 'india', dob: { d: '2', m: '8', y: '1985' }, sex: 'male',
+      height: { unit: 'cm', cm: '175' }, weight: { unit: 'kg', v: '86' }, goals: ['weight', 'energy'],
+      symptoms: ['tired', 'muscle', 'bloating'], symptom_duration: '2w3m', symptom_impact: 'moderate',
+      diet: 'omnivore', animal_freq: '1to2', fruit_veg: 'daily_one', activity: 'sedentary', sleep_hours: '5to6', rested: 'sometimes', tobacco: 'quit', alcohol: '1to3',
+      conditions: ['cholesterol'], family: ['heart', 't2d'], gi_surgery: 'no',
+      medicines: 'yes', medicines_details: 'Atorvastatin 10 mg once a day; pantoprazole 40 mg before breakfast',
+      supplements: ['none'], allergies: 'no', prior_tests: 'lt3m', deficiencies: ['none_known'] },
+    '3': { name: 'Aditi Rao', phone_code: '+91', phone: '91234 56789', country: 'india', dob: { d: '9', m: '1', y: '1994' }, sex: 'female', pregnancy: 'pregnant',
+      height: { unit: 'cm', cm: '158' }, weight: { unit: 'kg', v: '61' }, goals: ['energy'],
+      symptoms: ['tired', 'bloating'], symptom_duration: '2w3m', symptom_impact: 'mild',
+      diet: 'veg_no_eggs', fruit_veg: 'daily_multi', activity: '60to149', sleep_hours: '7to9', rested: 'sometimes', tobacco: 'never', alcohol: 'never',
+      conditions: ['thyroid'], family: ['none_known'], gi_surgery: 'no', menstruation: 'other_reason',
+      medicines: 'yes', medicines_details: 'Thyronorm 50 mcg', supplements: ['multivitamin'], allergies: 'no', prior_tests: '3to12m', deficiencies: ['none_known'] }
+  };
+
+  function load(key) { try { return JSON.parse(sessionStorage.getItem(key)); } catch (e) { return null; } }
+  function store(key, val) { try { sessionStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+  var params = new URLSearchParams(location.search);
+  var saved = load(STORE);
+  var a = null, sample = '';
+  if (!LIVE && params.get('sample')) { sample = SAMPLES[params.get('sample')] ? params.get('sample') : '1'; a = SAMPLES[sample]; }
+  else if (saved && saved.done && saved.answers) a = saved.answers;
+  else if (!LIVE) { sample = '1'; a = SAMPLES['1']; }
+  var aid = saved && saved.aid ? String(saved.aid) : '';
+
+  // What the visitor did on this page: the option, the checkout details, the
+  // order waiting on Razorpay, and the paid order with its slot.
+  var r = load(RSTORE) || {};
+  if (sample && r.sample !== sample) r = { sample: sample };
+  if (!sample && r.sample) r = {};
+  function keep() { store(RSTORE, r); }
+  if (!LIVE) {
+    if (params.get('api')) { r.api = params.get('api'); keep(); }
+    API = r.api || '';
+  }
+
+  // Razorpay sends the payer back here with its own query string. Only the
+  // link id is read - whether it is paid is asked of Bud's server.
+  var back = params.get('razorpay_payment_link_id');
+  if (back) {
+    r.pending = r.pending || {};
+    r.pending.link = back;
+    keep();
+    if (window.history && history.replaceState) history.replaceState(null, '', location.pathname);
+  }
+
+  // ======================================================================
+  // Helpers
+  // ======================================================================
+
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+  function inr(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+  function has(k, v) { var x = a[k]; return Array.isArray(x) ? x.indexOf(v) > -1 : x === v; }
+  function anyOf(k, vs) { return vs.some(function (v) { return has(k, v); }); }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function list(xs) { return xs.length < 2 ? (xs[0] || '') : xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1]; }
+  function clamp(n) { return Math.max(5, Math.min(100, Math.round(n))); }
+  function ph(text, isPh) { return isPh ? (LIVE ? '' : '<span class="ph">' + esc(text) + '</span>') : esc(text); }
+  function waTeam(text) { return WA_TEAM + '?text=' + encodeURIComponent(text); }
+
+  var ICONS = {
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/>',
+    bolt: '<path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8z"/>',
+    drop: '<path d="M12 3.2s6 6.3 6 10.8a6 6 0 0 1-12 0c0-4.5 6-10.8 6-10.8z"/>',
+    moon: '<path d="M19.5 14.6A7.5 7.5 0 0 1 9.4 4.5a7.5 7.5 0 1 0 10.1 10.1z"/>',
+    fish: '<path d="M4 12c2.5-3.6 5.8-5.4 9.2-5.4 3.3 0 5.9 1.9 7.8 5.4-1.9 3.5-4.5 5.4-7.8 5.4C9.8 17.4 6.5 15.6 4 12z"/><path d="M4 12 1.5 8.8v6.4L4 12z"/>',
+    egg: '<path d="M12 3c-3.4 0-6 5.6-6 9.7C6 17 8.7 21 12 21s6-4 6-8.3C18 8.6 15.4 3 12 3z"/>',
+    leaf: '<path d="M5 19.5C4 11 9.5 5 19.5 4.5 19.7 14 14 19.6 5 19.5z"/><path d="M5 19.5c3-4.5 6-7.3 10-9.5"/>',
+    milk: '<path d="M8.5 3h7M9 3v3.5L7 10v10.5c0 .3.2.5.5.5h9c.3 0 .5-.2.5-.5V10l-2-3.5V3"/><path d="M7 13.5h10"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8v.01"/>',
+    users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 19.5c.6-3.3 3-5.2 6-5.2s5.4 1.9 6 5.2"/><path d="M16 5.3a3 3 0 0 1 0 5.6M18 14.6c1.6.7 2.6 2.4 3 4.9"/>',
+    doctor: '<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>',
+    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>'
+  };
+  function ico(name) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[name] || '') + '</svg>'; }
+
+  // ======================================================================
+  // Reading the answers. Rules, not a model: each area starts at 100 and
+  // loses points for answers linked to problems there; each signal adds up
+  // points for answers linked to that gap.
+  // ======================================================================
+
+  function firstName(n) {
+    var w = String(n || '').trim().split(/\s+/).filter(function (x) { return /\p{L}/u.test(x); })[0] || '';
+    return w ? w.charAt(0).toUpperCase() + w.slice(1) : '';
+  }
+  function ageOf() {
+    var d = a.dob || {}, y = +d.y, m = +d.m, day = +d.d;
+    if (!y || !m || !day) return null;
+    var now = new Date(), g = now.getFullYear() - y;
+    if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < day)) g--;
+    return g;
+  }
+  function bmiOf() {
+    var h = a.height || {}, w = a.weight || {};
+    if (h.unknown || w.unknown) return null;
+    var cm = h.unit === 'ft' ? (+h.ft || 0) * 30.48 + (+h.in || 0) * 2.54 : +h.cm;
+    var kg = w.unit === 'lb' ? (+w.v || 0) * 0.453592 : +w.v;
+    if (!cm || !kg || cm < 100 || cm > 250 || kg < 25 || kg > 300) return null;
+    return kg / Math.pow(cm / 100, 2);
+  }
+  function statusOf(score) { return score >= 75 ? 'good' : score >= 50 ? 'fair' : 'warn'; }
+  var STATUS_WORD = { good: 'Good', fair: 'Fair', warn: 'Needs attention' };
+
+  function buildReport() {
+    var sym = function (v) { return has('symptoms', v); };
+    var age = ageOf(), bmi = bmiOf();
+    var isVeg = anyOf('diet', ['veg_dairy_eggs', 'veg_no_eggs', 'vegan']);
+    var eatsAnimal = anyOf('diet', ['pescatarian', 'omnivore']);
+    var lowAnimal = eatsAnimal && anyOf('animal_freq', ['occasionally', 'never']);
+    var femaleish = a.sex === 'female' || a.sex === 'prefer_not';
+    var menstruating = femaleish && anyOf('menstruation', ['regular', 'irregular']);
+    var menopause = femaleish && a.menstruation === 'menopause';
+    var meds = a.medicines === 'yes' ? String(a.medicines_details || '').toLowerCase() : '';
+    var onMetformin = /metformin|glycomet|gluconorm|obimet/.test(meds);
+    var onPpi = /pantoprazole|\bpan[\s-]?(40|d)\b|omeprazole|\bomez\b|esomeprazole|rabeprazole|lansoprazole|ranitidine|famotidine/.test(meds);
+    var onThinner = /warfarin|acitrom|clopidogrel|ecosprin|aspirin|apixaban|rivaroxaban|dabigatran/.test(meds);
+    var kidney = has('conditions', 'kidney');
+    var poorSleep = sym('sleep') || a.rested === 'rarely' || anyOf('sleep_hours', ['lt5', '5to6']);
+    var known = function (k) { return has('deficiencies', k); };
+
+    // ---------- areas ----------
+    var impact = { significant: 10, moderate: 5 }[a.symptom_impact] || 0;
+    var energy = 100
+      - (sym('tired') ? 30 : 0) - (sym('focus') ? 15 : 0) - (sym('muscle') ? 8 : 0) - (sym('appetite') ? 5 : 0)
+      - ({ lt5: 15, '5to6': 8, varies: 6, gt9: 4 }[a.sleep_hours] || 0)
+      - ({ rarely: 10, sometimes: 4 }[a.rested] || 0)
+      - (sym('tired') || sym('focus') ? impact : 0)
+      - (has('conditions', 'anaemia') ? 5 : 0) - (a.activity === 'sedentary' ? 5 : 0);
+    var sleep = 100
+      - ({ lt5: 40, '5to6': 22, varies: 18, gt9: 10 }[a.sleep_hours] || 0)
+      - ({ rarely: 30, sometimes: 12 }[a.rested] || 0)
+      - (sym('sleep') ? 15 : 0) - (sym('sleep') ? Math.round(impact * 0.8) : 0)
+      - ({ '4plus': 8, '1to3': 3 }[a.alcohol] || 0) - (a.tobacco === 'current' ? 5 : 0);
+    var gut = 100
+      - (sym('bloating') ? 25 : 0) - (sym('bowel') ? 25 : 0)
+      - (has('conditions', 'digestive') ? 15 : 0) - (a.gi_surgery === 'yes' ? 10 : 0)
+      - ({ rarely: 20, few_week: 10, daily_one: 4 }[a.fruit_veg] || 0)
+      - (a.symptom_duration === 'gt3m' && (sym('bloating') || sym('bowel')) ? 5 : 0)
+      - (has('conditions', 'liver') ? 5 : 0);
+    var gaps = {};
+    ['b12', 'vitd', 'iron', 'folate', 'calcium', 'other'].forEach(function (k) { if (known(k)) gaps[k] = 1; });
+    if (has('conditions', 'anaemia')) gaps.iron = 1;
+    if (has('conditions', 'b12')) gaps.b12 = 1;
+    if (has('conditions', 'vitd')) gaps.vitd = 1;
+    var nutrition = 100
+      - ({ rarely: 25, few_week: 15, daily_one: 6 }[a.fruit_veg] || 0)
+      - ({ vegan: 12, veg_no_eggs: 8, veg_dairy_eggs: 4, restricted: 10 }[a.diet] || 0)
+      - (lowAnimal ? 8 : eatsAnimal && a.animal_freq === '1to2' ? 4 : 0)
+      - Math.min(24, Object.keys(gaps).length * 8)
+      - ({ '4plus': 8, '1to3': 3 }[a.alcohol] || 0) - (a.tobacco === 'current' ? 8 : 0)
+      - (sym('appetite') ? 5 : 0);
+    var activity = ({ sedentary: 30, lt60: 45, '60to149': 65, '150to300': 85, gt300: 95, not_sure: 55 }[a.activity] || 55)
+      - (sym('muscle') ? 8 : 0);
+    var metabolic = 100
+      - (bmi === null ? 0 : bmi < 18.5 ? 15 : bmi >= 30 ? 30 : bmi >= 25 ? 15 : 0)
+      - (has('conditions', 'diabetes') ? 20 : 0) - (has('conditions', 'bp') ? 12 : 0) - (has('conditions', 'cholesterol') ? 12 : 0)
+      - (has('conditions', 'liver') ? 10 : 0) - (has('conditions', 'heart') ? 12 : 0) - (has('conditions', 'pcos') ? 8 : 0)
+      - (has('conditions', 'thyroid') ? 6 : 0) - (kidney ? 8 : 0)
+      - (has('family', 't2d') ? 6 : 0) - (has('family', 'heart') ? 6 : 0)
+      - ({ sedentary: 8, lt60: 4 }[a.activity] || 0) - (a.tobacco === 'current' ? 10 : 0) - (a.alcohol === '4plus' ? 8 : 0);
+
+    var areas = [['Energy', energy], ['Sleep', sleep], ['Gut', gut], ['Nutrition', nutrition], ['Activity', activity], ['Metabolic', metabolic]]
+      .map(function (x) { var s = clamp(x[1]); return { name: x[0], score: s, status: statusOf(s) }; });
+    var score = Math.round(areas.reduce(function (t, x) { return t + x.score; }, 0) / areas.length);
+    var scoreStatus = score >= 80 ? 'good' : score >= 60 ? 'fair' : 'warn';
+    var scoreWord = { good: 'Strong foundation', fair: 'Room to improve', warn: 'Needs attention' }[scoreStatus];
+
+    // ---------- signals ----------
+    // One reason per card: the most personal one the answers support. A
+    // caution (a blood disorder in the family, kidneys, a blood thinner) is
+    // the one second line a card may carry, because it changes what a doctor
+    // may prescribe.
+    var sigs = [];
+    function sig(name, icon, pts, lines, care) {
+      lines = lines.filter(Boolean);
+      if (lines.length) sigs.push({ name: name, icon: icon, pts: pts, line: lines[0], care: care || '' });
+    }
+
+    (function () {
+      var pts = 0, lines = [], frag = [];
+      if (known('vitd') || has('conditions', 'vitd')) { pts += 5; lines.push('You’ve been told your Vitamin D was low before.'); }
+      if (sym('tired')) { pts += 1; frag.push('frequent tiredness'); }
+      if (sym('muscle')) { pts += 2; frag.push('muscle weakness or cramps'); }
+      if (has('conditions', 'bone')) { pts += 3; frag.push('low bone density'); }
+      if (menopause) pts += 1;
+      if (age !== null && age >= 50) pts += 1;
+      if (bmi !== null && bmi >= 30) pts += 1;
+      if (frag.length) lines.push(cap(list(frag)) + (frag.length > 1 ? ' are' : ' is') + ' often linked to low Vitamin D.');
+      if (has('supplements', 'vitd')) lines.push('You take Vitamin D already — your test shows if the dose is right.');
+      if (a.country === 'india') { pts += 3; lines.push('It’s one of the most common gaps blood tests find in India.'); }
+      sig('Vitamin D', 'sun', pts, lines);
+    })();
+
+    (function () {
+      var pts = 0, lines = [];
+      if (known('b12') || has('conditions', 'b12')) { pts += 5; lines.push('You’ve been told your B12 was low before.'); }
+      if (sym('tingling')) { pts += 3; lines.push('Numbness or tingling in your hands or feet can be a sign of low B12.'); }
+      if (a.diet === 'vegan') { pts += 4; lines.push('A vegan diet has almost no natural B12.'); }
+      else if (a.diet === 'veg_no_eggs') { pts += 3; lines.push('A vegetarian diet without eggs gives very little B12.'); }
+      else if (a.diet === 'veg_dairy_eggs') { pts += 2; lines.push('Vegetarian meals carry little B12 beyond milk and eggs.'); }
+      else if (lowAnimal) { pts += 2; lines.push('You rarely eat eggs, fish or meat, the main sources of B12.'); }
+      if (onMetformin || onPpi) { pts += 2; lines.push((onMetformin && onPpi ? 'Metformin and acid-reducing medicines' : onMetformin ? 'Metformin' : 'Acid-reducing medicines') + ' can lower B12 over time.'); }
+      if (a.gi_surgery === 'yes') { pts += 3; lines.push('Stomach or bowel surgery can cut how much B12 you absorb.'); }
+      if (sym('tired') || sym('focus')) { pts += 1; lines.push(cap(list([sym('tired') && 'tiredness', sym('focus') && 'poor focus'].filter(Boolean))) + ' are often linked to low B12.'); }
+      if (age !== null && age >= 50) pts += 1;
+      if (a.alcohol === '4plus') pts += 1;
+      sig('Vitamin B12', 'bolt', pts, lines);
+    })();
+
+    // Iron: men rarely run low without a cause, and iron is not something to
+    // take without one - so for them only a known gap or gut surgery counts.
+    (function () {
+      var pts = 0, lines = [];
+      if (known('iron') || has('conditions', 'anaemia')) { pts += 5; lines.push('You’ve been told you had low iron or anaemia before.'); }
+      if (a.gi_surgery === 'yes') { pts += 2; lines.push('Stomach or bowel surgery can cut how much iron you absorb.'); }
+      if (femaleish) {
+        if (menstruating) pts += 1;
+        if (menstruating && a.heavy_periods === 'yes') { pts += 4; lines.push('Heavy or long periods are one of the most common reasons women run low on iron.'); }
+        var f = [sym('tired') && 'tiredness', sym('hair') && 'hair fall'].filter(Boolean);
+        if (f.length) { pts += f.length; lines.push(cap(list(f)) + (f.length > 1 ? ' are' : ' is') + ' often linked to low iron stores.'); }
+        if (isVeg) { pts += 1; lines.push('Iron from plant foods is harder for the body to absorb.'); }
+      }
+      sig('Iron', 'drop', pts, lines, has('family', 'blood') ? 'With a blood disorder in your family, your doctor checks this before any iron.' : '');
+    })();
+
+    (function () {
+      var pts = 0, lines = [], frag = [];
+      if (sym('muscle')) { pts += 3; frag.push('muscle cramps'); }
+      if (poorSleep) { pts += 2; frag.push('poor sleep'); }
+      if (frag.length) lines.push(cap(list(frag)) + (frag.length > 1 ? ' are' : ' is') + ' often linked to low magnesium.');
+      if (has('goals', 'sleep')) pts += 1;
+      if (a.alcohol === '4plus') { pts += 2; lines.push('Drinking most days lowers magnesium.'); }
+      else if (a.alcohol === '1to3') pts += 1;
+      if (has('conditions', 'diabetes')) { pts += 1; lines.push('Diabetes is linked to lower magnesium.'); }
+      if (onPpi) { pts += 1; lines.push('Acid-reducing medicines can lower magnesium.'); }
+      sig('Magnesium', 'moon', pts, lines, kidney ? 'With a kidney condition, your doctor decides this one carefully.' : '');
+    })();
+
+    (function () {
+      var pts = 0, lines = [];
+      if (isVeg) { pts += 3; lines.push('Your diet has no fish, the main source of the Omega-3s EPA and DHA.'); }
+      else if (lowAnimal) { pts += 2; lines.push('You rarely eat fish, the main source of Omega-3s.'); }
+      if (has('conditions', 'cholesterol')) pts += 2;
+      if (has('conditions', 'heart')) pts += 2;
+      if (has('family', 'heart')) pts += 1;
+      if (has('conditions', 'cholesterol') || has('conditions', 'heart')) lines.push('Your doctor will weigh Omega-3s alongside your cholesterol and heart health.');
+      else if (has('family', 'heart')) lines.push('Heart disease in your family makes Omega-3s worth a look.');
+      sig('Omega-3', 'fish', pts, lines, onThinner ? 'You take a blood thinner, so your doctor checks this carefully.' : '');
+    })();
+
+    (function () {
+      var pts = 0, lines = [];
+      if (isVeg) { pts += 2; lines.push('Vegetarian meals often fall short of the protein you need.'); }
+      else if (lowAnimal) pts += 1;
+      if (has('goals', 'strength')) { pts += 2; lines.push('Building strength takes more protein than most people eat.'); }
+      else if (has('goals', 'weight')) { pts += 1; lines.push('Enough protein protects your muscle while you lose weight.'); }
+      if (sym('muscle')) { pts += 2; lines.push('Muscle weakness can mean too little protein.'); }
+      if (sym('hair')) { pts += 1; lines.push('Hair fall is often linked to too little protein.'); }
+      if (anyOf('activity', ['150to300', 'gt300'])) pts += 1;
+      sig('Protein', 'egg', pts, lines, kidney ? 'With a kidney condition, your protein target is set carefully.' : '');
+    })();
+
+    (function () {
+      var pts = 0, lines = [], frag = [];
+      if (sym('bloating')) { pts += 3; frag.push('bloating or acidity'); }
+      if (sym('bowel')) { pts += 3; frag.push('constipation or loose stools'); }
+      if (frag.length) lines.push(cap(list(frag)) + (frag.length > 1 ? ' are' : ' is') + ' worth working through with your nutritionist.');
+      if (has('conditions', 'digestive')) { pts += 2; lines.push('Your digestive condition shapes what’s safe to add.'); }
+      if (a.fruit_veg === 'rarely') { pts += 2; lines.push('Eating fruit and vegetables rarely means very little fibre.'); }
+      else if (a.fruit_veg === 'few_week') { pts += 1; lines.push('Fruit and vegetables a few times a week means little fibre.'); }
+      if (a.gi_surgery === 'yes') pts += 1;
+      if (a.symptom_duration === 'gt3m' && frag.length) pts += 1;
+      sig('Gut health', 'leaf', pts, lines);
+    })();
+
+    (function () {
+      var pts = 0, lines = [];
+      if (known('calcium')) { pts += 5; lines.push('You’ve been told your calcium was low before.'); }
+      if (has('conditions', 'bone')) { pts += 3; lines.push('Low bone density makes calcium a priority.'); }
+      if (a.diet === 'vegan') { pts += 3; lines.push('A vegan diet has no dairy, the main source of calcium for most people.'); }
+      if (menopause) { pts += 2; lines.push('Calcium needs rise after menopause.'); }
+      if (femaleish && age !== null && age >= 45) pts += 1;
+      sig('Calcium', 'milk', pts, lines);
+    })();
+
+    (function () {
+      var pts = 0, lines = [];
+      if (known('folate')) { pts += 5; lines.push('You’ve been told your folate was low before.'); }
+      if (femaleish && a.pregnancy === 'trying') { pts += 3; lines.push('Folate matters before and during pregnancy.'); }
+      sig('Folate', 'leaf', pts, lines);
+    })();
+
+    var shown = sigs.filter(function (s) { return s.pts >= 3; })
+      .sort(function (x, y) { return y.pts - x.pts; })
+      .slice(0, 6)
+      .map(function (s) { s.high = s.pts >= 6; return s; });
+
+    return {
+      first: firstName(a.name),
+      areas: areas, score: score, scoreStatus: scoreStatus, scoreWord: scoreWord,
+      signals: shown,
+      pregnant: femaleish && anyOf('pregnancy', ['pregnant', 'breastfeeding']),
+      breastfeeding: femaleish && a.pregnancy === 'breastfeeding',
+      abroad: a.country && a.country !== 'india',
+      recentTest: a.prior_tests === 'lt3m'
+    };
+  }
+
+  // ======================================================================
+  // Prices
+  // ======================================================================
+
+  function offerOn() { return Date.now() < OFFER_ENDS.getTime(); }
+  function perMonth(key) { return offerOn() ? PLANS[key].price : PLANS[key].regular; }
+  function total(key) { return perMonth(key) * MONTHS; }
+  function saving(key) { return (PLANS[key].regular - PLANS[key].price) * MONTHS; }
+  function chosen() { return r.plan && PLANS[r.plan] ? r.plan : (R.recentTest ? 'report' : 'test'); }
+
+  // ======================================================================
+  // The report
+  // ======================================================================
+
+  var main = document.getElementById('report');
+  var stickyEl = document.getElementById('sticky');
+  var sheetRoot = document.getElementById('sheet-root');
+  var R = null;
+
+  function previewPill() {
+    if (LIVE || !sample) return '';
+    return '<div class="preview" role="note">Preview · <a href="?sample=1">1</a> <a href="?sample=2">2</a> <a href="?sample=3">3</a></div>';
+  }
+
+  function hero() {
+    var who = R.first ? esc(R.first) + ', here’s' : 'Here’s';
+    var lede = R.signals.length
+      ? 'A few likely gaps stand out. A blood test confirms them, and a doctor prescribes what you need.'
+      : 'Nothing stands out strongly. A blood test shows what answers can’t.';
+    var C = 2 * Math.PI * 52;
+    var st = R.scoreStatus;
+    var areas = R.areas.map(function (x) {
+      return '<li><div class="area-top"><b>' + esc(x.name) + '</b><span><i class="dot ' + x.status + '"></i>' + STATUS_WORD[x.status] + '</span></div>' +
+        '<div class="bar ' + x.status + '" role="meter" aria-label="' + esc(x.name) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + x.score + '"><i data-w="' + x.score + '"></i></div></li>';
+    }).join('');
+    return '<section class="wrap hero">' +
+      '<h1>' + who + ' what your answers say.</h1>' +
+      '<p>' + lede + '</p>' +
+      '<div class="panel">' +
+        '<div class="score">' +
+          '<div class="ring" role="img" aria-label="Health score ' + R.score + ' out of 100, ' + esc(R.scoreWord) + '">' +
+            '<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" style="stroke:var(--' + st + '-t)"/>' +
+            '<circle class="arc" cx="60" cy="60" r="52" style="stroke:var(--' + st + ')" stroke-dasharray="' + C.toFixed(2) + '" stroke-dashoffset="' + C.toFixed(2) + '" data-to="' + (C * (1 - R.score / 100)).toFixed(2) + '"/></svg>' +
+            '<div class="ring-n"><b data-count="' + R.score + '">0</b><span>of 100</span></div>' +
+          '</div>' +
+          '<div class="label">Health score</div>' +
+          '<div class="state"><i class="dot ' + st + '"></i>' + esc(R.scoreWord) + '</div>' +
+        '</div>' +
+        '<ul class="areas">' + areas + '</ul>' +
+      '</div>' +
+    '</section>';
+  }
+
+  function signals() {
+    var body;
+    if (!R.signals.length) {
+      body = '<p class="nothing">Many gaps, like low Vitamin D or B12, show no signs at first — which is why your plan starts with a blood test.</p>';
+    } else {
+      body = '<div class="sigs">' + R.signals.map(function (s) {
+        return '<article class="sig"><div class="sig-top">' + ico(s.icon) + '<h3>' + esc(s.name) + '</h3>' +
+          (s.high ? '<span class="hi"><i class="dot warn"></i>High priority</span>' : '') + '</div>' +
+          '<p>' + esc(s.line) + '</p>' + (s.care ? '<p class="care">' + esc(s.care) + '</p>' : '') + '</article>';
+      }).join('') + '</div>';
+    }
+    var note = R.pregnant
+      ? '<div class="note">' + ico('info') + '<span>Because you’re ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ', none of this is a suggestion to take anything — your doctor should guide any supplement.</span></div>'
+      : '';
+    return '<section class="wrap sec" id="signals"><div class="label">Your signals</div><h2>What stands out</h2>' +
+      '<p class="lede">Each one is linked to answers you gave. Your blood test confirms it, and your doctor sets any dose.</p>' +
+      body + note + '</section>';
+  }
+
+  function option(key) {
+    var p = PLANS[key], on = chosen() === key;
+    var price = offerOn()
+      ? '<s>' + inr(p.regular) + '</s><strong>' + inr(p.price) + '</strong><small> /month</small>'
+      : '<strong>' + inr(p.regular) + '</strong><small> /month</small>';
+    var sub = key === 'report' && R.recentTest ? 'You said your last test was within 3 months.' : p.sub;
+    return '<label class="opt' + (on ? ' on' : '') + '">' +
+      '<input type="radio" name="plan" value="' + key + '"' + (on ? ' checked' : '') + '>' +
+      '<span class="tick" aria-hidden="true"></span>' +
+      '<span class="opt-row"><b>' + esc(p.title) + '</b><em>' + price + '</em></span>' +
+      '<span class="opt-sub">' + esc(sub) + '</span>' +
+    '</label>';
+  }
+
+  function priceCard() {
+    if (R.abroad) {
+      return '<div class="price talk"><h3>The plan is in India for now.</h3>' +
+        '<p>Home blood tests and supplements are India-only today. Message us and we’ll tell you what we can do where you are.</p>' +
+        '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment from outside India. What can you do for me here?') + '">Message the Bud team</a></div>';
+    }
+    if (R.pregnant) {
+      return '<div class="price talk"><h3>Let’s talk first.</h3>' +
+        '<p>Our standard plan isn’t designed for pregnancy or breastfeeding. Message us and we’ll help you find the right care.</p>' +
+        '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment. I’m ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ' and have a question about the 90-day plan.') + '">Message the Bud team</a></div>';
+    }
+    var key = chosen();
+    return '<div class="price" id="price">' +
+      '<h3>Choose your blood test</h3>' +
+      '<div class="opts" role="radiogroup" aria-label="Blood test">' + option('test') + option('report') + '</div>' +
+      (offerOn() ? '<div class="offer"><span>Launch price · ends ' + OFFER_ENDS_TEXT + '</span><b id="save">You save ' + inr(saving(key)) + '</b></div>' : '') +
+      '<div class="total"><span>3 months, paid once</span><strong id="total">' + inr(total(key)) + '</strong></div>' +
+      '<button type="button" class="btn btn-block" data-act="checkout">Start my plan' + ico('arrow') + '</button>' +
+      '<div class="proof">' + ico('users') + esc(PURCHASED) + ' people have purchased this plan</div>' +
+      '<p class="fine">No autopay. Nothing renews on its own.</p>' +
+    '</div>';
+  }
+
+  function plan() {
+    var doc = DOCTOR.placeholder && LIVE
+      ? '<div class="doc"><i>' + ico('doctor') + '</i><span>A doctor reviews every plan. Nothing is prescribed before your blood report is read.</span></div>'
+      : '<div class="doc"><i>' + ico('doctor') + '</i><span>Reviewed by <b>' + ph(DOCTOR.name, DOCTOR.placeholder) + '</b> ' + ph(DOCTOR.creds, DOCTOR.placeholder) + '. Nothing is prescribed before your blood report is read.</span></div>';
+    return '<section class="band" id="plan"><div class="wrap plan">' +
+      '<div>' +
+        '<div class="label">Your next step</div>' +
+        '<h2>A 90‑day plan built on your blood work.</h2>' +
+        '<ol class="steps">' +
+          '<li><div><b>Blood test at home</b><span>Or use a report from the last 3 months.</span></div></li>' +
+          '<li><div><b>Doctor consultation</b><span>Your supplements and their doses, set from your report.</span></div></li>' +
+          '<li><div><b>3 months of supplements</b><span>Prescribed for you.</span></div></li>' +
+          '<li><div><b>Nutritionist at day 0 and day 45</b><span>Your food plan, then a check-in on how it’s going.</span></div></li>' +
+          '<li><div><b>Bud on WhatsApp, every day</b><span>Food, supplements and workouts tracked, with reminders.</span></div></li>' +
+        '</ol>' + doc +
+      '</div>' + priceCard() +
+    '</div></section>';
+  }
+
+  function questions() {
+    var qs = [
+      ['What happens after I pay?', 'We confirm your home blood test on WhatsApp. Once your report is in you see your doctor, then your nutritionist, and your supplements start.'],
+      ['Why do I need a blood test?', 'Your answers show signals; only your blood shows levels. A doctor can’t set a safe dose of Vitamin D or iron without knowing where you start.'],
+      ['Can I use a report I already have?', 'Yes, if it’s from the last 3 months. Choose it above and send it to us after you pay — we check it has the markers your doctor needs.'],
+      ['Is it safe with my medicines?', 'Your doctor reads the medicines and supplements you listed before prescribing anything, and checks every supplement against them.']
+    ];
+    return '<section class="wrap sec" id="faq"><div class="label">Questions</div><h2>Before you decide</h2>' +
+      '<div class="faq">' + qs.map(function (q) {
+        return '<details><summary>' + esc(q[0]) + ico('plus') + '</summary><p>' + esc(q[1]) + '</p></details>';
+      }).join('') + '</div></section>';
+  }
+
+  function footer() {
+    return '<footer class="foot"><div class="wrap"><span>Based on your answers only — not a diagnosis. © 2026 Bud</span>' +
+      '<nav><a href="/privacy">Privacy</a><a href="/terms">Terms</a></nav></div></footer>';
+  }
+
+  function sticky() {
+    if (R.abroad || R.pregnant) { stickyEl.innerHTML = ''; return; }
+    var key = chosen();
+    var price = offerOn() ? '<s>' + inr(PLANS[key].regular) + '</s><strong>' + inr(PLANS[key].price) + '</strong>' : '<strong>' + inr(PLANS[key].regular) + '</strong>';
+    stickyEl.innerHTML = '<div class="wrap"><div>' + price + '<small> /month · 90-day plan</small></div>' +
+      '<button type="button" class="btn" data-act="checkout">Start my plan</button></div>';
+  }
+
+  function renderReport() {
+    main.innerHTML = hero() + signals() + plan() + questions() + footer() + previewPill();
+    sticky();
+    animate();
+    watchSticky();
+  }
+
+  function animate() {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        main.querySelectorAll('.arc').forEach(function (c) { c.style.strokeDashoffset = c.getAttribute('data-to'); });
+        main.querySelectorAll('.bar i').forEach(function (i) { i.style.width = i.getAttribute('data-w') + '%'; });
+      });
+    });
+    main.querySelectorAll('[data-count]').forEach(function (b) {
+      var to = +b.getAttribute('data-count');
+      if (reduce) { b.textContent = to; return; }
+      var t0 = null;
+      (function step(t) {
+        if (!t0) t0 = t;
+        var p = Math.min(1, (t - t0) / 1300);
+        b.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    });
+  }
+
+  // The bar shows once the score panel is out of view and hides while the
+  // price card is on screen.
+  var io = null;
+  function watchSticky() {
+    if (io) io.disconnect();
+    stickyEl.classList.remove('show');
+    if (!stickyEl.innerHTML || !('IntersectionObserver' in window)) return;
+    var top = main.querySelector('.panel'), price = document.getElementById('price');
+    var seen = { top: true, price: false };
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.target === top) seen.top = e.isIntersecting; if (e.target === price) seen.price = e.isIntersecting; });
+      var show = !seen.top && !seen.price;
+      stickyEl.classList.toggle('show', show);
+      stickyEl.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }, { threshold: 0.05 });
+    if (top) io.observe(top);
+    if (price) io.observe(price);
+  }
+
+  // ======================================================================
+  // Talking to Bud's server
+  // ======================================================================
+
+  function post(path, body) {
+    return fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, status: res.status, data: data || {} }; });
+      })
+      .catch(function () { return { ok: false, status: 0, data: {} }; });
+  }
+
+  var FIELD_ERRORS = {
+    bad_name: ['name', 'Add your name.'],
+    bad_phone: ['phone', 'Add the WhatsApp number we can reach you on.'],
+    bad_address: ['address', 'Add your flat or house number, building and street.'],
+    bad_pincode: ['pincode', 'A 6-digit pincode.'],
+    bad_city: ['city', 'Add your city.'],
+    bad_state: ['state', 'Choose your state.']
+  };
+  var GENERAL_ERRORS = {
+    payments_off: 'Payments are paused for a moment. Message us on WhatsApp and we’ll sort it out.',
+    razorpay: 'We couldn’t open the payment page. Try again in a minute.',
+    no_assessment: 'We couldn’t find your assessment. Please take it again.',
+    assessment_unfinished: 'Your assessment isn’t finished yet. Please complete it first.',
+    not_in_india: 'The plan is only available in India for now.',
+    talk_first: 'Please message us before starting the plan.'
+  };
+
+  // ======================================================================
+  // Checkout
+  // ======================================================================
+
+  var STATES = ['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh',
+    'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand',
+    'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha',
+    'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'];
+
+  var lastFocus = null;
+  function field(name, label, control) {
+    return '<div class="field" data-f="' + name + '"><label for="f-' + name + '">' + label + '</label>' + control + '</div>';
+  }
+
+  function openCheckout() {
+    var key = chosen(), c = r.contact || {};
+    var phone = c.phone || ((a.phone_code || '+91') + ' ' + (a.phone || '')).trim();
+    lastFocus = document.activeElement;
+    sheetRoot.innerHTML =
+      '<div class="veil" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h">' +
+        '<button type="button" class="close" data-act="close" aria-label="Close">' + ico('x') + '</button>' +
+        '<form id="checkout" novalidate>' +
+          '<h2 id="sheet-h">Almost there</h2>' +
+          '<p class="lede">' + (key === 'test' ? 'Where should we collect your blood sample and send your supplements?' : 'Where should we send your supplements?') + '</p>' +
+          '<div class="chosen"><span>' + esc(PLANS[key].order) + '</span><strong>' + inr(total(key)) + '</strong></div>' +
+          field('name', 'Full name', '<input class="input" id="f-name" name="name" autocomplete="name" maxlength="80" value="' + esc(c.name || a.name || '') + '">') +
+          field('phone', 'WhatsApp number', '<input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="' + esc(phone) + '">') +
+          field('address', 'Address', '<textarea class="input" id="f-address" name="address" autocomplete="street-address" maxlength="300" placeholder="Flat or house number, building, street, area">' + esc(c.address || '') + '</textarea>') +
+          '<div class="row2">' +
+            field('pincode', 'Pincode', '<input class="input" id="f-pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" maxlength="6" value="' + esc(c.pincode || '') + '">') +
+            field('city', 'City', '<input class="input" id="f-city" name="city" autocomplete="address-level2" maxlength="60" value="' + esc(c.city || '') + '">') +
+          '</div>' +
+          field('state', 'State', '<select class="input" id="f-state" name="state" autocomplete="address-level1"><option value="">Choose your state</option>' +
+            STATES.map(function (s) { return '<option' + (c.state === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select>') +
+          '<div id="form-err"></div>' +
+          '<button type="submit" class="btn btn-block" id="pay">Pay ' + inr(total(key)) + '</button>' +
+          '<div class="secure">' + ico('lock') + 'Secure payment by Razorpay</div>' +
+          '<p class="terms">By paying you agree to our <a class="link" href="/terms" target="_blank" rel="noopener">Terms</a>.</p>' +
+        '</form>' +
+      '</div></div>';
+    document.body.classList.add('locked');
+    [main, stickyEl, document.querySelector('.top')].forEach(function (el) { if (el) el.inert = true; });
+    var first = sheetRoot.querySelector('#f-address');
+    if (first && window.matchMedia('(min-width: 641px)').matches) first.focus({ preventScroll: true });
+    sheetRoot.querySelector('#checkout').addEventListener('submit', submitCheckout);
+  }
+
+  function closeCheckout() {
+    sheetRoot.innerHTML = '';
+    document.body.classList.remove('locked');
+    [main, stickyEl, document.querySelector('.top')].forEach(function (el) { if (el) el.inert = false; });
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  }
+
+  function showErrors(f, errs, general) {
+    f.querySelectorAll('.err').forEach(function (e) { e.remove(); });
+    f.querySelectorAll('.input').forEach(function (e) { e.classList.remove('bad'); e.removeAttribute('aria-invalid'); });
+    var keys = Object.keys(errs);
+    keys.forEach(function (k) {
+      var input = f.elements[k];
+      input.classList.add('bad');
+      input.setAttribute('aria-invalid', 'true');
+      f.querySelector('[data-f="' + k + '"]').insertAdjacentHTML('beforeend', '<p class="err">' + esc(errs[k]) + '</p>');
+    });
+    f.querySelector('#form-err').innerHTML = general ? '<p class="form-err" role="alert">' + esc(general) + '</p>' : '';
+    if (keys.length) f.elements[keys[0]].focus();
+  }
+
+  function readForm(f) {
+    var v = {};
+    ['name', 'phone', 'address', 'pincode', 'city', 'state'].forEach(function (k) { v[k] = (f.elements[k].value || '').trim(); });
+    var errs = {};
+    if (v.name.length < 2) errs.name = FIELD_ERRORS.bad_name[1];
+    if (v.phone.replace(/\D/g, '').length < 10) errs.phone = FIELD_ERRORS.bad_phone[1];
+    if (v.address.length < 10) errs.address = FIELD_ERRORS.bad_address[1];
+    if (!/^[1-9][0-9]{5}$/.test(v.pincode)) errs.pincode = FIELD_ERRORS.bad_pincode[1];
+    if (v.city.length < 2) errs.city = FIELD_ERRORS.bad_city[1];
+    if (!v.state) errs.state = FIELD_ERRORS.bad_state[1];
+    showErrors(f, errs, '');
+    return Object.keys(errs).length ? null : v;
+  }
+
+  function submitCheckout(ev) {
+    ev.preventDefault();
+    var f = ev.target, v = readForm(f);
+    if (!v) return;
+    var key = chosen();
+    r.plan = key;
+    r.contact = v;
+    keep();
+    var btn = f.querySelector('#pay');
+    if (!API || !aid) {
+      // A local preview has no server to pay through: show what comes after.
+      r.purchase = { plan: key, amount: total(key), link: 'preview', preview: true };
+      keep();
+      closeCheckout();
+      renderPaid();
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Opening Razorpay…';
+    post('/plan/checkout', { id: aid, plan: key, contact: v }).then(function (res) {
+      if (res.ok && res.data.url) {
+        r.pending = { link: res.data.link, plan: key, amount: res.data.amount_inr };
+        keep();
+        location.href = res.data.url;
+        return;
+      }
+      if (res.ok && res.data.status === 'paid') {
+        r.purchase = { plan: res.data.plan || key, amount: res.data.amount_inr, link: res.data.link, slot: res.data.slot || null };
+        keep();
+        closeCheckout();
+        renderPaid();
+        return;
+      }
+      btn.disabled = false;
+      btn.textContent = 'Pay ' + inr(total(key));
+      var code = res.data && res.data.detail;
+      if (FIELD_ERRORS[code]) { var e = {}; e[FIELD_ERRORS[code][0]] = FIELD_ERRORS[code][1]; showErrors(f, e, ''); return; }
+      showErrors(f, {}, GENERAL_ERRORS[code] || (res.status === 429 ? 'Too many tries. Wait a few minutes and try again.' : 'Something went wrong. Check your connection and try again.'));
+    });
+  }
+
+  // ======================================================================
+  // After Razorpay
+  // ======================================================================
+
+  function renderConfirming() {
+    main.innerHTML = '<section class="wrap done"><h1>Confirming your payment</h1><div class="wait"><span class="spin" aria-hidden="true"></span>This takes a few seconds.</div></section>' + footer();
+    stickyEl.innerHTML = '';
+  }
+
+  function confirmPaid(tries) {
+    if (!aid || !r.pending || !r.pending.link) { renderReport(); return; }
+    post('/plan/confirm', { id: aid, link: r.pending.link }).then(function (res) {
+      if (res.ok && res.data.status === 'paid') {
+        r.purchase = { plan: res.data.plan, amount: res.data.amount_inr, link: res.data.link, slot: res.data.slot || null };
+        delete r.pending;
+        keep();
+        renderPaid();
+        return;
+      }
+      if (tries < 6) { setTimeout(function () { confirmPaid(tries + 1); }, 2000); return; }
+      renderNotYet();
+    });
+  }
+
+  function renderNotYet() {
+    main.innerHTML = '<section class="wrap done"><h1>We haven’t received your payment yet</h1>' +
+      '<p>If you paid, it can take a minute to reach us. If you didn’t finish, you can try again.</p>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px"><button type="button" class="btn" data-act="recheck">Check again</button>' +
+      '<button type="button" class="btn btn-quiet" data-act="retry">Back to my plan</button></div></section>' + footer();
+  }
+
+  function dayList() {
+    var out = [], d = new Date();
+    for (var i = 1; i <= 7; i++) {
+      var x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + i);
+      out.push({ v: x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'),
+                 wd: x.toLocaleDateString('en-IN', { weekday: 'short' }), dm: x.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) });
+    }
+    return out;
+  }
+  function dayWords(v) {
+    var p = String(v || '').split('-');
+    return p.length === 3 ? new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : v;
+  }
+  var WINDOWS = { '7-9': '7–9 AM', '9-11': '9–11 AM' };
+
+  function renderPaid() {
+    var p = r.purchase, key = PLANS[p.plan] ? p.plan : 'test';
+    var name = firstName((r.contact || {}).name || a.name);
+    var book;
+    if (key === 'test' && p.slot) {
+      book = '<div class="book"><h2>Your slot request is in</h2><p>' + esc(dayWords(p.slot.day)) + ', ' + esc(WINDOWS[p.slot.window] || p.slot.window) +
+        '. We’ll confirm the exact time on WhatsApp.</p>' +
+        '<p style="margin-top:16px"><button type="button" class="link" data-act="change-slot" style="border:0;background:none;padding:0;cursor:pointer;font:inherit">Change it</button></p></div>';
+    } else if (key === 'test') {
+      var draft = r.slotDraft || {};
+      book = '<div class="book"><h2>Book your home blood test</h2><p>Pick a day and a morning window. It’s usually done fasting.</p>' +
+        '<div class="pick"><span>Day</span><div class="days" role="group" aria-label="Day">' + dayList().map(function (d) {
+          return '<button type="button" class="chipb" data-act="pick-day" data-v="' + d.v + '" aria-label="' + esc(dayWords(d.v)) + '" aria-pressed="' + (draft.day === d.v) + '">' + esc(d.wd) + '<small>' + esc(d.dm) + '</small></button>';
+        }).join('') + '</div></div>' +
+        '<div class="pick"><span>Window</span><div class="wins" role="group" aria-label="Window">' + Object.keys(WINDOWS).map(function (w) {
+          return '<button type="button" class="chipb" data-act="pick-win" data-v="' + w + '" aria-pressed="' + (draft.window === w) + '">' + WINDOWS[w] + '</button>';
+        }).join('') + '</div></div>' +
+        '<div class="field"><label for="f-saddress">Address</label><textarea class="input" id="f-saddress" maxlength="300">' +
+          esc(draft.address || [((r.contact || {}).address), (r.contact || {}).city, (r.contact || {}).pincode].filter(Boolean).join(', ')) + '</textarea></div>' +
+        '<div id="slot-err"></div>' +
+        '<button type="button" class="btn btn-block" data-act="slot" style="margin-top:18px">Request this slot</button></div>';
+    } else {
+      book = '<div class="book"><h2>Send us your blood report</h2><p>It must be from the last 3 months. Send the PDF or clear photos on WhatsApp and we’ll check it has the markers your doctor needs.</p>' +
+        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, here’s my blood report for my Bud 90-day plan.') + '">Send my report on WhatsApp</a></div>';
+    }
+    var steps = (key === 'test'
+      ? ['We confirm your blood test slot on WhatsApp.', 'Your doctor reads your report and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']
+      : ['We check your report has what your doctor needs.', 'Your doctor reads it and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']);
+    main.innerHTML = '<section class="wrap done">' +
+      '<span class="done-ico">' + ico('check') + '</span>' +
+      '<h1>You’re in' + (name ? ', ' + esc(name) : '') + '.</h1>' +
+      '<p>Payment received for your 90‑day plan.' + (p.preview ? ' (Preview: no payment was taken.)' : '') + '</p>' +
+      '<div class="receipt"><span>' + esc(PLANS[key].order) + '</span><b>' + inr(p.amount || total(key)) + '</b></div>' +
+      book +
+      '<ol class="next">' + steps.map(function (t, i) { return '<li><b>' + (i + 1) + '</b><span>' + esc(t) + '</span></li>'; }).join('') + '</ol>' +
+      '<p style="margin-top:22px"><a class="link" href="#" data-act="back-to-report">Back to your report</a></p>' +
+    '</section>' + footer() + previewPill();
+    stickyEl.innerHTML = '';
+    stickyEl.classList.remove('show');
+    window.scrollTo(0, 0);
+  }
+
+  function requestSlot(btn) {
+    var p = r.purchase, d = r.slotDraft || {};
+    var addr = (document.getElementById('f-saddress') || {}).value || '';
+    var errBox = document.getElementById('slot-err');
+    var problem = !d.day ? 'Pick a day.' : !d.window ? 'Pick a window.' : addr.trim().length < 10 ? 'Add the address for the visit.' : '';
+    errBox.innerHTML = problem ? '<p class="form-err" role="alert">' + esc(problem) + '</p>' : '';
+    if (problem) return;
+    d.address = addr.trim();
+    if (!API || p.preview) {
+      p.slot = { day: d.day, window: d.window };
+      keep();
+      renderPaid();
+      return;
+    }
+    btn.disabled = true;
+    post('/plan/slot', { id: aid, link: p.link, day: d.day, window: d.window, address: d.address }).then(function (res) {
+      btn.disabled = false;
+      if (res.ok && res.data.slot) { p.slot = res.data.slot; keep(); renderPaid(); return; }
+      var code = res.data && res.data.detail;
+      errBox.innerHTML = '<p class="form-err" role="alert">' + esc({ bad_day: 'Pick a day in the next week.', bad_window: 'Pick a window.', bad_address: 'Add the address for the visit.' }[code] || 'Something went wrong. Try again in a minute.') + '</p>';
+    });
+  }
+
+  // ======================================================================
+  // Events
+  // ======================================================================
+
+  document.addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-act]');
+    if (!t) return;
+    var act = t.getAttribute('data-act');
+    if (act === 'checkout') { ev.preventDefault(); openCheckout(); }
+    else if (act === 'close') closeCheckout();
+    else if (act === 'close-bg') { if (ev.target === t) closeCheckout(); }
+    else if (act === 'pick-day' || act === 'pick-win') {
+      r.slotDraft = r.slotDraft || {};
+      r.slotDraft[act === 'pick-day' ? 'day' : 'window'] = t.getAttribute('data-v');
+      var ta = document.getElementById('f-saddress');
+      if (ta) r.slotDraft.address = ta.value;
+      keep();
+      t.parentNode.querySelectorAll('.chipb').forEach(function (b) { b.setAttribute('aria-pressed', b === t ? 'true' : 'false'); });
+    }
+    else if (act === 'slot') requestSlot(t);
+    else if (act === 'change-slot') { delete r.purchase.slot; keep(); renderPaid(); }
+    else if (act === 'recheck') { renderConfirming(); confirmPaid(4); }
+    else if (act === 'retry') { delete r.pending; keep(); renderReport(); }
+    else if (act === 'back-to-report') { ev.preventDefault(); if (r.purchase && r.purchase.preview) delete r.purchase; keep(); renderReport(); window.scrollTo(0, 0); }
+  });
+
+  document.addEventListener('change', function (ev) {
+    if (ev.target.name !== 'plan') return;
+    r.plan = ev.target.value;
+    keep();
+    document.querySelectorAll('.opt').forEach(function (o) { o.classList.toggle('on', o.querySelector('input').checked); });
+    var key = chosen();
+    var tot = document.getElementById('total'), sv = document.getElementById('save');
+    if (tot) tot.textContent = inr(total(key));
+    if (sv) sv.textContent = 'You save ' + inr(saving(key));
+    sticky();
+  });
+
+  document.addEventListener('keydown', function (ev) {
+    if (!sheetRoot.innerHTML) return;
+    if (ev.key === 'Escape') closeCheckout();
+    if (ev.key === 'Tab') {
+      var f = sheetRoot.querySelectorAll('button, input, select, textarea, a[href]');
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+      else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ======================================================================
+  // Start
+  // ======================================================================
+
+  if (!a) {
+    var mid = saved && !saved.done && saved.answers && Object.keys(saved.answers).length;
+    main.innerHTML = '<section class="wrap empty"><h1>' + (mid ? 'Finish your assessment first' : 'Your report starts with the assessment') + '</h1>' +
+      '<p>' + (mid ? 'You’re part-way through. Finish it and your report appears here.' : 'Answer a few questions and your report appears here straight away.') + '</p>' +
+      '<a class="btn" href="/assessment">' + (mid ? 'Continue the assessment' : 'Start the assessment') + ico('arrow') + '</a></section>';
+    return;
+  }
+  R = buildReport();
+  if (r.purchase) {
+    renderPaid();
+    // Bring a paid order up to date with the server (a slot set elsewhere).
+    if (API && aid && !r.purchase.preview) post('/plan/confirm', { id: aid, link: r.purchase.link }).then(function (res) {
+      if (res.ok && res.data.status === 'paid') { r.purchase.slot = res.data.slot || r.purchase.slot || null; keep(); renderPaid(); }
+    });
+  } else if (r.pending && r.pending.link && API) {
+    renderConfirming();
+    confirmPaid(0);
+  } else {
+    renderReport();
+  }
+})();
+</script>
+</body>
+</html>

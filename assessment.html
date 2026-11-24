@@ -461,6 +461,7 @@
 
   var WA = 'https://wa.me/+15672352765?text=Hi%20bud%2C%20lets%20get%20started%21';
   var STORE = 'bud-assessment-v1';
+  var REPORT = '/report';
 
   var SECTIONS = [
     'Your profile',
@@ -607,10 +608,10 @@
 
     { id: 'prior_tests', sec: 7, type: 'single', req: true, meta: 'Required · Single select',
       title: 'Have you had any blood tests or health investigations previously?',
-      options: [o('lt6m', 'Yes, within the last 6 months'), o('lt12m', 'Yes, within the last 12 months'), o('gt12m', 'Yes, more than 12 months ago'), o('no', 'No'), o('not_sure', 'Not sure')],
+      options: [o('lt3m', 'Yes, within the last 3 months'), o('3to12m', 'Yes, 3 to 12 months ago'), o('gt12m', 'Yes, more than 12 months ago'), o('no', 'No'), o('not_sure', 'Not sure')],
       follow: [
-        { key: 'prior_tests_date', when: function (a) { return anyOf(a, 'prior_tests', ['lt6m', 'lt12m', 'gt12m']); }, type: 'text', label: 'Approximate date of testing', placeholder: 'e.g. March 2026' },
-        { key: 'prior_tests_lab', when: function (a) { return anyOf(a, 'prior_tests', ['lt6m', 'lt12m', 'gt12m']); }, type: 'text', label: 'Laboratory / provider (if known)' }
+        { key: 'prior_tests_date', when: function (a) { return anyOf(a, 'prior_tests', ['lt3m', '3to12m', 'gt12m']); }, type: 'text', label: 'Approximate date of testing', placeholder: 'e.g. March 2026' },
+        { key: 'prior_tests_lab', when: function (a) { return anyOf(a, 'prior_tests', ['lt3m', '3to12m', 'gt12m']); }, type: 'text', label: 'Laboratory / provider (if known)' }
       ] },
 
     { id: 'deficiencies', sec: 7, type: 'multi', other: 'deficiencies_other', exclusive: ['none_known', 'not_sure'], meta: 'Select all that apply.',
@@ -843,8 +844,8 @@
       '<p>Your personalised recommendations, if appropriate, will be developed after clinical review.</p>' +
       '<p class="sign">Bud — Your personal health companion.</p>' +
       '<div class="actions">' +
-        '<a class="btn btn-primary btn-plain" href="' + WA + '">Chat with Bud on WhatsApp</a>' +
-        '<a class="btn btn-ghost" href="/">Back to home</a>' +
+        '<a class="btn btn-primary btn-plain" href="' + REPORT + '">See your report</a>' +
+        '<a class="btn btn-ghost" href="' + WA + '">Chat with Bud on WhatsApp</a>' +
       '</div>';
     return w;
   }
@@ -1077,7 +1078,9 @@
       }
       state.done = true;
       save();
-      render();
+      // The report is worked out in the browser from these same answers, so
+      // it is ready the moment the server has them.
+      location.href = REPORT;
     });
   }
 
