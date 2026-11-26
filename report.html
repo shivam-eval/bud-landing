@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Your Health Report - Bud</title>
-<meta name="description" content="Your health report from the Bud assessment, and the 90-day plan built on your blood work.">
+<meta name="description" content="Your health report from the Bud assessment, and the plan built on your blood work.">
 <meta name="theme-color" content="#f7f5f0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,6 +136,8 @@
   .price { padding: 30px; border-radius: 24px; background: var(--surface); color: var(--ink); box-shadow: 0 30px 60px -40px rgba(0, 0, 0, 0.6); }
   .price h3 { margin: 0; font: 600 17px/1.3 var(--sans); }
   .incl { margin: 6px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; text-wrap: balance; }
+  /* Two lines kept either way, so ticking the blood-test box never moves the box. */
+  .incl.two { min-height: 2.9em; }
   .opts { display: grid; gap: 10px; margin-top: 18px; }
   .opt { position: relative; display: block; padding: 18px 18px 18px 52px; border: 1px solid var(--hair); border-radius: 16px; cursor: pointer; transition: border-color .2s ease, background-color .2s ease; }
   .opt:hover { border-color: rgba(31, 95, 79, 0.45); }
@@ -154,6 +156,15 @@
   .opt-price s { margin-right: 6px; color: var(--muted); font-size: 13px; }
   .opt-price strong { font: 700 19px/1 var(--sans); letter-spacing: -0.02em; }
   .opt-price small { color: var(--muted); font-size: 12.5px; }
+  /* The blood-test line: plain text to tap, never a checkbox. */
+  .own { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 2px 0; border: 0; background: none; color: var(--green); font: 600 13px/1.35 var(--sans); text-align: left; cursor: pointer; }
+  .own span { text-decoration: underline; text-decoration-color: rgba(31, 95, 79, 0.35); text-underline-offset: 3px; }
+  .own:hover span { text-decoration-color: var(--green); }
+  .own:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+  .own.on { color: var(--ink-2); font-weight: 500; }
+  .own.on span { text-decoration: none; }
+  .own.on svg { width: 15px; height: 15px; color: var(--green); }
+  .own.on u { margin-left: 6px; color: var(--green); font-weight: 600; text-underline-offset: 3px; }
   .offer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--hair-2); font-size: 13.5px; color: var(--muted); }
   .offer b { color: var(--warn); font-weight: 600; }
   .total { display: flex; align-items: baseline; justify-content: space-between; margin-top: 10px; }
@@ -162,6 +173,17 @@
   .price .btn { margin-top: 18px; }
   .proof { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font: 600 13.5px/1.3 var(--sans); }
   .proof svg { width: 17px; height: 17px; color: var(--green); }
+  .callme { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hair-2); text-align: center; color: var(--muted); font-size: 13px; line-height: 1.4; }
+  .callme .linkb { padding: 0; border: 0; background: none; color: var(--green); font: 600 13px/1.4 var(--sans); cursor: pointer; }
+  .callme .linkb:hover { text-decoration: underline; }
+  .callme .linkb:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 4px; }
+  .callme.open { text-align: left; }
+  .callme label { display: block; margin-bottom: 8px; font: 600 13px/1.3 var(--sans); color: var(--ink-2); }
+  .cb-row { display: flex; gap: 8px; }
+  .cb-row .input { flex: 1 1 auto; min-width: 0; min-height: 46px; padding: 10px 12px; }
+  .cb-row .btn { flex: 0 0 auto; min-height: 46px; margin-top: 0; padding: 0 18px; font-size: 14.5px; }
+  .callme.sent { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--ink-2); }
+  .callme.sent svg { flex: 0 0 auto; width: 16px; height: 16px; color: var(--green); }
   .talk h3 { margin: 0; font: 400 30px/1.1 var(--serif); }
   .talk p { margin: 12px 0 0; color: var(--ink-2); font-size: 15px; }
   .talk .btn { margin-top: 22px; }
@@ -317,29 +339,45 @@
   // it, the regular price alone (owner, 2026-11-24).
   var OFFER_ENDS = new Date('2026-12-31T23:59:59+05:30');
   var OFFER_ENDS_TEXT = '31 Dec';
-  var MONTHS = 3;
-  // India sees the two rupee plans; anybody who chose another country in the
-  // assessment sees the one dollar plan, with no blood test (owner,
-  // 2026-11-24). The server holds the same figures and charges these.
+  // India sees a 1-month and a 3-month plan, each with our home blood test -
+  // or, once they tick "I have a blood test", the same two with their
+  // own report, for less (owner, 2026-11-26). Anybody who chose another
+  // country in the assessment sees the one dollar plan, with no blood test
+  // (owner, 2026-11-24). Every price is the WHOLE plan, paid once; `regular`
+  // is the struck-through one, and what is charged from 1 Jan. The server
+  // holds the same figures and charges these.
   var PLANS = {
-    test: {
-      title: '3-month plan + home blood test',
-      sub: 'We collect your sample at home.',
-      order: '90-day plan, home blood test',
-      price: 4500, regular: 5500, cur: 'INR'
+    m1_test: {
+      months: 1, blood: 'test', title: '1-month plan',
+      order: '1-month plan, home blood test',
+      price: 3499, regular: 3999, cur: 'INR'
     },
-    report: {
-      title: '3-month plan + your own blood test',
-      sub: 'Send us a report from the last 3 months.',
-      order: '90-day plan, your own blood report',
-      price: 4000, regular: 5000, cur: 'INR'
+    m3_test: {
+      months: 3, blood: 'test', title: '3-month plan',
+      order: '3-month plan, home blood test',
+      price: 7999, regular: 11999, cur: 'INR'
+    },
+    m1_report: {
+      months: 1, blood: 'report', title: '1-month plan',
+      order: '1-month plan, your own blood report',
+      price: 2499, regular: 3499, cur: 'INR'
+    },
+    m3_report: {
+      months: 3, blood: 'report', title: '3-month plan',
+      order: '3-month plan, your own blood report',
+      price: 6999, regular: 7999, cur: 'INR'
     },
     abroad: {
-      title: '3-month plan',
+      months: 3, blood: '', title: '3-month plan', monthly: true,
       sub: 'No blood test needed. It starts with your doctor.',
       order: '90-day plan',
-      price: 79, regular: 99, cur: 'USD'
+      price: 237, regular: 297, cur: 'USD'
     }
+  };
+  // Bought before 2026-11-26, and still on a buyer's paid screen.
+  var LEGACY = {
+    test: { months: 3, blood: 'test', title: '3-month plan', order: '90-day plan, home blood test', price: 13500, regular: 16500, cur: 'INR' },
+    report: { months: 3, blood: 'report', title: '3-month plan', order: '90-day plan, your own blood report', price: 12000, regular: 15000, cur: 'INR' }
   };
   // The owner's figure (2026-11-24), from sales on their other platform.
   // Keep it true: update it as it grows.
@@ -683,8 +721,7 @@
       signals: shown,
       pregnant: femaleish && anyOf('pregnancy', ['pregnant', 'breastfeeding']),
       breastfeeding: femaleish && a.pregnancy === 'breastfeeding',
-      abroad: a.country && a.country !== 'india',
-      recentTest: a.prior_tests === 'lt3m'
+      abroad: a.country && a.country !== 'india'
     };
   }
 
@@ -693,15 +730,19 @@
   // ======================================================================
 
   function offerOn() { return Date.now() < OFFER_ENDS.getTime(); }
-  function perMonth(key) { return offerOn() ? PLANS[key].price : PLANS[key].regular; }
-  function total(key) { return perMonth(key) * MONTHS; }
-  function saving(key) { return (PLANS[key].regular - PLANS[key].price) * MONTHS; }
-  function chosen() {
-    if (R.abroad) return 'abroad';
-    return r.plan === 'test' || r.plan === 'report' ? r.plan : (R.recentTest ? 'report' : 'test');
-  }
-  // In the plan's own currency: ₹13,500, or $237 outside India.
-  function money(n, key) { return PLANS[key].cur === 'USD' ? '$' + Number(n).toLocaleString('en-US') : inr(n); }
+  function planOf(key) { return PLANS[key] || LEGACY[key] || PLANS.m3_test; }
+  function total(key) { return offerOn() ? planOf(key).price : planOf(key).regular; }
+  function saving(key) { return planOf(key).regular - planOf(key).price; }
+  // What a month costs, for the plan shown per month (outside India only).
+  function monthly(n, key) { return Math.round(n / planOf(key).months); }
+  // The 3-month plan with our blood test until they choose otherwise - the
+  // blood-test box starts unticked for everybody (owner, 2026-11-26).
+  function months() { return r.months === 1 ? 1 : 3; }
+  function ownTest() { return r.own === true; }
+  function keyFor(m, own) { return 'm' + m + '_' + (own ? 'report' : 'test'); }
+  function chosen() { return R.abroad ? 'abroad' : keyFor(months(), ownTest()); }
+  // In the plan's own currency: ₹7,999, or $237 outside India.
+  function money(n, key) { return planOf(key).cur === 'USD' ? '$' + Number(n).toLocaleString('en-US') : inr(n); }
 
   // ======================================================================
   // The report
@@ -770,23 +811,27 @@
       body + note + '</section>';
   }
 
+  // The struck-through price and the price, as the option shows them: the
+  // whole plan, or a month of it for the plan shown per month (abroad).
+  function priceHtml(key) {
+    var p = planOf(key), per = p.monthly ? function (n) { return monthly(n, key); } : function (n) { return n; };
+    var unit = p.monthly ? '<small> /month</small>' : '';
+    return offerOn()
+      ? '<s>' + money(per(p.regular), key) + '</s><strong>' + money(per(p.price), key) + '</strong>' + unit
+      : '<strong>' + money(per(p.regular), key) + '</strong>' + unit;
+  }
+
   function option(key, solo) {
     var p = PLANS[key], on = chosen() === key;
-    var price = offerOn()
-      ? '<s>' + money(p.regular, key) + '</s><strong>' + money(p.price, key) + '</strong><small> /month</small>'
-      : '<strong>' + money(p.regular, key) + '</strong><small> /month</small>';
-    var sub = key === 'report' && R.recentTest ? 'You said your last test was within 3 months.' : p.sub;
-    // "3-month plan + home blood test": on a phone it breaks after the "+",
-    // never inside the blood test's name.
-    var parts = p.title.split(' + ');
-    var title = esc(parts[0]) + (parts[1] ? ' + <span>' + esc(parts[1]) + '</span>' : '');
-    var inner = '<b class="opt-title">' + title + '</b>' +
-      '<span class="opt-sub">' + esc(sub) + '</span>' +
-      '<span class="opt-price">' + price + '</span>';
+    var inner = '<b class="opt-title">' + esc(p.title) + '</b>' +
+      (p.sub ? '<span class="opt-sub">' + esc(p.sub) + '</span>' : '') +
+      '<span class="opt-price">' + priceHtml(key) + '</span>';
     // The only plan on offer (outside India): shown as chosen, with nothing to pick.
     if (solo) return '<div class="opt on solo">' + inner + '</div>';
+    // The radio names the LENGTH; the blood-test box below picks which of the
+    // two prices it carries.
     return '<label class="opt' + (on ? ' on' : '') + '">' +
-      '<input type="radio" name="plan" value="' + key + '"' + (on ? ' checked' : '') + '>' +
+      '<input type="radio" name="plan" value="' + p.months + '"' + (on ? ' checked' : '') + '>' +
       '<span class="tick" aria-hidden="true"></span>' + inner +
     '</label>';
   }
@@ -795,22 +840,102 @@
     if (R.pregnant) {
       return '<div class="price talk"><h3>Let’s talk first.</h3>' +
         '<p>Our standard plan isn’t designed for pregnancy or breastfeeding. Message us and we’ll help you find the right care.</p>' +
-        '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment. I’m ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ' and have a question about the 90-day plan.') + '">Message the Bud team</a></div>';
+        '<a class="btn btn-block" href="' + waTeam('Hi, I took the Bud health assessment. I’m ' + (R.breastfeeding ? 'breastfeeding' : 'pregnant') + ' and have a question about the plan.') + '">Message the Bud team</a></div>';
     }
-    var key = chosen();
+    return '<div class="price" id="price">' + priceInner() + '</div>';
+  }
+
+  // The card's contents, rebuilt whole when they pick a length or tick the box.
+  function priceInner() {
+    var key = chosen(), own = ownTest();
     var head = R.abroad
       ? '<h3>Your plan</h3>' +
-        '<p class="incl">Includes doctor, supplements, nutritionist and Bud.</p>' +
+        '<p class="incl">Includes doctor, supplements, nutritionist, nutrition tracking and activity sync.</p>' +
         '<div class="opts">' + option('abroad', true) + '</div>'
       : '<h3>Choose your plan</h3>' +
-        '<p class="incl">Both include doctor, supplements, nutritionist and Bud.</p>' +
-        '<div class="opts" role="radiogroup" aria-label="Plan">' + option('test') + option('report') + '</div>';
-    return '<div class="price" id="price">' + head +
+        // With their own report nothing says what is left out - the line just
+        // stops naming our blood test (owner, 2026-11-26).
+        '<p class="incl two">Both include ' + (own ? '' : 'a home blood test, ') + 'doctor, supplements, nutritionist, nutrition tracking and activity sync.</p>' +
+        '<div class="opts" role="radiogroup" aria-label="Plan">' + option(keyFor(1, own)) + option(keyFor(3, own)) + '</div>' +
+        // A line to tap, not a checkbox (owner, 2026-11-26): it switches both
+        // prices, and once on it says so with a way back.
+        '<button type="button" class="own' + (own ? ' on' : '') + '" data-act="own" aria-pressed="' + own + '">' +
+          (own ? ico('check') + '<span>Using your own blood test</span><u>Undo</u>'
+               : '<span>I have a blood test from the last 3 months</span>') + '</button>';
+    var span = planOf(key).months === 1 ? '1 month' : planOf(key).months + ' months';
+    return head +
       (offerOn() ? '<div class="offer"><span>Launch price · ends ' + OFFER_ENDS_TEXT + '</span><b id="save">You save ' + money(saving(key), key) + '</b></div>' : '') +
-      '<div class="total"><span>3 months, paid once</span><strong id="total">' + money(total(key), key) + '</strong></div>' +
+      '<div class="total"><span>' + span + ', paid once</span><strong id="total">' + money(total(key), key) + '</strong></div>' +
       '<button type="button" class="btn btn-block" data-act="checkout">Start my plan' + ico('arrow') + '</button>' +
       '<div class="proof">' + ico('users') + esc(PURCHASED) + ' people have purchased this plan</div>' +
-    '</div>';
+      callme();
+  }
+
+  // Talk to the team before buying (owner, 2026-11-26): a small line that
+  // opens into one number field; the team calls them back. The number starts
+  // as the one they gave in the assessment.
+  function callme() {
+    var cb = r.callback || {};
+    if (cb.done) return '<div class="callme sent">' + ico('check') + '<span>Thanks — our team will call you on ' + esc(cb.done) + '.</span></div>';
+    if (!cb.open) return '<div class="callme"><button type="button" class="linkb" data-act="callme">Talk to our team before you buy</button></div>';
+    var code = a.phone_code && a.phone_code !== 'other' ? a.phone_code + ' ' : '';
+    var phone = typeof cb.phone === 'string' ? cb.phone : (code + (a.phone || '')).trim();
+    return '<form class="callme open" id="callme" novalidate>' +
+      '<label for="f-cb">Leave your number and we’ll call you.</label>' +
+      '<div class="cb-row"><input class="input" id="f-cb" name="cbphone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="' + esc(phone) + '">' +
+      '<button type="submit" class="btn" id="cb-go">Call me</button></div>' +
+      '<div id="cb-err"></div></form>';
+  }
+
+  function sendCallme(f) {
+    var input = f.elements.cbphone, typed = (input.value || '').trim();
+    var digits = typed.replace(/\D/g, '').length;
+    var err = f.querySelector('#cb-err');
+    function fail(msg) {
+      input.classList.add('bad');
+      input.setAttribute('aria-invalid', 'true');
+      err.innerHTML = '<p class="err" role="alert">' + esc(msg) + '</p>';
+      input.focus();
+    }
+    input.classList.remove('bad');
+    input.removeAttribute('aria-invalid');
+    err.innerHTML = '';
+    var badPhone = R.abroad ? 'Add your number with its country code, like +1.' : 'Add a 10-digit number we can call.';
+    if (R.abroad ? (typed.charAt(0) !== '+' || digits < 8) : digits < 10) return fail(badPhone);
+    r.callback = { open: true, phone: typed };
+    function done() {
+      r.callback = { done: typed };
+      keep();
+      var card = document.getElementById('price');
+      if (card) card.innerHTML = priceInner();
+    }
+    if (!API || !aid) { done(); return; }
+    var btn = f.querySelector('#cb-go');
+    btn.disabled = true;
+    post('/plan/callback', { id: aid, phone: typed, plan: chosen() }).then(function (res) {
+      btn.disabled = false;
+      if (res.ok) return done();
+      var code = (res.data && res.data.detail) || '';
+      if (code === 'bad_phone') return fail(badPhone);
+      fail(res.status === 429 ? 'Too many tries. Please try again in a little while.'
+        : 'We couldn’t send that. Try again in a minute.');
+    });
+  }
+
+  // What the plan holds, for the length they have picked.
+  function stepsHtml() {
+    var one = !R.abroad && months() === 1;
+    // Outside India there is no blood test: the plan starts with the doctor.
+    var steps = (R.abroad ? [] : [['Blood test at home', 'Or use a report from the last 3 months.']]).concat([
+      ['Doctor consultation', R.abroad ? 'Your supplements and their doses, set with you.' : 'Your supplements and their doses, set from your report.'],
+      [one ? '1 month of supplements' : '3 months of supplements', R.abroad ? 'Prescribed for you, delivered to you.' : 'Prescribed for you.'],
+      one ? ['Nutritionist at day 0', 'Your food plan, set with you.']
+          : ['Nutritionist at day 0 and day 45', 'Your food plan, then a check-in on how it’s going.'],
+      ['Bud on WhatsApp, every day', 'Food, supplements and workouts tracked, with reminders.']
+    ]);
+    return steps.map(function (s) {
+      return '<li><div><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div></li>';
+    }).join('');
   }
 
   function plan() {
@@ -818,21 +943,11 @@
       '<div><b>' + esc(DOCTOR.name) + '</b><small>' + esc(DOCTOR.creds) + '</small>' +
       '<span>' + (R.abroad ? 'Goes through your answers with you and prescribes your supplements.'
                            : 'Reads your blood report and prescribes your supplements.') + '</span></div></div>';
-    // Outside India there is no blood test: the plan starts with the doctor.
-    var steps = (R.abroad ? [] : [['Blood test at home', 'Or use a report from the last 3 months.']]).concat([
-      ['Doctor consultation', R.abroad ? 'Your supplements and their doses, set with you.' : 'Your supplements and their doses, set from your report.'],
-      ['3 months of supplements', R.abroad ? 'Prescribed for you, delivered to you.' : 'Prescribed for you.'],
-      ['Nutritionist at day 0 and day 45', 'Your food plan, then a check-in on how it’s going.'],
-      ['Bud on WhatsApp, every day', 'Food, supplements and workouts tracked, with reminders.']
-    ]);
     return '<section class="band" id="plan"><div class="wrap plan">' +
       '<div>' +
         '<div class="label">Your next step</div>' +
-        '<h2>' + (R.abroad ? 'A 90‑day plan built around you.' : 'A 90‑day plan built on your blood work.') + '</h2>' +
-        '<ol class="steps">' + steps.map(function (s) {
-          return '<li><div><b>' + esc(s[0]) + '</b><span>' + esc(s[1]) + '</span></div></li>';
-        }).join('') +
-        '</ol>' + doc +
+        '<h2>' + (R.abroad ? 'A 90‑day plan built around you.' : 'A plan built on your blood work.') + '</h2>' +
+        '<ol class="steps" id="steps">' + stepsHtml() + '</ol>' + doc +
       '</div>' + priceCard() +
     '</div></section>';
   }
@@ -847,7 +962,7 @@
     ] : [
       ['What happens after I pay?', 'We confirm your home blood test on WhatsApp. Once your report is in you see your doctor, then your nutritionist, and your supplements start.'],
       ['Why do I need a blood test?', 'Your answers show signals; only your blood shows levels. A doctor can’t set a safe dose of Vitamin D or iron without knowing where you start.'],
-      ['Can I use a report I already have?', 'Yes, if it’s from the last 3 months. Choose it above and send it to us after you pay — we check it has the markers your doctor needs.'],
+      ['Can I use a report I already have?', 'Yes, if it’s from the last 3 months. Tick the box above and send it to us after you pay — we check it has the markers your doctor needs.'],
       safe
     ];
     return '<section class="wrap sec" id="faq"><div class="label">Questions</div><h2>Before you decide</h2>' +
@@ -863,9 +978,9 @@
 
   function sticky() {
     if (R.pregnant) { stickyEl.innerHTML = ''; return; }
-    var key = chosen();
-    var price = offerOn() ? '<s>' + money(PLANS[key].regular, key) + '</s><strong>' + money(PLANS[key].price, key) + '</strong>' : '<strong>' + money(PLANS[key].regular, key) + '</strong>';
-    stickyEl.innerHTML = '<div class="wrap"><div>' + price + '<small> /month · 90-day plan</small></div>' +
+    var key = chosen(), p = planOf(key);
+    var name = p.monthly ? ' · 90-day plan' : ' · ' + p.title;
+    stickyEl.innerHTML = '<div class="wrap"><div>' + priceHtml(key) + '<small>' + name + '</small></div>' +
       '<button type="button" class="btn" data-act="checkout">Start my plan</button></div>';
   }
 
@@ -996,8 +1111,8 @@
         '<button type="button" class="close" data-act="close" aria-label="Close">' + ico('x') + '</button>' +
         '<form id="checkout" novalidate>' +
           '<h2 id="sheet-h">Almost there</h2>' +
-          '<p class="lede">' + (key === 'test' ? 'Where should we collect your blood sample and send your supplements?' : 'Where should we send your supplements?') + '</p>' +
-          '<div class="chosen"><span>' + esc(PLANS[key].order) + '</span><strong>' + money(total(key), key) + '</strong></div>' +
+          '<p class="lede">' + (planOf(key).blood === 'test' ? 'Where should we collect your blood sample and send your supplements?' : 'Where should we send your supplements?') + '</p>' +
+          '<div class="chosen"><span>' + esc(planOf(key).order) + '</span><strong>' + money(total(key), key) + '</strong></div>' +
           field('name', 'Full name', '<input class="input" id="f-name" name="name" autocomplete="name" maxlength="80" value="' + esc(c.name || a.name || '') + '">') +
           field('phone', 'WhatsApp number', '<input class="input" id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="' + esc(phone) + '">') +
           field('address', 'Address', '<textarea class="input" id="f-address" name="address" autocomplete="street-address" maxlength="300" placeholder="' +
@@ -1143,14 +1258,15 @@
   var WINDOWS = { '7-9': '7–9 AM', '9-11': '9–11 AM' };
 
   function renderPaid() {
-    var p = r.purchase, key = PLANS[p.plan] ? p.plan : 'test';
+    var p = r.purchase, key = PLANS[p.plan] || LEGACY[p.plan] ? p.plan : 'm3_test';
+    var blood = planOf(key).blood, what = 'Bud ' + (planOf(key).monthly || LEGACY[key] ? '90-day plan' : planOf(key).title);
     var name = firstName((r.contact || {}).name || a.name);
     var book;
-    if (key === 'test' && p.slot) {
+    if (blood === 'test' && p.slot) {
       book = '<div class="book"><h2>Your slot request is in</h2><p>' + esc(dayWords(p.slot.day)) + ', ' + esc(WINDOWS[p.slot.window] || p.slot.window) +
         '. We’ll confirm the exact time on WhatsApp.</p>' +
         '<p style="margin-top:16px"><button type="button" class="link" data-act="change-slot" style="border:0;background:none;padding:0;cursor:pointer;font:inherit">Change it</button></p></div>';
-    } else if (key === 'test') {
+    } else if (blood === 'test') {
       var draft = r.slotDraft || {};
       book = '<div class="book"><h2>Book your home blood test</h2><p>Pick a day and a morning window. It’s usually done fasting.</p>' +
         '<div class="pick"><span>Day</span><div class="days" role="group" aria-label="Day">' + dayList().map(function (d) {
@@ -1166,12 +1282,12 @@
     } else if (key === 'abroad') {
       // No blood test outside India: the doctor comes first.
       book = '<div class="book"><h2>Next: your doctor</h2><p>We’ll message you on WhatsApp to set up your consultation.</p>' +
-        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, I’ve paid for my Bud 90-day plan. When can I see the doctor?') + '">Message us on WhatsApp</a></div>';
+        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, I’ve paid for my ' + what + '. When can I see the doctor?') + '">Message us on WhatsApp</a></div>';
     } else {
       book = '<div class="book"><h2>Send us your blood report</h2><p>It must be from the last 3 months. Send the PDF or clear photos on WhatsApp and we’ll check it has the markers your doctor needs.</p>' +
-        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, here’s my blood report for my Bud 90-day plan.') + '">Send my report on WhatsApp</a></div>';
+        '<a class="btn" style="margin-top:18px" href="' + waTeam('Hi, here’s my blood report for my ' + what + '.') + '">Send my report on WhatsApp</a></div>';
     }
-    var steps = key === 'test'
+    var steps = blood === 'test'
       ? ['We confirm your blood test slot on WhatsApp.', 'Your doctor reads your report and prescribes your supplements.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']
       : key === 'abroad'
         ? ['We set up your consultation with the doctor on WhatsApp.', 'Your doctor prescribes your supplements, and we deliver them.', 'Day 0 with your nutritionist, and Bud starts with you on WhatsApp.']
@@ -1179,8 +1295,8 @@
     main.innerHTML = '<section class="wrap done">' +
       '<span class="done-ico">' + ico('check') + '</span>' +
       '<h1>You’re in' + (name ? ', ' + esc(name) : '') + '.</h1>' +
-      '<p>Payment received for your 90‑day plan.' + (p.preview ? ' (Preview: no payment was taken.)' : '') + '</p>' +
-      '<div class="receipt"><span>' + esc(PLANS[key].order) + '</span><b>' + money(p.amount || total(key), key) + '</b></div>' +
+      '<p>Payment received for your ' + esc(what.replace(/^Bud /, '')) + '.' + (p.preview ? ' (Preview: no payment was taken.)' : '') + '</p>' +
+      '<div class="receipt"><span>' + esc(planOf(key).order) + '</span><b>' + money(p.amount || total(key), key) + '</b></div>' +
       book +
       '<ol class="next">' + steps.map(function (t, i) { return '<li><b>' + (i + 1) + '</b><span>' + esc(t) + '</span></li>'; }).join('') + '</ol>' +
       '<p style="margin-top:22px"><a class="link" href="#" data-act="back-to-report">Back to your report</a></p>' +
@@ -1222,6 +1338,15 @@
     if (!t) return;
     var act = t.getAttribute('data-act');
     if (act === 'checkout') { ev.preventDefault(); openCheckout(); }
+    else if (act === 'own') { r.own = !ownTest(); replan('[data-act="own"]'); }
+    else if (act === 'callme') {
+      r.callback = { open: true };
+      keep();
+      var card = document.getElementById('price');
+      if (card) card.innerHTML = priceInner();
+      var cbInput = document.getElementById('f-cb');
+      if (cbInput) cbInput.focus({ preventScroll: true });
+    }
     else if (act === 'close') closeCheckout();
     else if (act === 'close-bg') { if (ev.target === t) closeCheckout(); }
     else if (act === 'pick-day' || act === 'pick-win') {
@@ -1239,19 +1364,36 @@
     else if (act === 'back-to-report') { ev.preventDefault(); if (r.purchase && r.purchase.preview) delete r.purchase; keep(); renderReport(); window.scrollTo(0, 0); }
   });
 
+  // A length picked, or the blood-test line tapped: the card is rebuilt (every
+  // price on it moves with the blood test), focus goes back to what they
+  // touched, and the plan's steps follow the length.
+  function replan(focusSel) {
+    keep();
+    var card = document.getElementById('price');
+    if (card) {
+      card.innerHTML = priceInner();
+      var again = card.querySelector(focusSel);
+      if (again) again.focus({ preventScroll: true });
+    }
+    var steps = document.getElementById('steps');
+    if (steps) steps.innerHTML = stepsHtml();
+    sticky();
+  }
   document.addEventListener('change', function (ev) {
     if (ev.target.name !== 'plan') return;
-    r.plan = ev.target.value;
-    keep();
-    document.querySelectorAll('.opt').forEach(function (o) {
-      var input = o.querySelector('input');
-      if (input) o.classList.toggle('on', input.checked);
-    });
-    var key = chosen();
-    var tot = document.getElementById('total'), sv = document.getElementById('save');
-    if (tot) tot.textContent = money(total(key), key);
-    if (sv) sv.textContent = 'You save ' + money(saving(key), key);
-    sticky();
+    r.months = +ev.target.value === 1 ? 1 : 3;
+    replan('input[name="plan"]:checked');
+  });
+
+  // The callback form lives in the price card, which is rebuilt when they pick
+  // another plan - so what they type is kept as they type it.
+  document.addEventListener('submit', function (ev) {
+    if (ev.target.id !== 'callme') return;
+    ev.preventDefault();
+    sendCallme(ev.target);
+  });
+  document.addEventListener('input', function (ev) {
+    if (ev.target.id === 'f-cb' && r.callback) { r.callback.phone = ev.target.value; keep(); }
   });
 
   document.addEventListener('keydown', function (ev) {

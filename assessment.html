@@ -52,10 +52,11 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
+  /* Logo left, section centred; the empty third column keeps it centred. */
   .a-bar {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
     max-width: 1180px;
     margin: 0 auto;
@@ -70,21 +71,12 @@
     letter-spacing: -0.02em;
   }
   .logo svg { width: 28px; height: 28px; }
+  .logo { justify-self: start; }
   .a-section {
     font: 600 13px/1.2 var(--sans);
     color: var(--muted);
     text-align: center;
-    flex: 1;
   }
-  .a-exit {
-    padding: 9px 16px;
-    border: 1px solid var(--line);
-    border-radius: 100px;
-    background: #fff;
-    text-decoration: none;
-    font: 600 13px/1 var(--sans);
-  }
-  .a-exit:hover { border-color: var(--brand); color: var(--brand); }
   .a-progress { height: 4px; background: rgba(15, 31, 26, 0.07); }
   .a-progress i {
     display: block;
@@ -208,7 +200,16 @@
   .input:focus, .select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 4px rgba(37, 112, 92, 0.12); }
   .row { display: flex; gap: 10px; }
   .row > * { flex: 1; }
-  .phone-row .select { flex: 0 0 116px; }
+  /* Drawn by us rather than the browser: Safari's own dropdown pads its text
+     and cut "+91 India" short (owner's screenshot, 2026-11-26). */
+  .select {
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 34px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%235f6f69' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center / 12px 12px;
+    cursor: pointer;
+  }
+  .phone-row .select { flex: 0 0 132px; padding-left: 14px; }
   .dob-row .input { text-align: center; }
   .dob-row .y { flex: 1.5; }
   .follow {
@@ -436,7 +437,6 @@
         Bud
       </a>
       <div class="a-section" id="a-section" aria-live="polite"></div>
-      <a class="a-exit" href="/">Exit</a>
     </div>
     <div class="a-progress" role="progressbar" aria-label="Assessment progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="a-bar"></i></div>
   </header>
@@ -551,7 +551,7 @@
 
     { id: 'activity', sec: 4, type: 'single', meta: 'Single select',
       title: 'How physically active are you in a typical week?',
-      options: [o('sedentary', 'Mostly sedentary; little structured exercise'), o('lt60', 'Less than 60 minutes of moderate or vigorous activity'), o('60to149', '60–149 minutes a week'), o('150to300', '150–300 minutes a week'), o('gt300', 'More than 300 minutes a week'), o('not_sure', 'Not sure')] },
+      options: [o('sedentary', 'Mostly sedentary; little structured exercise'), o('lt60', 'Less than 1 hour of exercise a week'), o('60to149', '1–2.5 hours a week'), o('150to300', '2.5–5 hours a week'), o('gt300', 'More than 5 hours a week'), o('not_sure', 'Not sure')] },
 
     { id: 'sleep_hours', sec: 4, type: 'single', meta: 'Single select',
       title: 'How much sleep do you usually get?',
